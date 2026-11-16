@@ -4,14 +4,7 @@ import { PIERCING_SUB_TABS } from "./piercing-sub-tabs.js";
 import { renderAttemptTable } from "../components/upgrade/attempt-table.js";
 import { renderProbabilityBar } from "../components/upgrade/probability-bar.js";
 import { renderActionButtons } from "../components/upgrade/action-buttons.js";
-
-const pierceAttempts = Array.from({ length: 10 }, (_, i) => ({
-  index: i + 1,
-  material: "🌙",
-  protect: "📜",
-  smelting: "✨",
-  result: "Pending",
-}));
+import { getAttemptRows } from "../data/attempt-plans.js";
 
 export const pierceMaterials = [
   { icon: "🌙", name: "Moonstone", quantity: 40 },
@@ -38,7 +31,7 @@ export function renderPiercingPierceBody() {
       <span>Pierced sockets: <b>${pierced} / ${max}</b></span>
       <span class="muted">Next target: Slot ${String(nextSlot).padStart(2, "0")}</span>
     </div>
-    ${renderAttemptTable({ title: "Piercing Attempts", rows: pierceAttempts })}
+    ${renderAttemptTable({ title: "Piercing Attempts", rows: getAttemptRows("piercing-pierce") })}
     ${renderProbabilityBar({
       chance: "12%",
       energy: "18%",
@@ -47,6 +40,7 @@ export function renderPiercingPierceBody() {
     ${renderActionButtons({
       primary: "Start",
       secondary: ["Auto Refill", "Clear"],
+      attemptPlanKey: "piercing-pierce",
     })}
   `;
 }

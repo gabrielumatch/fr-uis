@@ -1,7 +1,13 @@
 import { equippedItem } from "./data/equipped-item.js";
 import {
+  attemptPlanCanStart,
+  autoRefillAttemptPlan,
+  clearAttemptPlan,
+} from "./data/attempt-plans.js";
+import {
   applyElementChange,
   elementUpgradeState,
+  getElementById,
 } from "./data/element-upgrade.js";
 import { renderWorkshopHeader } from "./components/workshop-header.js";
 import { renderTabBar } from "./components/tab-bar.js";
@@ -76,6 +82,23 @@ function readRouteFromUrl() {
   }
 
   return { ...DEFAULT_ROUTE };
+}
+
+/**
+ * @param {WorkshopRoute} route
+ * @returns {import("./data/attempt-plans.js").AttemptPlanKey | null}
+ */
+function attemptPlanKeyFromRoute(route) {
+  if (route.tabId === "upgrade" && route.upgradeSub === "level") {
+    return "upgrade-level";
+  }
+  if (route.tabId === "element" && route.elementSub === "upgrade") {
+    return "element-upgrade";
+  }
+  if (route.tabId === "piercing" && route.piercingSub === "pierce") {
+    return "piercing-pierce";
+  }
+  return null;
 }
 
 /** @param {WorkshopRoute} route */
@@ -274,6 +297,43 @@ function bindEvents(mount) {
           render(mount, readRouteFromUrl());
         }
         return;
+      }
+
+      if (action === "Auto Refill") {
+        const planKey = attemptPlanKeyFromRoute(readRouteFromUrl());
+        if (planKey) {
+          if (planKey === "element-upgrade") {
+            const icon =
+              getElementById(elementUpgradeState.appliedElementId)?.cardIcon ??
+              "⚡";
+            autoRefillAttemptPlan(planKey, { material: icon });
+          } else {
+            autoRefillAttemptPlan(planKey);
+          }
+          render(mount, readRouteFromUrl());
+        }
+        return;
+      }
+
+      if (action === "Clear") {
+        const planKey = attemptPlanKeyFromRoute(readRouteFromUrl());
+        if (planKey) {
+          clearAttemptPlan(planKey);
+          render(mount, readRouteFromUrl());
+        }
+        return;
+      }
+
+      if (action === "Start") {
+        const planKey =
+          actionBtn.dataset.attemptPlan ??
+          attemptPlanKeyFromRoute(readRouteFromUrl());
+        if (planKey && !attemptPlanCanStart(/** @type {any} */ (planKey))) {
+          return;
+        }
+        if (actionBtn.disabled || actionBtn.getAttribute("aria-disabled") === "true") {
+          return;
+        }
       }
 
       const slot = actionBtn.dataset.slotIndex ?? actionBtn.dataset.jewelSlot;

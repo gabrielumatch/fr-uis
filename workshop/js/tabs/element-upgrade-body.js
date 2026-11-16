@@ -9,16 +9,7 @@ import { renderElementTarget } from "../components/element/element-target.js";
 import { renderAttemptTable } from "../components/upgrade/attempt-table.js";
 import { renderProbabilityBar } from "../components/upgrade/probability-bar.js";
 import { renderActionButtons } from "../components/upgrade/action-buttons.js";
-
-function buildAttemptRows(count, cardIcon) {
-  return Array.from({ length: count }, (_, i) => ({
-    index: i + 1,
-    material: cardIcon,
-    protect: "📜",
-    smelting: "✨",
-    result: "Pending",
-  }));
-}
+import { getAttemptRows } from "../data/attempt-plans.js";
 
 export function getElementUpgradeMaterials() {
   const applied = getElementById(elementUpgradeState.appliedElementId);
@@ -44,7 +35,6 @@ export function renderElementUpgradeBody() {
     level,
     maxLevel,
     targetLevel,
-    plannedAttempts,
     preview,
   } = elementUpgradeState;
 
@@ -70,7 +60,7 @@ export function renderElementUpgradeBody() {
     ${renderElementTarget({ current: level, target: targetLevel, max: maxLevel })}
     ${renderAttemptTable({
       title: "Upgrade Attempts",
-      rows: buildAttemptRows(plannedAttempts, applied?.cardIcon ?? "⚡"),
+      rows: getAttemptRows("element-upgrade"),
     })}
     ${renderProbabilityBar({
       chance: preview.chance,
@@ -80,6 +70,7 @@ export function renderElementUpgradeBody() {
     ${renderActionButtons({
       primary: "Start",
       secondary: ["Auto Refill", "Clear"],
+      attemptPlanKey: "element-upgrade",
     })}
   `;
 }

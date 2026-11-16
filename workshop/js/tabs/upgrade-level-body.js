@@ -4,15 +4,8 @@ import { renderProbabilityBar } from "../components/upgrade/probability-bar.js";
 import { renderActionButtons } from "../components/upgrade/action-buttons.js";
 import { renderPanelSubTabBar } from "../components/upgrade/sub-tab-bar.js";
 import { equippedItem } from "../data/equipped-item.js";
+import { getAttemptRows } from "../data/attempt-plans.js";
 import { UPGRADE_SUB_TABS } from "./upgrade-sub-tabs.js";
-
-const attemptRows = Array.from({ length: 10 }, (_, i) => ({
-  index: i + 1,
-  material: "🔶",
-  protect: "📜",
-  smelting: "✨",
-  result: "Pending",
-}));
 
 export function renderUpgradeLevelBody() {
   return `
@@ -26,7 +19,7 @@ export function renderUpgradeLevelBody() {
       current: equippedItem.upgradeLevel,
       target: equippedItem.upgradeLevel + 1,
     })}
-    ${renderAttemptTable({ rows: attemptRows })}
+    ${renderAttemptTable({ rows: getAttemptRows("upgrade-level") })}
     ${renderProbabilityBar({
       chance: "10%",
       energy: "27.5%",
@@ -35,6 +28,7 @@ export function renderUpgradeLevelBody() {
     ${renderActionButtons({
       primary: "Start",
       secondary: ["Auto Refill", "Clear"],
+      attemptPlanKey: "upgrade-level",
     })}
   `;
 }

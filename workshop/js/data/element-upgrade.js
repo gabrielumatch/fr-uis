@@ -61,7 +61,6 @@ export const elementUpgradeState = {
   /** Destino no modo Change Element (não usado no upgrade de nível). */
   changeTargetElementId: "water",
   targetLevel: 20,
-  plannedAttempts: 5,
   preview: {
     chance: "90%",
     energy: "27.5%",

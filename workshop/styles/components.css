@@ -212,6 +212,15 @@
   border-color: #b99b6b;
 }
 
+.btn:disabled,
+.btn.is-disabled:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  filter: grayscale(0.35);
+  box-shadow: none;
+  pointer-events: none;
+}
+
 .btn--buy {
   padding: 7px 11px;
   background: linear-gradient(#4d8248, #315d2d);
@@ -336,6 +345,11 @@
 
 .attempt-table .cell-icon {
   font-size: 16px;
+}
+
+.attempt-table .cell-empty {
+  font-size: 12px;
+  letter-spacing: 0.08em;
 }
 
 .probability-bar {
