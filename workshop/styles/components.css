@@ -32,7 +32,7 @@
 
 .inventory-layout {
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
+  grid-template-columns: 300px minmax(0, 1fr);
   gap: 12px;
   align-items: start;
 }
@@ -80,13 +80,14 @@
 .inv-char__footer {
   display: flex;
   justify-content: center;
-  gap: 4px;
-  flex-wrap: wrap;
+  gap: 3px;
+  flex-wrap: nowrap;
+  max-width: 100%;
 }
 
 .inv-char__body {
   display: grid;
-  grid-template-columns: 38px minmax(0, 1fr) 38px;
+  grid-template-columns: 50px minmax(0, 1fr) 50px;
   gap: 6px;
   align-items: stretch;
   flex: 1;
@@ -159,8 +160,8 @@
 }
 
 .inv-slot--equip {
-  width: 36px;
-  height: 36px;
+  width: 48px;
+  height: 48px;
   border: 1px solid #9a7a48;
   border-radius: 6px;
   background: linear-gradient(145deg, #faf0db, #dcc596);
@@ -199,21 +200,31 @@
     inset 0 0 12px #fffaa44;
 }
 
+.inv-slot--grid.inv-slot--skin-donor {
+  background: linear-gradient(160deg, #e8dff5 0%, #c9b8e8 55%, #9a7ac4 100%);
+  border-color: #7a5ca8;
+}
+
+.inv-slot--skin-donor .inv-slot__badge {
+  color: #e8d4ff;
+  font-size: 8px;
+}
+
 .inv-slot__icon {
   display: grid;
   place-items: center;
   width: 100%;
   height: 100%;
-  font-size: 22px;
+  font-size: 24px;
   line-height: 1;
 }
 
 .inv-slot--equip .inv-slot__icon {
-  font-size: 18px;
+  font-size: 26px;
 }
 
 .inv-slot--grid .inv-slot__icon {
-  font-size: 18px;
+  font-size: 28px;
 }
 
 .inv-slot__badge {
@@ -221,7 +232,7 @@
   top: 1px;
   right: 2px;
   z-index: 1;
-  font: bold 7px Arial, sans-serif;
+  font: bold 9px Arial, sans-serif;
   color: #c8f060;
   text-shadow:
     0 0 1px #000,
@@ -264,15 +275,19 @@
 }
 
 .inv-grid {
-  --inv-slot-size: 34px;
+  --inv-slot-size: 52px;
+  --inv-grid-gap: 5px;
+  --inv-grid-pad: 6px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, var(--inv-slot-size));
+  /* Quantas colunas couberem na largura da coluna da bag; slot fixo, nunca encolhe */
+  grid-template-columns: repeat(auto-fill, minmax(var(--inv-slot-size), var(--inv-slot-size)));
   grid-auto-rows: var(--inv-slot-size);
-  gap: 3px;
+  gap: var(--inv-grid-gap);
   justify-content: start;
   align-content: start;
+  box-sizing: border-box;
   width: 100%;
-  padding: 6px;
+  padding: var(--inv-grid-pad);
   background: linear-gradient(180deg, #b89558 0%, #9a7a48 100%);
   border: 2px solid #6b4a26;
   border-radius: 6px;

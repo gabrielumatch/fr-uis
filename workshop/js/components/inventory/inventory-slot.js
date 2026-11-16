@@ -8,6 +8,7 @@
  *   title?: string;
  *   as?: 'button' | 'div';
  *   variant?: 'grid' | 'equip';
+ *   skinDonor?: boolean;
  *   className?: string;
  * }} props
  */
@@ -20,6 +21,7 @@ export function renderInventorySlot({
   title = "",
   as = "div",
   variant = "equip",
+  skinDonor = false,
   className = "",
 }) {
   const filled = !empty && icon;
@@ -29,6 +31,7 @@ export function renderInventorySlot({
     filled ? "inv-slot--filled" : "inv-slot--empty",
     active ? " is-active" : "",
     workshopItemId ? " inv-slot--workshop" : "",
+    skinDonor ? " inv-slot--skin-donor" : "",
     className,
   ]
     .filter(Boolean)

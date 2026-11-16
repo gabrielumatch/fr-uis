@@ -13,7 +13,8 @@ function renderBagCell(cell, activeWorkshopItemId) {
 
   const wsId = cell.workshopItemId;
   const item = wsId ? getWorkshopItemById(wsId) : undefined;
-  const title = item?.name ?? "";
+  const title =
+    item?.name ?? (cell.skinDonor ? "Skin item (transmute donor)" : "");
   const active = Boolean(wsId && wsId === activeWorkshopItemId);
 
   const slotHtml = renderInventorySlot({
@@ -24,6 +25,7 @@ function renderBagCell(cell, activeWorkshopItemId) {
     title,
     variant: "grid",
     as: wsId ? "button" : "div",
+    skinDonor: Boolean(cell.skinDonor),
   });
 
   return `<div class="inv-grid__cell" role="gridcell">${slotHtml}</div>`;
