@@ -1,30 +1,57 @@
+import { renderPiercingPierceBody, pierceMaterials } from "./piercing-pierce-body.js";
 import {
-  piercingWeaponConfig,
-  summarizeEquippedWeaponCards,
-} from "../data/piercing-slots.js";
-import { renderPiercingSlotList } from "../components/piercing/slot-list.js";
-import { renderPiercingActions } from "../components/piercing/piercing-actions.js";
-import { renderCardBonusBar } from "../components/piercing/card-bonus-bar.js";
+  renderPiercingCardsBody,
+  cardsMaterials,
+} from "./piercing-cards-body.js";
+
+export { PIERCING_SUB_TABS } from "./piercing-sub-tabs.js";
+
+/** @typedef {'pierce' | 'cards'} PiercingSubId */
+
+/**
+ * @param {PiercingSubId} [sub]
+ */
+export function resolvePiercingSub(sub) {
+  return sub === "cards" ? "cards" : "pierce";
+}
+
+/**
+ * @param {PiercingSubId} sub
+ */
+export function getPiercingPanelView(sub) {
+  const mode = resolvePiercingSub(sub);
+  if (mode === "cards") {
+    return {
+      panelTitle: "Card Management",
+      panelSubtitle: "Insert or remove letter cards on pierced sockets.",
+      materialsVariant: "grid",
+      materialsTitle: "Materials Required / Available",
+      materials: cardsMaterials,
+      renderBody: renderPiercingCardsBody,
+    };
+  }
+
+  return {
+    panelTitle: "Safe Piercing",
+    panelSubtitle: "Open new card sockets on your weapon.",
+    materialsVariant: "grid",
+    materialsTitle: "Materials Required / Available",
+    materials: pierceMaterials,
+    renderBody: renderPiercingPierceBody,
+  };
+}
 
 /** @type {import('./registry.js').TabDefinition} */
 export const piercingTab = {
   id: "piercing",
   label: "Piercing & Cards",
   icon: "⚫",
-  panelTitle: "Piercing & Card Management",
-  panelSubtitle: "Open sockets, then insert or remove cards.",
+  panelTitle: "Safe Piercing",
+  panelSubtitle: "",
   materialsVariant: "grid",
   materialsTitle: "Materials Required / Available",
-  materials: [
-    { icon: "🌙", name: "Moonstone", quantity: 40 },
-    { icon: "📜", name: "GProtect", quantity: 5 },
-    { icon: "✨", name: "Smelting Scroll", quantity: 5 },
-  ],
+  materials: pierceMaterials,
   renderBody() {
-    return `
-      ${renderPiercingSlotList(piercingWeaponConfig)}
-      ${renderPiercingActions()}
-      ${renderCardBonusBar(summarizeEquippedWeaponCards(piercingWeaponConfig))}
-    `;
+    return renderPiercingPierceBody();
   },
 };

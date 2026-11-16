@@ -7,6 +7,7 @@
  *   name: string;
  *   type: string;
  *   upgradeBadge: string;
+ *   upgradeLevel: number;
  *   stats: StatRow[];
  *   awake: AwakeStat[];
  *   gearScore: number;
@@ -17,13 +18,14 @@ export const equippedItem = {
   name: "Lusaka's Axe",
   type: "Two-Handed Axe",
   upgradeBadge: "+10",
+  upgradeLevel: 10,
   stats: [
     { label: "Attack", value: "196" },
     { label: "Element", value: "Lightning 19/20" },
     { label: "Upgrade", value: "10/20" },
     { label: "Piercing", value: "5 / 10" },
     { label: "Cards", value: "4/10" },
-    { label: "Jewels", value: "5/5" },
+    { label: "Jewels", value: "5 / 5 unlocked" },
   ],
   awake: [
     { label: "STR", value: "+25", tone: "red" },

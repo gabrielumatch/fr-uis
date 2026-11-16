@@ -4,14 +4,13 @@
 
 **Contexto do projeto:** mock com Lusaka's, +10/20, Element 19/20, Safe Upgrade com 10 linhas → alinhado a **FlyFF Universe** (NPC Boboko) + legado PC onde aplicável.
 
-## Visão geral (5 abas da UI)
+## Visão geral (abas da UI)
 
 | Aba | O que é | Efeito no item |
 |-----|---------|----------------|
-| **Upgrade** | Nível `+N` do item (ataque/DEF, glow, set bonus) | Cap comum: +10; Ultimate: até +20 (Shining Oricalkum) |
+| **Upgrades & Jewels** | Nível `+N` + sub-aba **Jewels** | Cap comum: +10; Ultimate: até +20; joias só após +6 |
 | **Element** | Elemento no arma/suit (dano vs mobs) | +0 a +20, separado do `+` de upgrade |
-| **Piercing & Cards** | **Piercing** = abrir socket; **Cards** = inserir carta | Sockets permanentes; cartas 100% ao inserir |
-| **Jewels** | Ultimate Jewels / runas em slots da Ultimate | Slots desbloqueiam com upgrade da Ultimate; jewel pode quebrar |
+| **Piercing & Cards** | Sub-abas **Pierce** + **Cards** | Primeiro fura socket; depois letter card (100% insert) |
 | **Awake** | 5 linhas extras aleatórias (± stats) | 100% sucesso no roll inicial; reroll via scrolls |
 
 ## Upgrade (`+` do equipamento)
@@ -49,6 +48,8 @@
 
 ## Piercing & Cards
 
+Na UI: tab **Piercing & Cards** → `#piercing` (Safe Piercing) | `#piercing-cards` (cartas).
+
 ### Piercing (abrir slot)
 - **Suit:** até **4** sockets (% cards Volcano/Ocean/etc. no legado).
 - **Universe weapon:** 1H/escudo **5** slots; 2H **10** slots (Power Dice 8/10 + **GProtect**).
@@ -61,9 +62,12 @@
 - **Arma e escudo:** **Letter cards** por elemento — `Fire Card (D)` … `(R)` (e Baruna SR); Wind não tem R/SR. Stats por grade (ex. Fire D = STR +2, Fire A = STR +7, Crit Dmg +2%). Referência: [Piercing Cards (Weapons, Shields)](https://flyffwiki.com/piercing-cards-for-weapons-shields/).
 - **Remover carta (Universe):** escolhe qual linha remover; carta removida se perde.
 
-## Jewels
+## Jewels (dentro de Upgrade)
 
-- **Ultimate weapon:** cada upgrade desbloqueia slot de **Ultimate Jewel / Rune** (Universe: até 10 slots; legado Peach: slots a partir de +6, até 5 em +10).
+- **Vínculo com + do item:** antes de **+6** não há socket de joia; a partir de **+6** abre **1** slot, até **5** em **+10** ([socketing ultimate](https://flyff-global.fandom.com/wiki/Socketing_Ultimate_Weapons)).
+- **Universe:** pode ir além com +20 e Ultimate Jewels/runas (até 10 slots) — tratar como modo estendido.
+- Na UI: tab **Upgrades & Jewels** → sub-abas **Upgrades** | **Jewels**; URL `#upgrade-jewels`.
+- **Ultimate weapon:** inserir joia no slot **já desbloqueado** pelo nível do item.
 - Aplicar: double-click jewel no arma (como carta).
 - Universe: mesmo tipo repetido possível com chance decrescente; fail **destrói só o jewel**.
 - Legado socketing em Peach: fail perde jewel, não a arma.
@@ -96,7 +100,7 @@
 
 1. **Upgrade tab:** target level, 10 rows, chance/energy/cost, penya — espelhar Safe Upgrade + pity no tooltip do item.
 2. **Sidebar stats:** Attack, Element `n/20`, Upgrade `n/max`, Piercing `slots/max`, Cards = cartas preenchidas, Jewels `n/max`.
-3. **Element / Piercing / Jewels / Awake:** painéis separados mas compartilham padrão de materiais + protect + batch de 10 quando “Safe”.
+3. **Element / Piercing / Awake:** painéis separados; **Jewels** vive em **Upgrades & Jewels** → `#upgrade-jewels`.
 4. Diferenciar **nível de upgrade** vs **nível de elemento** nos dados (`js/data/equipped-item.js`).
 
 *Atualizado: 2026-11-16*

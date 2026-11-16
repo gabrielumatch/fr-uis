@@ -1,43 +1,60 @@
-import { renderUpgradeTarget } from "../components/upgrade/upgrade-target.js";
-import { renderAttemptTable } from "../components/upgrade/attempt-table.js";
-import { renderProbabilityBar } from "../components/upgrade/probability-bar.js";
-import { renderActionButtons } from "../components/upgrade/action-buttons.js";
+import { renderUpgradeLevelBody, upgradeLevelMaterials } from "./upgrade-level-body.js";
+import {
+  renderUpgradeJewelsBody,
+  upgradeJewelsMaterials,
+} from "./upgrade-jewels-body.js";
 
-const attemptRows = Array.from({ length: 10 }, (_, i) => ({
-  index: i + 1,
-  material: "🔶",
-  protect: "📜",
-  smelting: "✨",
-  result: "Pending",
-}));
+/** @typedef {'level' | 'jewels'} UpgradeSubId */
+
+import { UPGRADE_SUB_TABS } from "./upgrade-sub-tabs.js";
+
+export { UPGRADE_SUB_TABS };
+
+/**
+ * @param {UpgradeSubId} [sub]
+ */
+export function resolveUpgradeSub(sub) {
+  return sub === "jewels" ? "jewels" : "level";
+}
+
+/**
+ * @param {UpgradeSubId} sub
+ */
+export function getUpgradePanelView(sub) {
+  const mode = resolveUpgradeSub(sub);
+  if (mode === "jewels") {
+    return {
+      panelTitle: "Jewel Management",
+      panelSubtitle:
+        "Jewel sockets unlock with upgrade level (+6 = 1st slot, +10 = 5 slots).",
+      materialsVariant: "grid",
+      materialsTitle: "Materials Required / Available",
+      materials: upgradeJewelsMaterials(),
+      renderBody: renderUpgradeJewelsBody,
+    };
+  }
+
+  return {
+    panelTitle: "Safe Upgrade",
+    panelSubtitle: "Plan protected upgrade attempts to your target level.",
+    materialsVariant: "grid",
+    materialsTitle: "Materials Required / Available",
+    materials: upgradeLevelMaterials,
+    renderBody: renderUpgradeLevelBody,
+  };
+}
 
 /** @type {import('./registry.js').TabDefinition} */
 export const upgradeTab = {
   id: "upgrade",
-  label: "Upgrade",
+  label: "Upgrades & Jewels",
   icon: "🔨",
   panelTitle: "Safe Upgrade",
-  panelSubtitle: "Plan protected upgrade attempts to your target level.",
+  panelSubtitle: "",
   materialsVariant: "grid",
+  materials: upgradeLevelMaterials,
   materialsTitle: "Materials Required / Available",
-  materials: [
-    { icon: "🔶", name: "Orikalkum", quantity: 25 },
-    { icon: "📜", name: "SProtect", quantity: 10 },
-    { icon: "✨", name: "Smelting Scroll", quantity: 5 },
-  ],
   renderBody() {
-    return `
-      ${renderUpgradeTarget({ current: 10, target: 11 })}
-      ${renderAttemptTable({ rows: attemptRows })}
-      ${renderProbabilityBar({
-        chance: "10%",
-        energy: "27.5%",
-        cost: "29,702 Penya",
-      })}
-      ${renderActionButtons({
-        primary: "Start",
-        secondary: ["Auto Refill", "Clear"],
-      })}
-    `;
+    return renderUpgradeLevelBody();
   },
 };

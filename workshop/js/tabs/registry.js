@@ -1,7 +1,6 @@
 import { upgradeTab } from "./upgrade-panel.js";
 import { elementTab } from "./element-panel.js";
 import { piercingTab } from "./piercing-panel.js";
-import { jewelsTab } from "./jewels-panel.js";
 import { awakeTab } from "./awake-panel.js";
 
 /**
@@ -29,9 +28,17 @@ export const tabRegistry = [
   upgradeTab,
   elementTab,
   piercingTab,
-  jewelsTab,
   awakeTab,
 ];
+
+/** Hash aliases (joias ficam dentro de Upgrade). */
+export const TAB_HASH_ALIASES = {
+  jewels: "upgrade",
+  "upgrade-jewels": "upgrade",
+  "upgrade-level": "upgrade",
+  "piercing-cards": "piercing",
+  "piercing-pierce": "piercing",
+};
 
 /**
  * @param {string} id
