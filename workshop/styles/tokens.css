@@ -1,0 +1,14 @@
+:root {
+  --paper: #e8d7b5;
+  --panel: #f5e9ce;
+  --panel-deep: #ead4a5;
+  --ink: #49331f;
+  --gold: #947044;
+  --gold-dark: #65421f;
+  --line: #b79560;
+  --muted: #92764e;
+  --stat-red: #a63d2f;
+  --stat-blue: #3d5f8c;
+  --success: #5c713a;
+  --shadow: #65451c22;
+}
