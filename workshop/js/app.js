@@ -6,19 +6,29 @@ import { renderOperationPanel } from "./components/operation-panel.js";
 import { getTabById, tabRegistry, TAB_HASH_ALIASES } from "./tabs/registry.js";
 import { getUpgradePanelView, resolveUpgradeSub } from "./tabs/upgrade-panel.js";
 import { getPiercingPanelView, resolvePiercingSub } from "./tabs/piercing-panel.js";
+import { getElementPanelView, resolveElementSub } from "./tabs/element-panel.js";
 
 const DEFAULT_TAB = "upgrade";
 
 /** @typedef {'level' | 'jewels'} UpgradeSub */
 /** @typedef {'pierce' | 'cards'} PiercingSub */
+/** @typedef {'upgrade' | 'change'} ElementSub */
 
 /**
  * @typedef {{
  *   tabId: string;
  *   upgradeSub: UpgradeSub;
  *   piercingSub: PiercingSub;
+ *   elementSub: ElementSub;
  * }} WorkshopRoute
  */
+
+const DEFAULT_ROUTE = /** @type {WorkshopRoute} */ ({
+  tabId: DEFAULT_TAB,
+  upgradeSub: "level",
+  piercingSub: "pierce",
+  elementSub: "upgrade",
+});
 
 /** @returns {WorkshopRoute} */
 function readRouteFromUrl() {
@@ -28,28 +38,35 @@ function readRouteFromUrl() {
     "";
 
   if (raw === "upgrade-jewels" || raw === "jewels") {
-    return { tabId: "upgrade", upgradeSub: "jewels", piercingSub: "pierce" };
+    return { ...DEFAULT_ROUTE, tabId: "upgrade", upgradeSub: "jewels" };
   }
   if (raw === "upgrade-level") {
-    return { tabId: "upgrade", upgradeSub: "level", piercingSub: "pierce" };
+    return { ...DEFAULT_ROUTE, tabId: "upgrade", upgradeSub: "level" };
   }
   if (raw === "piercing-cards") {
-    return { tabId: "piercing", upgradeSub: "level", piercingSub: "cards" };
+    return { ...DEFAULT_ROUTE, tabId: "piercing", piercingSub: "cards" };
   }
   if (raw === "piercing-pierce" || raw === "piercing") {
-    return { tabId: "piercing", upgradeSub: "level", piercingSub: "pierce" };
+    return { ...DEFAULT_ROUTE, tabId: "piercing", piercingSub: "pierce" };
+  }
+  if (raw === "element-change") {
+    return { ...DEFAULT_ROUTE, tabId: "element", elementSub: "change" };
+  }
+  if (raw === "element-upgrade" || raw === "element") {
+    return { ...DEFAULT_ROUTE, tabId: "element", elementSub: "upgrade" };
   }
 
   const tabId = TAB_HASH_ALIASES[raw] ?? raw;
   if (tabId && getTabById(tabId)) {
     return {
+      ...DEFAULT_ROUTE,
       tabId,
-      upgradeSub: "level",
       piercingSub: tabId === "piercing" ? "pierce" : "pierce",
+      elementSub: tabId === "element" ? "upgrade" : "upgrade",
     };
   }
 
-  return { tabId: DEFAULT_TAB, upgradeSub: "level", piercingSub: "pierce" };
+  return { ...DEFAULT_ROUTE };
 }
 
 /** @param {WorkshopRoute} route */
@@ -64,6 +81,10 @@ function writeRouteToUrl(route) {
     hash = "piercing-cards";
   } else if (route.tabId === "piercing") {
     hash = "piercing";
+  } else if (route.tabId === "element" && route.elementSub === "change") {
+    hash = "element-change";
+  } else if (route.tabId === "element") {
+    hash = "element";
   }
 
   const next = `#${hash}`;
@@ -88,22 +109,20 @@ function render(mount, route) {
 
   if (tab.id === "upgrade") {
     const view = getUpgradePanelView(resolveUpgradeSub(route.upgradeSub));
-    panelTitle = view.panelTitle;
-    panelSubtitle = view.panelSubtitle;
+    ({ panelTitle, panelSubtitle, materials, materialsVariant, materialsTitle } = view);
     bodyHtml = view.renderBody();
-    materials = view.materials;
-    materialsVariant = view.materialsVariant;
-    materialsTitle = view.materialsTitle;
   }
 
   if (tab.id === "piercing") {
     const view = getPiercingPanelView(resolvePiercingSub(route.piercingSub));
-    panelTitle = view.panelTitle;
-    panelSubtitle = view.panelSubtitle;
+    ({ panelTitle, panelSubtitle, materials, materialsVariant, materialsTitle } = view);
     bodyHtml = view.renderBody();
-    materials = view.materials;
-    materialsVariant = view.materialsVariant;
-    materialsTitle = view.materialsTitle;
+  }
+
+  if (tab.id === "element") {
+    const view = getElementPanelView(resolveElementSub(route.elementSub));
+    ({ panelTitle, panelSubtitle, materials, materialsVariant, materialsTitle } = view);
+    bodyHtml = view.renderBody();
   }
 
   const tabDefs = tabRegistry.map(({ id, label, icon }) => ({ id, label, icon }));
@@ -136,9 +155,9 @@ function bindEvents(mount) {
     const upgradeSubBtn = target.closest("[data-upgrade-sub]");
     if (upgradeSubBtn instanceof HTMLButtonElement) {
       writeRouteToUrl({
+        ...DEFAULT_ROUTE,
         tabId: "upgrade",
         upgradeSub: resolveUpgradeSub(upgradeSubBtn.dataset.upgradeSub),
-        piercingSub: "pierce",
       });
       return;
     }
@@ -146,9 +165,19 @@ function bindEvents(mount) {
     const piercingSubBtn = target.closest("[data-piercing-sub]");
     if (piercingSubBtn instanceof HTMLButtonElement) {
       writeRouteToUrl({
+        ...DEFAULT_ROUTE,
         tabId: "piercing",
-        upgradeSub: "level",
         piercingSub: resolvePiercingSub(piercingSubBtn.dataset.piercingSub),
+      });
+      return;
+    }
+
+    const elementSubBtn = target.closest("[data-element-sub]");
+    if (elementSubBtn instanceof HTMLButtonElement) {
+      writeRouteToUrl({
+        ...DEFAULT_ROUTE,
+        tabId: "element",
+        elementSub: resolveElementSub(elementSubBtn.dataset.elementSub),
       });
       return;
     }
@@ -158,27 +187,25 @@ function bindEvents(mount) {
       const tabId = tabBtn.dataset.tabId ?? DEFAULT_TAB;
       if (getTabById(tabId)) {
         writeRouteToUrl({
+          ...DEFAULT_ROUTE,
           tabId,
           upgradeSub: tabId === "upgrade" ? "level" : "level",
           piercingSub: tabId === "piercing" ? "pierce" : "pierce",
+          elementSub: tabId === "element" ? "upgrade" : "upgrade",
         });
       } else {
-        render(mount, {
-          tabId: DEFAULT_TAB,
-          upgradeSub: "level",
-          piercingSub: "pierce",
-        });
+        render(mount, { ...DEFAULT_ROUTE });
       }
       return;
     }
 
-    const elementBtn = target.closest("[data-element-id]");
+    const changeElBtn = target.closest("[data-change-element-id]");
     if (
-      elementBtn instanceof HTMLButtonElement &&
-      !elementBtn.classList.contains("tab-bar__btn")
+      changeElBtn instanceof HTMLButtonElement &&
+      !changeElBtn.disabled
     ) {
       alert(
-        `Workshop preview — switch to ${elementBtn.dataset.elementId} element (needs Scroll of Element Change if item already has another element).`,
+        `Workshop preview — target element: ${changeElBtn.dataset.changeElementId}. Requires Scroll of Element Change; level stays the same.`,
       );
       return;
     }
@@ -209,11 +236,13 @@ function bindEvents(mount) {
           ? "Uses Moonstone + GProtect to pierce the next locked socket."
           : action === "Insert" || action === "Insert Card"
             ? "Requires an empty pierced socket — cards insert at 100% success."
-            : action === "Start"
-              ? "Consumes Awakening Scroll and Penya; rerolls awake lines (100% success)."
-              : action === "Previous"
-                ? "Restore the last awake result if you used protection."
-                : "";
+            : action === "Change Element"
+              ? "Consumes Scroll of Element Change; type changes, level unchanged."
+              : action === "Start"
+                ? "Consumes materials for the selected operation."
+                : action === "Previous"
+                  ? "Restore the last awake result if you used protection."
+                  : "";
       alert(
         `Workshop preview — "${action}"${slotPart} not connected to the game server.${hint ? ` ${hint}` : ""}`,
       );

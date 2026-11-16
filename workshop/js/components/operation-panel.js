@@ -23,11 +23,15 @@ export function renderOperationPanel({
       <div class="operation-panel__body" data-operation-body>
         ${bodyHtml}
       </div>
-      ${renderMaterialFooter({
-        materials,
-        variant: materialsVariant ?? "grid",
-        title: materialsTitle,
-      })}
+      ${
+        materials?.length
+          ? renderMaterialFooter({
+              materials,
+              variant: materialsVariant ?? "grid",
+              title: materialsTitle,
+            })
+          : ""
+      }
     </section>
   `;
 }

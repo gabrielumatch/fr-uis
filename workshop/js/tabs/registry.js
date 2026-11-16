@@ -38,6 +38,8 @@ export const TAB_HASH_ALIASES = {
   "upgrade-level": "upgrade",
   "piercing-cards": "piercing",
   "piercing-pierce": "piercing",
+  "element-change": "element",
+  "element-upgrade": "element",
 };
 
 /**

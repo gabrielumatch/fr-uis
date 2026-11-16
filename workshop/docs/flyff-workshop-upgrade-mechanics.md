@@ -38,6 +38,8 @@
 
 ## Element
 
+Na UI: tab **Element** → `#element` (subir nível com a **mesma** carta do elemento do item) | `#element-change` (trocar tipo com **Scroll of Element Change**, mantém nível).
+
 - Track **independente** do `+` de upgrade; máx **+20** em arma e suit.
 - Cartas: Flame / River / Generator / Desert / Cyclone → Fire / Water / Electric / Earth / Wind.
 - **+1–+2:** não falham; **+3:** pode falhar sem quebrar item; **+4–+20:** fail pode **destruir** sem SProtect.

@@ -56,8 +56,8 @@ export const elementUpgradeState = {
   appliedElementId: "lightning",
   level: 19,
   maxLevel: 20,
-  /** Elemento escolhido no picker (pode trocar tipo com Scroll of Element Change no jogo) */
-  selectedElementId: "lightning",
+  /** Destino no modo Change Element (não usado no upgrade de nível). */
+  changeTargetElementId: "water",
   targetLevel: 20,
   plannedAttempts: 5,
   preview: {
@@ -68,6 +68,7 @@ export const elementUpgradeState = {
     elementCards: 40,
     sprotect: 10,
     smeltingElements: 5,
+    elementChangeScrolls: 3,
   },
 };
 

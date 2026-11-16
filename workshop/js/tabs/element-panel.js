@@ -1,23 +1,47 @@
 import {
-  elementUpgradeState,
-  elementTypes,
-  getElementById,
-} from "../data/element-upgrade.js";
-import { renderElementStatus } from "../components/element/element-status.js";
-import { renderElementPicker } from "../components/element/element-picker.js";
-import { renderElementTarget } from "../components/element/element-target.js";
-import { renderAttemptTable } from "../components/upgrade/attempt-table.js";
-import { renderProbabilityBar } from "../components/upgrade/probability-bar.js";
-import { renderActionButtons } from "../components/upgrade/action-buttons.js";
+  renderElementUpgradeBody,
+  getElementUpgradeMaterials,
+} from "./element-upgrade-body.js";
+import {
+  renderElementChangeBody,
+  getElementChangeMaterials,
+} from "./element-change-body.js";
 
-function buildAttemptRows(count, cardIcon) {
-  return Array.from({ length: count }, (_, i) => ({
-    index: i + 1,
-    material: cardIcon,
-    protect: "📜",
-    smelting: "✨",
-    result: "Pending",
-  }));
+export { ELEMENT_SUB_TABS } from "./element-sub-tabs.js";
+
+/** @typedef {'upgrade' | 'change'} ElementSubId */
+
+/**
+ * @param {ElementSubId} [sub]
+ */
+export function resolveElementSub(sub) {
+  return sub === "change" ? "change" : "upgrade";
+}
+
+/**
+ * @param {ElementSubId} sub
+ */
+export function getElementPanelView(sub) {
+  const mode = resolveElementSub(sub);
+  if (mode === "change") {
+    return {
+      panelTitle: "Change Element",
+      panelSubtitle: "Swap element type without losing level.",
+      materialsVariant: "grid",
+      materialsTitle: "Materials Required / Available",
+      materials: getElementChangeMaterials(),
+      renderBody: renderElementChangeBody,
+    };
+  }
+
+  return {
+    panelTitle: "Element Upgrade",
+    panelSubtitle: "Raise level using the same element card as the item.",
+    materialsVariant: "grid",
+    materialsTitle: "Materials Required / Available",
+    materials: getElementUpgradeMaterials(),
+    renderBody: renderElementUpgradeBody,
+  };
 }
 
 /** @type {import('./registry.js').TabDefinition} */
@@ -26,53 +50,11 @@ export const elementTab = {
   label: "Element",
   icon: "⚡",
   panelTitle: "Element Upgrade",
-  panelSubtitle: "Raise elemental level with element cards.",
+  panelSubtitle: "",
   materialsVariant: "grid",
   materialsTitle: "Materials Required / Available",
-  get materials() {
-    const el = getElementById(elementUpgradeState.selectedElementId);
-    const cardName = el?.cardName ?? "Element Card";
-    const cardIcon = el?.cardIcon ?? "⚡";
-    const { inventory } = elementUpgradeState;
-    return [
-      { icon: cardIcon, name: cardName, quantity: inventory.elementCards },
-      { icon: "📜", name: "SProtect", quantity: inventory.sprotect },
-      {
-        icon: "✨",
-        name: "Smelting Scroll (Elements)",
-        quantity: inventory.smeltingElements,
-      },
-    ];
-  },
+  materials: getElementUpgradeMaterials(),
   renderBody() {
-    const { appliedElementId, level, maxLevel, selectedElementId, targetLevel, plannedAttempts, preview } =
-      elementUpgradeState;
-
-    const applied = getElementById(appliedElementId) ?? elementTypes[2];
-    const selected = getElementById(selectedElementId) ?? applied;
-
-    return `
-      ${renderElementStatus({
-        label: applied.label,
-        icon: applied.icon,
-        level,
-        max: maxLevel,
-      })}
-      ${renderElementPicker({ elements: elementTypes, selectedId: selectedElementId })}
-      ${renderElementTarget({ current: level, target: targetLevel, max: maxLevel })}
-      ${renderAttemptTable({
-        title: "Upgrade Attempts",
-        rows: buildAttemptRows(plannedAttempts, selected.cardIcon),
-      })}
-      ${renderProbabilityBar({
-        chance: preview.chance,
-        energy: preview.energy,
-        chanceHighlight: true,
-      })}
-      ${renderActionButtons({
-        primary: "Start",
-        secondary: ["Auto Refill", "Clear"],
-      })}
-    `;
+    return renderElementUpgradeBody();
   },
 };

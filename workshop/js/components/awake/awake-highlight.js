@@ -23,25 +23,29 @@ export function renderAwakeHighlight({
       .join("");
 
   return `
-    <section class="awake-highlight">
-      <h3 class="section-title">Highlight Stat</h3>
-      <div class="awake-highlight__selects">
-        <select name="awake-highlight-primary" aria-label="Highlight stat primary">
-          ${optionHtml(primary)}
-        </select>
-        <select name="awake-highlight-secondary" aria-label="Highlight stat secondary">
-          ${optionHtml(secondary)}
-        </select>
-      </div>
-      <div class="awake-highlight__checks">
-        <label class="awake-check">
-          <input type="checkbox" name="awake-colored" ${showColored ? "checked" : ""} />
-          Show colored stats
-        </label>
-        <label class="awake-check">
-          <input type="checkbox" name="awake-summarize" ${summarize ? "checked" : ""} />
-          Summarize stats
-        </label>
+    <section class="awake-highlight" aria-label="Awake display options">
+      <div class="awake-highlight__row">
+        <div class="awake-highlight__left">
+          <span class="awake-highlight__heading">Highlight Stat</span>
+          <div class="awake-highlight__selects">
+            <select name="awake-highlight-primary" aria-label="Highlight stat primary">
+              ${optionHtml(primary)}
+            </select>
+            <select name="awake-highlight-secondary" aria-label="Highlight stat secondary">
+              ${optionHtml(secondary)}
+            </select>
+          </div>
+        </div>
+        <fieldset class="awake-highlight__options" aria-label="Display options">
+          <label class="awake-check">
+            <input type="checkbox" name="awake-colored" ${showColored ? "checked" : ""} />
+            <span class="awake-check__text">Show colored stats</span>
+          </label>
+          <label class="awake-check">
+            <input type="checkbox" name="awake-summarize" ${summarize ? "checked" : ""} />
+            <span class="awake-check__text">Summarize stats</span>
+          </label>
+        </fieldset>
       </div>
     </section>
   `;
