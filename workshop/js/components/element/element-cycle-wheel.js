@@ -1,5 +1,91 @@
 import { getElementById } from "../../data/element-upgrade.js";
-import { ELEMENT_CYCLE_ORDER } from "../../data/element-cycle.js";
+import {
+  ELEMENT_CYCLE_ORDER,
+  elementStrongAgainst,
+  elementWeakAgainst,
+} from "../../data/element-cycle.js";
+import {
+  elementMatchupPercent,
+  formatMatchupPercent,
+  ELEMENT_LEVEL_MAX,
+  ELEMENT_MATCHUP_CAP_PERCENT,
+} from "../../data/element-advantage-scale.js";
+
+/**
+ * @param {{
+ *   appliedId: string;
+ *   elementLevel: number;
+ *   maxElementLevel?: number;
+ *   itemKind: 'weapon' | 'suit';
+ * }} props
+ */
+function renderElementMatchupScale({
+  appliedId,
+  elementLevel,
+  maxElementLevel = ELEMENT_LEVEL_MAX,
+  itemKind,
+}) {
+  const applied = getElementById(appliedId);
+  const strongId = elementStrongAgainst(appliedId);
+  const weakId = elementWeakAgainst(appliedId);
+  const strong = strongId ? getElementById(strongId) : null;
+  const weak = weakId ? getElementById(weakId) : null;
+  const pct = formatMatchupPercent(
+    elementMatchupPercent(elementLevel, maxElementLevel),
+  );
+  const isWeapon = itemKind === "weapon";
+  const roleNoun = isWeapon ? "damage" : "damage taken";
+
+  /**
+   * @param {typeof strong} target
+   * @param {'strong' | 'weak'} tone
+   */
+  function matchupCard(target, tone) {
+    if (!target) return "";
+    const sign = tone === "strong" ? (isWeapon ? "+" : "−") : isWeapon ? "−" : "+";
+    const verb = isWeapon
+      ? tone === "strong"
+        ? "more"
+        : "less"
+      : tone === "strong"
+        ? "less"
+        : "more";
+
+    return `
+      <article class="element-cycle-matchup__card element-cycle-matchup__card--${tone}">
+        <span class="element-cycle-matchup__card-tag">${tone === "strong" ? "Strong" : "Weak"}</span>
+        <span class="element-cycle-matchup__target" title="vs ${target.label}">
+          <span class="element-cycle-matchup__target-icon" aria-hidden="true">${target.icon}</span>
+          <span class="element-cycle-matchup__target-name">${target.label}</span>
+        </span>
+        <span class="element-cycle-matchup__effect">
+          <strong>${sign}${pct}%</strong>
+          <span class="element-cycle-matchup__effect-text">${verb} ${roleNoun}</span>
+        </span>
+      </article>
+    `;
+  }
+
+  return `
+    <hgroup class="element-cycle-matchup" role="note" aria-label="Element matchup bonuses at plus ${elementLevel}">
+      <p class="element-cycle-matchup__head">
+        <span class="element-cycle-matchup__yours">
+          <span aria-hidden="true">${applied?.icon ?? ""}</span>
+          <span>${applied?.label ?? "Element"}</span>
+          <span class="element-cycle-matchup__lvl">+${elementLevel}</span>
+        </span>
+        <span class="element-cycle-matchup__role">${isWeapon ? "Weapon" : "Suit"}</span>
+      </p>
+      <div class="element-cycle-matchup__grid">
+        ${matchupCard(strong, "strong")}
+        ${matchupCard(weak, "weak")}
+      </div>
+      <p class="element-cycle-matchup__foot muted">
+        Scales to ±${ELEMENT_MATCHUP_CAP_PERCENT}% at +${maxElementLevel}
+      </p>
+    </hgroup>
+  `;
+}
 
 const CX = 180;
 const CY = 178;
@@ -44,6 +130,9 @@ function trackArcPath(i) {
  *   targetId?: string;
  *   interactive?: boolean;
  *   showChangeAction?: boolean;
+ *   elementLevel?: number;
+ *   maxElementLevel?: number;
+ *   itemKind?: 'weapon' | 'suit';
  * }} props
  */
 export function renderElementCycleWheel({
@@ -51,6 +140,9 @@ export function renderElementCycleWheel({
   targetId,
   interactive = false,
   showChangeAction = false,
+  elementLevel,
+  maxElementLevel,
+  itemKind = "weapon",
 }) {
   const target = targetId ? getElementById(targetId) : null;
   const canChange = Boolean(targetId && targetId !== appliedId && target);
@@ -137,6 +229,16 @@ export function renderElementCycleWheel({
         Follow the ring clockwise — each element has advantage over the <strong>next</strong> one.
       </p>
       <div class="element-cycle-wheel__frame">
+            ${
+              elementLevel != null && elementLevel > 0
+                ? renderElementMatchupScale({
+                    appliedId,
+                    elementLevel,
+                    maxElementLevel,
+                    itemKind,
+                  })
+                : ""
+            }
             <svg class="element-cycle-wheel__svg" viewBox="0 0 360 360" role="img" aria-label="Clockwise arrows mean the first element beats the second">
               <defs>
                 <linearGradient id="element-cycle-arc" x1="0%" y1="0%" x2="100%" y2="0%">

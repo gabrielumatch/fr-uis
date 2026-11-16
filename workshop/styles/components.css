@@ -392,6 +392,143 @@
   line-height: 1.45;
 }
 
+.element-cycle-matchup {
+  margin: 0 0 12px;
+  padding: 10px 12px 8px;
+  background: linear-gradient(#f5ebd4, #ebdcc0);
+  border: 1px solid #d0b481;
+  border-radius: 10px;
+  box-shadow: inset 0 1px #fff6;
+}
+
+.element-cycle-matchup__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 0 10px;
+  font-size: 12px;
+}
+
+.element-cycle-matchup__yours {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: #5e3f20;
+}
+
+.element-cycle-matchup__lvl {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  background: #e8d4ae;
+  border: 1px solid #c5a779;
+}
+
+.element-cycle-matchup__role {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #89663a;
+}
+
+.element-cycle-matchup__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.element-cycle-matchup__card {
+  position: relative;
+  padding: 10px 10px 8px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  text-align: center;
+}
+
+.element-cycle-matchup__card--strong {
+  background: linear-gradient(#e8f5eb, #d4ecd9);
+  border-color: #8bc49a;
+}
+
+.element-cycle-matchup__card--weak {
+  background: linear-gradient(#f8ebe6, #edd5cc);
+  border-color: #d9a088;
+}
+
+.element-cycle-matchup__card-tag {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #6b5034;
+}
+
+.element-cycle-matchup__card--strong .element-cycle-matchup__card-tag {
+  color: #2d6a38;
+}
+
+.element-cycle-matchup__card--weak .element-cycle-matchup__card-tag {
+  color: #8b4428;
+}
+
+.element-cycle-matchup__target {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+
+.element-cycle-matchup__target-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.element-cycle-matchup__target-name {
+  font: bold 11px Arial, sans-serif;
+  color: #5e3f20;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.element-cycle-matchup__effect {
+  display: block;
+  line-height: 1.25;
+}
+
+.element-cycle-matchup__effect strong {
+  display: block;
+  font-size: 16px;
+  letter-spacing: -0.02em;
+}
+
+.element-cycle-matchup__card--strong .element-cycle-matchup__effect strong {
+  color: #2d6a38;
+}
+
+.element-cycle-matchup__card--weak .element-cycle-matchup__effect strong {
+  color: #a85a3a;
+}
+
+.element-cycle-matchup__effect-text {
+  font-size: 9px;
+  font-weight: 600;
+  color: #6b5034;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.element-cycle-matchup__foot {
+  margin: 8px 0 0;
+  text-align: center;
+  font-size: 9px;
+}
+
 .element-cycle-wheel__frame {
   position: relative;
   padding: 12px 10px 10px;

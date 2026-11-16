@@ -11,12 +11,15 @@
  *   stats: StatRow[];
  *   awake: AwakeStat[];
  *   gearScore: number;
+ *   elementHost: 'weapon' | 'suit';
  * }}
  */
 export const equippedItem = {
   icon: "🪓",
   name: "Lusaka's Axe",
   type: "Two-Handed Axe",
+  /** Arma = bônus de dano no matchup; suit = tomar menos/mais dano. */
+  elementHost: "weapon",
   upgradeBadge: "+9",
   upgradeLevel: 9,
   stats: [

@@ -1,3 +1,4 @@
+import { equippedItem } from "../data/equipped-item.js";
 import { elementUpgradeState, getElementById } from "../data/element-upgrade.js";
 import { renderPanelSubTabBar } from "../components/upgrade/sub-tab-bar.js";
 import { ELEMENT_SUB_TABS } from "./element-sub-tabs.js";
@@ -41,6 +42,9 @@ export function renderElementChangeBody() {
       targetId: changeTargetElementId,
       interactive: true,
       showChangeAction: true,
+      elementLevel: level,
+      maxElementLevel: maxLevel,
+      itemKind: equippedItem.elementHost,
     })}
   `;
 }

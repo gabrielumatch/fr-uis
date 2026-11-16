@@ -48,6 +48,7 @@ Na UI: tab **Element** → `#element` (subir nível com a **mesma** carta do ele
 - **Scroll of Element Change:** troca tipo mantendo grau.
 - **Ciclo vs mobs/PvP** (horário = forte contra o próximo): **Fire → Wind → Earth → Lightning → Water → Fire** ([Element wiki](https://flyff.fandom.com/wiki/Element)). Ex.: Fire forte vs Wind, fraco vs Water.
 - Na UI **Change Element**, anel com setas (horário) destaca verde/ferrugem a vantagem e fraqueza do elemento atual do item.
+- **Matchup ±%:** em **+20** chega a **±15%** (proporcional: +19 → 14.25%, etc.). **Arma** modifica dano causado; **suit** modifica dano **recebido** (menos no forte, mais no fraco).
 
 ## Piercing & Cards
 
