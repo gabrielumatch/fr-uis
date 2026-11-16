@@ -3,27 +3,37 @@
  */
 
 /**
- * @param {{ rows: AttemptRow[]; title?: string }} props
- */
-/**
  * @param {string} value
+ * @param {string} slotLabel
  */
-function renderMaterialCell(value) {
-  if (!value) {
-    return `<span class="cell-empty muted">—</span>`;
-  }
-  return `<span class="cell-icon" aria-hidden="true">${value}</span>`;
+function renderMaterialCell(value, slotLabel) {
+  const filled = Boolean(value);
+  return `
+    <span
+      class="attempt-slot${filled ? " attempt-slot--filled" : " attempt-slot--empty"}"
+      role="img"
+      aria-label="${filled ? slotLabel : `${slotLabel} empty`}"
+    >
+      ${
+        filled
+          ? `<span class="attempt-slot__icon" aria-hidden="true">${value}</span>`
+          : `<span class="attempt-slot__void" aria-hidden="true"></span>`
+      }
+    </span>
+  `;
 }
 
+/**
+ * @param {{ rows: AttemptRow[]; title?: string }} props
+ */
 export function renderAttemptTable({ rows, title }) {
   const body = rows
     .map(
       (row) => `
     <tr>
-      <td>${row.index}</td>
-      <td>${renderMaterialCell(row.material)}</td>
-      <td>${renderMaterialCell(row.protect)}</td>
-      <td>${renderMaterialCell(row.smelting)}</td>
+      <td>${renderMaterialCell(row.material, "Material")}</td>
+      <td>${renderMaterialCell(row.protect, "Protect scroll")}</td>
+      <td>${renderMaterialCell(row.smelting, "Smelting scroll")}</td>
       <td class="${row.result === "Waiting" ? "muted" : ""}">${row.result}</td>
     </tr>
   `,
@@ -32,14 +42,13 @@ export function renderAttemptTable({ rows, title }) {
 
   const heading = title
     ? `<div class="attempt-table__title section-title">${title}</div>`
-  : "";
+    : "";
 
   return `
     ${heading}
     <table class="attempt-table">
       <thead>
         <tr>
-          <th scope="col">#</th>
           <th scope="col">Material</th>
           <th scope="col">Protect</th>
           <th scope="col">Smelting</th>
