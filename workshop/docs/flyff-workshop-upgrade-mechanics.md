@@ -11,6 +11,7 @@
 | **Upgrades & Jewels** | Nível `+N` + sub-aba **Jewels** | Cap comum: +10; Ultimate: até +20; joias só após +6 |
 | **Element** | Elemento no arma/suit (dano vs mobs) | +0 a +20, separado do `+` de upgrade |
 | **Piercing & Cards** | Sub-abas **Pierce** + **Cards** | Primeiro fura socket; depois letter card (100% insert) |
+| **Skins** | Makeup Artist (visual) | Só aparência; Primary mantém +, elemento, awake |
 | **Awake** | 5 linhas extras aleatórias (± stats) | 100% sucesso no roll inicial; reroll via scrolls |
 
 ## Upgrade (`+` do equipamento)
@@ -100,11 +101,20 @@ Na UI: tab **Piercing & Cards** → `#piercing` (Safe Piercing) | `#piercing-car
 | Smelting | +10% chance upgrade/element |
 | Scroll of Awakening (+ proteção/augment/reversion) | Awake |
 
+## Skins (Makeup Artist, gPotato)
+
+- NPC **Makeup Artist** (Flaris).
+- **Primary** + **Skin** (mesmo tipo: espada+espada, axe+axe).
+- Skin item consumido ao aplicar; primary mantém stats, `+`, elemento, awake.
+- **Uma skin por vez** — com skin ativa não dá para aplicar outra; só remover antes.
+- Remover: **Purge Skin Scroll** (skin item destruído) ou **Recover Skin Scroll** (skin volta ao inventário).
+- UI: `#skins` / `#skins-remove`.
+
 ## Implicações para `workshop/` (este repo)
 
 1. **Upgrade tab:** target level, 10 rows, chance/energy/cost, penya — espelhar Safe Upgrade + pity no tooltip do item.
 2. **Sidebar stats:** Attack, Element `n/20`, Upgrade `n/max`, Piercing `slots/max`, Cards = cartas preenchidas, Jewels `n/max`.
-3. **Element / Piercing / Awake:** painéis separados; **Jewels** vive em **Upgrades & Jewels** → `#upgrade-jewels`.
+3. **Element / Piercing / Awake / Skins:** painéis separados; **Jewels** vive em **Upgrades & Jewels** → `#upgrade-jewels`.
 4. Diferenciar **nível de upgrade** vs **nível de elemento** nos dados (`js/data/equipped-item.js`).
 
 *Atualizado: 2026-11-16*

@@ -12,6 +12,7 @@
  *   awake: AwakeStat[];
  *   gearScore: number;
  *   elementHost: 'weapon' | 'suit';
+ *   activeSkinName?: string | null;
  * }}
  */
 export const equippedItem = {
@@ -29,6 +30,7 @@ export const equippedItem = {
     { label: "Piercing", value: "5 / 10" },
     { label: "Cards", value: "4/10" },
     { label: "Jewels", value: "4 / 4 unlocked" },
+    { label: "Appearance", value: "Original" },
   ],
   awake: [
     { label: "STR", value: "+25", tone: "red" },

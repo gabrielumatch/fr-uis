@@ -2,6 +2,7 @@ import { upgradeTab } from "./upgrade-panel.js";
 import { elementTab } from "./element-panel.js";
 import { piercingTab } from "./piercing-panel.js";
 import { awakeTab } from "./awake-panel.js";
+import { skinsTab } from "./skins-panel.js";
 
 /**
  * @typedef {{ icon: string; name: string; quantity: number }} MaterialDef
@@ -29,6 +30,7 @@ export const tabRegistry = [
   elementTab,
   piercingTab,
   awakeTab,
+  skinsTab,
 ];
 
 /** Hash aliases (joias ficam dentro de Upgrade). */
@@ -40,6 +42,11 @@ export const TAB_HASH_ALIASES = {
   "piercing-pierce": "piercing",
   "element-change": "element",
   "element-upgrade": "element",
+  "skins-apply": "skins",
+  "skins-remove": "skins",
+  transmutation: "skins",
+  "transmutation-apply": "skins",
+  "transmutation-revert": "skins",
 };
 
 /**
