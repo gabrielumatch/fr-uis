@@ -5,8 +5,12 @@ import { renderJewelSlotRow } from "./jewel-slot-row.js";
  */
 export function renderJewelSlotList(state) {
   const filled = state.slots.filter((s) => s.jewel).length;
+  const ctx = {
+    selectedJewelId: state.selectedJewelId,
+    inventory: state.inventory,
+  };
   const rows = state.slots
-    .map((slot) => renderJewelSlotRow(slot))
+    .map((slot) => renderJewelSlotRow(slot, ctx))
     .join("");
 
   return `

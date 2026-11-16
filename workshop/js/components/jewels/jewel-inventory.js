@@ -8,12 +8,14 @@ export function renderJewelInventory({ inventory, selectedId }) {
     .map((j) => {
       const qty = inventory[j.id] ?? 0;
       const isSelected = j.id === selectedId;
+      const isEmpty = qty <= 0;
       return `
         <button
           type="button"
-          class="jewel-inv__tile${isSelected ? " is-selected" : ""}"
+          class="jewel-inv__tile${isSelected ? " is-selected" : ""}${isEmpty ? " is-empty" : ""}"
           data-jewel-type="${j.id}"
           aria-pressed="${isSelected}"
+          ${isEmpty ? "disabled" : ""}
         >
           <span class="jewel-inv__orb" aria-hidden="true">${j.icon}</span>
           <span class="jewel-inv__name">${j.name.replace(" Jewel", "")}</span>

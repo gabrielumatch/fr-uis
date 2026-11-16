@@ -1,13 +1,8 @@
-import {
-  elementUpgradeState,
-  elementTypes,
-  getElementById,
-} from "../data/element-upgrade.js";
+import { elementUpgradeState, getElementById } from "../data/element-upgrade.js";
 import { renderPanelSubTabBar } from "../components/upgrade/sub-tab-bar.js";
 import { ELEMENT_SUB_TABS } from "./element-sub-tabs.js";
 import { renderElementStatus } from "../components/element/element-status.js";
-import { renderElementPicker } from "../components/element/element-picker.js";
-import { renderActionButtons } from "../components/upgrade/action-buttons.js";
+import { renderElementCycleWheel } from "../components/element/element-cycle-wheel.js";
 
 export function getElementChangeMaterials() {
   return [
@@ -23,7 +18,6 @@ export function renderElementChangeBody() {
   const { appliedElementId, changeTargetElementId, level, maxLevel } =
     elementUpgradeState;
   const applied = getElementById(appliedElementId);
-  const target = getElementById(changeTargetElementId);
 
   return `
     ${renderPanelSubTabBar({
@@ -42,21 +36,11 @@ export function renderElementChangeBody() {
       level,
       max: maxLevel,
     })}
-    ${renderElementPicker({
-      elements: elementTypes,
-      selectedId: changeTargetElementId,
-      title: "New Element",
-      pickAttr: "change-element-id",
-      disabledId: appliedElementId,
-    })}
-    <div class="element-change-summary">
-      ${applied?.icon ?? ""} ${applied?.label ?? "—"} ${level}/${maxLevel}
-      <span aria-hidden="true">→</span>
-      ${target?.icon ?? ""} ${target?.label ?? "—"} ${level}/${maxLevel}
-    </div>
-    ${renderActionButtons({
-      primary: "Change Element",
-      secondary: [],
+    ${renderElementCycleWheel({
+      appliedId: appliedElementId,
+      targetId: changeTargetElementId,
+      interactive: true,
+      showChangeAction: true,
     })}
   `;
 }

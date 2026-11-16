@@ -11,7 +11,7 @@ export const awakeManagementState = {
   /** @type {AwakeLine[]} */
   lines: [
     { label: "STR", value: "+25", tone: "red" },
-    { label: "Add. Chance", value: "+17%", tone: "blue" },
+    { label: "Critical Chance", value: "+17%", tone: "blue" },
     { label: "Attack Speed", value: "+10%", tone: "blue" },
   ],
   highlightOptions: [
@@ -19,7 +19,7 @@ export const awakeManagementState = {
     "STA",
     "DEX",
     "INT",
-    "Add. Chance",
+    "Critical Chance",
     "Attack Speed",
     "Critical Chance",
   ],

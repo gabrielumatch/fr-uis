@@ -27,14 +27,76 @@ export const jewelTypes = [
   { id: "amethyst", name: "Amethyst Jewel", icon: "🟣", stat: "INT", bonus: "+5%" },
 ];
 
-/** Joias equipadas no preview (só contam se o slot estiver desbloqueado). */
+/** @type {Record<number, JewelType | null>} Joias no item (preview). */
 const equippedBySlotIndex = {
   1: jewelTypes[0],
   2: jewelTypes[1],
   3: jewelTypes[2],
   4: jewelTypes[3],
-  5: jewelTypes[4],
+  5: null,
 };
+
+/** @type {string} */
+let selectedJewelId = "ruby";
+
+/** @type {Record<string, number>} */
+const jewelInventory = {
+  ruby: 12,
+  sapphire: 8,
+  emerald: 5,
+  topaz: 3,
+  amethyst: 0,
+};
+
+/**
+ * @param {string} id
+ * @returns {JewelType | null}
+ */
+export function getJewelById(id) {
+  return jewelTypes.find((j) => j.id === id) ?? null;
+}
+
+/** @param {string} id */
+export function setSelectedJewelId(id) {
+  if (!getJewelById(id)) return;
+  if ((jewelInventory[id] ?? 0) <= 0) return;
+  selectedJewelId = id;
+}
+
+/**
+ * @param {number} slotIndex
+ * @returns {boolean}
+ */
+export function removeJewelFromSlot(slotIndex) {
+  const jewel = equippedBySlotIndex[slotIndex];
+  if (!jewel) return false;
+  equippedBySlotIndex[slotIndex] = null;
+  jewelInventory[jewel.id] = (jewelInventory[jewel.id] ?? 0) + 1;
+  return true;
+}
+
+/**
+ * @param {number} slotIndex
+ * @param {number} [upgradeLevel]
+ */
+export function insertJewelIntoSlot(
+  slotIndex,
+  upgradeLevel = equippedItem.upgradeLevel,
+) {
+  const required = requiredUpgradeForJewelSlot(slotIndex);
+  if (upgradeLevel < required) return { ok: false, reason: "locked" };
+  if (equippedBySlotIndex[slotIndex]) return { ok: false, reason: "occupied" };
+
+  const jewel = getJewelById(selectedJewelId);
+  if (!jewel) return { ok: false, reason: "invalid" };
+  if ((jewelInventory[selectedJewelId] ?? 0) <= 0) {
+    return { ok: false, reason: "no_stock" };
+  }
+
+  jewelInventory[selectedJewelId] -= 1;
+  equippedBySlotIndex[slotIndex] = jewel;
+  return { ok: true };
+}
 
 /**
  * @typedef {{
@@ -79,28 +141,13 @@ export function buildJewelManagementState(upgradeLevel = equippedItem.upgradeLev
     upgradeLevel,
     maxSlots: MAX_JEWEL_SLOTS_CLASSIC,
     unlockedCount,
-    selectedJewelId: "ruby",
+    selectedJewelId,
     slots,
-    inventory: {
-      ruby: 12,
-      sapphire: 8,
-      emerald: 5,
-      topaz: 3,
-      amethyst: 4,
-    },
+    inventory: { ...jewelInventory },
     materials: {
       moonstone: 40,
     },
   };
-}
-
-/**
- * @param {ReturnType<typeof buildJewelManagementState>} state
- */
-export function summarizeJewelBonus(state) {
-  const filled = state.slots.filter((s) => s.unlocked && s.jewel);
-  if (!filled.length) return "—";
-  return filled.map((s) => `${s.jewel.stat} ${s.jewel.bonus}`).join("  ");
 }
 
 /**

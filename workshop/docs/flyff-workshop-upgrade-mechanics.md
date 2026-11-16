@@ -2,7 +2,7 @@
 
 **Fontes:** [flyffwiki.com — Upgrading Normal Weapons](https://flyffwiki.com/guides-gameplay/upgrading-normal-weapons-shields-and-armor/), [Flyffipedia — Equipment Upgrade](https://flyffipedia.com/guide/equipment-set-weapon-upgrade-guide), [Piercing](https://flyffipedia.com/guide/piercing-upgrade-guide), [Fandom Upgrading](https://flyff.fandom.com/wiki/Upgrading).
 
-**Contexto do projeto:** mock com Lusaka's, +10/20, Element 19/20, Safe Upgrade com 10 linhas → alinhado a **FlyFF Universe** (NPC Boboko) + legado PC onde aplicável.
+**Contexto do projeto:** mock com Lusaka's, +9/20 (4 jewel slots; 5º em +10), Element 19/20, Safe Upgrade com 10 linhas → alinhado a **FlyFF Universe** (NPC Boboko) + legado PC onde aplicável.
 
 ## Visão geral (abas da UI)
 
@@ -46,7 +46,8 @@ Na UI: tab **Element** → `#element` (subir nível com a **mesma** carta do ele
 - **Safe Element Upgrade:** mesma ideia de 10 slots + SProtect obrigatório quando arriscado.
 - **Scroll of Smelting (Elements):** +10% chance (até +10 no legado).
 - **Scroll of Element Change:** troca tipo mantendo grau.
-- Rock-paper-scissors elemental vs mobs (forte/fraco).
+- **Ciclo vs mobs/PvP** (horário = forte contra o próximo): **Fire → Wind → Earth → Lightning → Water → Fire** ([Element wiki](https://flyff.fandom.com/wiki/Element)). Ex.: Fire forte vs Wind, fraco vs Water.
+- Na UI **Change Element**, anel com setas (horário) destaca verde/ferrugem a vantagem e fraqueza do elemento atual do item.
 
 ## Piercing & Cards
 

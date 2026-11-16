@@ -1,7 +1,9 @@
 /**
  * @param {import('../../data/jewel-management.js').buildJewelManagementState extends (...args: unknown[]) => infer R ? R['slots'][number] : never} slot
+ * @param {{ selectedJewelId: string; inventory: Record<string, number> }} ctx
  */
-export function renderJewelSlotRow(slot) {
+export function renderJewelSlotRow(slot, ctx) {
+  const canInsert = (ctx.inventory[ctx.selectedJewelId] ?? 0) > 0;
   const label = `Slot ${slot.index}`;
 
   if (!slot.unlocked) {
@@ -25,7 +27,13 @@ export function renderJewelSlotRow(slot) {
           <span class="jewel-row__icon" aria-hidden="true">◇</span>
           <span>Empty socket</span>
         </span>
-        <button type="button" class="btn btn--slot" data-action="Insert Jewel" data-jewel-slot="${slot.index}">
+        <button
+          type="button"
+          class="btn btn--slot"
+          data-action="Insert Jewel"
+          data-jewel-slot="${slot.index}"
+          ${canInsert ? "" : "disabled"}
+        >
           Insert
         </button>
       </div>

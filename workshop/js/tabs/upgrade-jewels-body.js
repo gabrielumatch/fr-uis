@@ -1,11 +1,6 @@
-import {
-  buildJewelManagementState,
-  summarizeJewelBonus,
-} from "../data/jewel-management.js";
+import { buildJewelManagementState } from "../data/jewel-management.js";
 import { renderJewelSlotList } from "../components/jewels/jewel-slot-list.js";
-import { renderJewelBonusBar } from "../components/jewels/jewel-bonus-bar.js";
 import { renderJewelInventory } from "../components/jewels/jewel-inventory.js";
-import { renderJewelActions } from "../components/jewels/jewel-actions.js";
 import { renderPanelSubTabBar } from "../components/upgrade/sub-tab-bar.js";
 import { UPGRADE_SUB_TABS } from "./upgrade-sub-tabs.js";
 
@@ -24,12 +19,10 @@ export function renderUpgradeJewelsBody() {
       <strong>5</strong> at +10 on Ultimate weapons.
     </p>
     ${renderJewelSlotList(state)}
-    ${renderJewelBonusBar(summarizeJewelBonus(state))}
     ${renderJewelInventory({
       inventory: state.inventory,
       selectedId: state.selectedJewelId,
     })}
-    ${renderJewelActions()}
   `;
 }
 

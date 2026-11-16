@@ -1,4 +1,5 @@
 import { equippedItem } from "./data/equipped-item.js";
+import { elementUpgradeState } from "./data/element-upgrade.js";
 import { renderWorkshopHeader } from "./components/workshop-header.js";
 import { renderTabBar } from "./components/tab-bar.js";
 import { renderItemSidebar } from "./components/item-sidebar.js";
@@ -7,6 +8,11 @@ import { getTabById, tabRegistry, TAB_HASH_ALIASES } from "./tabs/registry.js";
 import { getUpgradePanelView, resolveUpgradeSub } from "./tabs/upgrade-panel.js";
 import { getPiercingPanelView, resolvePiercingSub } from "./tabs/piercing-panel.js";
 import { getElementPanelView, resolveElementSub } from "./tabs/element-panel.js";
+import {
+  insertJewelIntoSlot,
+  removeJewelFromSlot,
+  setSelectedJewelId,
+} from "./data/jewel-management.js";
 
 const DEFAULT_TAB = "upgrade";
 
@@ -200,21 +206,29 @@ function bindEvents(mount) {
     }
 
     const changeElBtn = target.closest("[data-change-element-id]");
-    if (
-      changeElBtn instanceof HTMLButtonElement &&
-      !changeElBtn.disabled
-    ) {
-      alert(
-        `Workshop preview — target element: ${changeElBtn.dataset.changeElementId}. Requires Scroll of Element Change; level stays the same.`,
-      );
+    if (changeElBtn instanceof HTMLElement) {
+      const isDisabledBtn =
+        changeElBtn instanceof HTMLButtonElement && changeElBtn.disabled;
+      if (isDisabledBtn) return;
+      const nextId = changeElBtn.dataset.changeElementId;
+      if (
+        nextId &&
+        nextId !== elementUpgradeState.appliedElementId &&
+        nextId !== elementUpgradeState.changeTargetElementId
+      ) {
+        elementUpgradeState.changeTargetElementId = nextId;
+        render(mount, readRouteFromUrl());
+      }
       return;
     }
 
     const jewelTile = target.closest("[data-jewel-type]");
     if (jewelTile instanceof HTMLButtonElement) {
-      alert(
-        `Workshop preview — selected ${jewelTile.dataset.jewelType} jewel for insert.`,
-      );
+      const id = jewelTile.dataset.jewelType;
+      if (id) {
+        setSelectedJewelId(id);
+        render(mount, readRouteFromUrl());
+      }
       return;
     }
 
@@ -229,6 +243,28 @@ function bindEvents(mount) {
     const actionBtn = target.closest("[data-action]");
     if (actionBtn instanceof HTMLButtonElement) {
       const action = actionBtn.dataset.action ?? "Action";
+
+      if (action === "Remove Jewel" && actionBtn.dataset.jewelSlot) {
+        const slotIndex = Number(actionBtn.dataset.jewelSlot);
+        if (Number.isFinite(slotIndex) && removeJewelFromSlot(slotIndex)) {
+          render(mount, readRouteFromUrl());
+        }
+        return;
+      }
+
+      if (
+        action === "Insert Jewel" &&
+        actionBtn.dataset.jewelSlot &&
+        !actionBtn.disabled
+      ) {
+        const slotIndex = Number(actionBtn.dataset.jewelSlot);
+        if (Number.isFinite(slotIndex)) {
+          const result = insertJewelIntoSlot(slotIndex);
+          if (result.ok) render(mount, readRouteFromUrl());
+        }
+        return;
+      }
+
       const slot = actionBtn.dataset.slotIndex ?? actionBtn.dataset.jewelSlot;
       const slotPart = slot ? ` (slot ${slot})` : "";
       const hint =
