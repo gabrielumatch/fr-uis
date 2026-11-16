@@ -1,5 +1,8 @@
 import { equippedItem } from "./data/equipped-item.js";
-import { elementUpgradeState } from "./data/element-upgrade.js";
+import {
+  applyElementChange,
+  elementUpgradeState,
+} from "./data/element-upgrade.js";
 import { renderWorkshopHeader } from "./components/workshop-header.js";
 import { renderTabBar } from "./components/tab-bar.js";
 import { renderItemSidebar } from "./components/item-sidebar.js";
@@ -261,6 +264,14 @@ function bindEvents(mount) {
         if (Number.isFinite(slotIndex)) {
           const result = insertJewelIntoSlot(slotIndex);
           if (result.ok) render(mount, readRouteFromUrl());
+        }
+        return;
+      }
+
+      if (action === "Change Element" && !actionBtn.disabled) {
+        const result = applyElementChange();
+        if (result.ok) {
+          render(mount, readRouteFromUrl());
         }
         return;
       }

@@ -1,4 +1,7 @@
-import { getElementById } from "../../data/element-upgrade.js";
+import {
+  elementUpgradeState,
+  getElementById,
+} from "../../data/element-upgrade.js";
 import {
   ELEMENT_CYCLE_ORDER,
   elementStrongAgainst,
@@ -145,7 +148,13 @@ export function renderElementCycleWheel({
   itemKind = "weapon",
 }) {
   const target = targetId ? getElementById(targetId) : null;
-  const canChange = Boolean(targetId && targetId !== appliedId && target);
+  const scrolls = elementUpgradeState.inventory.elementChangeScrolls ?? 0;
+  const canChange = Boolean(
+    targetId &&
+      targetId !== appliedId &&
+      target &&
+      scrolls > 0,
+  );
   const appliedIdx = ELEMENT_CYCLE_ORDER.indexOf(appliedId);
   const weakArcIdx =
     appliedIdx >= 0
