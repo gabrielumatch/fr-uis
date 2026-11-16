@@ -1,4 +1,8 @@
-import { equippedItem } from "./data/equipped-item.js";
+import {
+  activeWorkshopItemId,
+  equippedItem,
+  selectWorkshopItem,
+} from "./data/equipped-item.js";
 import {
   attemptPlanCanStart,
   autoRefillAttemptPlan,
@@ -10,6 +14,8 @@ import {
   getElementById,
 } from "./data/element-upgrade.js";
 import { renderWorkshopHeader } from "./components/workshop-header.js";
+import { renderInventorySection } from "./components/inventory-section.js";
+import { inventoryTabId, setInventoryTab } from "./data/inventory-display.js";
 import { renderTabBar } from "./components/tab-bar.js";
 import { renderItemSidebar } from "./components/item-sidebar.js";
 import { renderOperationPanel } from "./components/operation-panel.js";
@@ -27,7 +33,8 @@ import {
   applySkin,
   removeSkin,
   setSelectedSkinId,
-  skinState,
+  syncSkinToEquippedItem,
+  getItemSkinState,
 } from "./data/skin-management.js";
 
 const DEFAULT_TAB = "upgrade";
@@ -192,7 +199,7 @@ function render(mount, route) {
   const tabDefs = tabRegistry.map(({ id, label, icon }) => ({ id, label, icon }));
 
   mount.innerHTML = `
-    <div class="workshop" id="equipment-workshop">
+    <section class="workshop" id="equipment-workshop" aria-labelledby="equipment-workshop-title">
       ${renderWorkshopHeader()}
       ${renderTabBar({ tabs: tabDefs, activeId: tab.id })}
       <div class="workshop__layout">
@@ -207,7 +214,11 @@ function render(mount, route) {
           materialsTitle,
         })}
       </div>
-    </div>
+    </section>
+    ${renderInventorySection({
+      activeId: activeWorkshopItemId,
+      tabId: inventoryTabId,
+    })}
   `;
 }
 
@@ -260,7 +271,28 @@ function bindEvents(mount) {
     if (skinBtn instanceof HTMLButtonElement) {
       const id = skinBtn.dataset.skinId;
       if (id) {
+        const skinState = getItemSkinState();
         setSelectedSkinId(id === skinState.selectedSkinId ? null : id);
+        render(mount, readRouteFromUrl());
+      }
+      return;
+    }
+
+    const invTabBtn = target.closest("[data-inventory-tab]");
+    if (invTabBtn instanceof HTMLButtonElement) {
+      const tab = invTabBtn.dataset.inventoryTab;
+      if (tab) {
+        setInventoryTab(tab);
+        render(mount, readRouteFromUrl());
+      }
+      return;
+    }
+
+    const workshopItemBtn = target.closest("[data-workshop-item-id]");
+    if (workshopItemBtn instanceof HTMLButtonElement) {
+      const itemId = workshopItemBtn.dataset.workshopItemId;
+      if (itemId && selectWorkshopItem(itemId)) {
+        syncSkinToEquippedItem();
         render(mount, readRouteFromUrl());
       }
       return;

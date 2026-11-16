@@ -2,7 +2,7 @@ import { renderPanelSubTabBar } from "../components/upgrade/sub-tab-bar.js";
 import { SKINS_SUB_TABS } from "./skins-sub-tabs.js";
 import { renderSkinSlotPair } from "../components/skins/skin-slot-pair.js";
 import { renderSkinPicker } from "../components/skins/skin-picker.js";
-import { getSkinById, skinState } from "../data/skin-management.js";
+import { getItemSkinState, getSkinById } from "../data/skin-management.js";
 import { renderActionButtons } from "../components/upgrade/action-buttons.js";
 
 export function getSkinsApplyMaterials() {
@@ -10,6 +10,7 @@ export function getSkinsApplyMaterials() {
 }
 
 export function renderSkinsApplyBody() {
+  const skinState = getItemSkinState();
   const blocked = skinState.hasSkinApplied;
   const selectedId = skinState.selectedSkinId;
   const selected = selectedId ? getSkinById(selectedId) : null;

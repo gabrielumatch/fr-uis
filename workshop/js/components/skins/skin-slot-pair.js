@@ -1,10 +1,11 @@
 import { equippedItem } from "../../data/equipped-item.js";
-import { getSkinById, skinState } from "../../data/skin-management.js";
+import { getItemSkinState, getSkinById } from "../../data/skin-management.js";
 
 /**
  * @param {{ skinSelected: boolean }} props
  */
 export function renderSkinSlotPair({ skinSelected }) {
+  const skinState = getItemSkinState();
   const selected = skinState.selectedSkinId
     ? getSkinById(skinState.selectedSkinId)
     : null;

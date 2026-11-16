@@ -1,7 +1,8 @@
 import { equippedItem } from "../../data/equipped-item.js";
-import { skinState } from "../../data/skin-management.js";
+import { getItemSkinState } from "../../data/skin-management.js";
 
 export function renderSkinPicker() {
+  const skinState = getItemSkinState();
   const selectedId = skinState.selectedSkinId;
   const { skinPool } = skinState;
 

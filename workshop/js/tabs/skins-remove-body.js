@@ -1,9 +1,10 @@
 import { renderPanelSubTabBar } from "../components/upgrade/sub-tab-bar.js";
 import { SKINS_SUB_TABS } from "./skins-sub-tabs.js";
 import { equippedItem } from "../data/equipped-item.js";
-import { skinState } from "../data/skin-management.js";
+import { getItemSkinState } from "../data/skin-management.js";
 
 export function getSkinsRemoveMaterials() {
+  const skinState = getItemSkinState();
   return [
     {
       icon: "📜",
@@ -19,6 +20,7 @@ export function getSkinsRemoveMaterials() {
 }
 
 export function renderSkinsRemoveBody() {
+  const skinState = getItemSkinState();
   const { hasSkinApplied, appliedLook } = skinState;
   const purgeScrolls = skinState.inventory.purgeSkinScrolls;
   const recoverScrolls = skinState.inventory.recoverSkinScrolls;

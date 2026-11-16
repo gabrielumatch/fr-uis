@@ -7,7 +7,7 @@ import { renderGearScore } from "./gear-score.js";
 export function renderItemSidebar(item) {
   return `
     <aside class="frame item-sidebar">
-      <h2 class="section-title">Equipped Item</h2>
+      <h2 class="section-title">Workshop Item</h2>
       ${renderItemCard(item)}
       ${renderStatList(item.stats)}
       ${renderAwakeAttributes(item.awake)}
