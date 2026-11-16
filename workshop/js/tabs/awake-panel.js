@@ -1,7 +1,6 @@
 import { awakeManagementState } from "../data/awake-management.js";
 import { equippedItem } from "../data/equipped-item.js";
 import { renderAwakeTargetItem } from "../components/awake/awake-target-item.js";
-import { renderAwakeMaterialSlots } from "../components/awake/awake-material-slots.js";
 import { renderAwakeNotice } from "../components/awake/awake-notice.js";
 import { renderAwakeResults } from "../components/awake/awake-results.js";
 import { renderAwakeHighlight } from "../components/awake/awake-highlight.js";
@@ -15,26 +14,27 @@ export const awakeTab = {
   panelTitle: "Awake Item",
   panelSubtitle: "",
   materialsVariant: "grid",
-  materialsTitle: "",
-  materials: [],
+  materialsTitle: "Materials Required / Available",
+  get materials() {
+    const inv = awakeManagementState.inventory;
+    return [
+      {
+        icon: "🔮",
+        name: "Awakening Scroll",
+        quantity: inv.awakeningScroll,
+      },
+      {
+        icon: "📜",
+        name: "Reversion Scroll",
+        quantity: inv.reversionScroll,
+      },
+    ];
+  },
   renderBody() {
     const s = awakeManagementState;
-    const inv = s.inventory;
 
     return `
       ${renderAwakeTargetItem({ name: equippedItem.name })}
-      ${renderAwakeMaterialSlots({
-        awakening: {
-          icon: "🔮",
-          name: "Awakening Scroll",
-          quantity: inv.awakeningScroll,
-        },
-        reversion: {
-          icon: "📜",
-          name: "Reversion Scroll",
-          quantity: inv.reversionScroll,
-        },
-      })}
       ${renderAwakeNotice({ penyaCost: s.penyaCost })}
       ${renderAwakeResults({ lines: s.lines, showColored: s.showColoredStats })}
       ${renderAwakeHighlight({
