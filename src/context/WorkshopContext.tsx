@@ -16,6 +16,7 @@ import {
   resolveInventoryTab,
   type InventoryTabId,
 } from "../data/inventory/display";
+import { useWorkshopRoute } from "../hooks/useWorkshopRoute";
 
 type WorkshopContextValue = {
   activeCatalogItemId: string;
@@ -30,9 +31,9 @@ type WorkshopContextValue = {
 const WorkshopContext = createContext<WorkshopContextValue | null>(null);
 
 export function WorkshopProvider({ children }: { children: ReactNode }) {
+  const { inventoryTab: urlInventoryTab, setInventoryTab: setInventoryTabUrl } =
+    useWorkshopRoute();
   const [selectionTick, setSelectionTick] = useState(0);
-  const [inventoryTabId, setInventoryTabId] =
-    useState<InventoryTabId>("weapons");
   const bump = useCallback(() => setSelectionTick((n) => n + 1), []);
 
   const value = useMemo<WorkshopContextValue>(
@@ -46,7 +47,9 @@ export function WorkshopProvider({ children }: { children: ReactNode }) {
       get equippedItem() {
         return equippedItem;
       },
-      inventoryTabId,
+      get inventoryTabId() {
+        return urlInventoryTab;
+      },
       bump,
       selectItem: (id) => {
         const ok = selectCatalogItem(id);
@@ -54,10 +57,10 @@ export function WorkshopProvider({ children }: { children: ReactNode }) {
         return ok;
       },
       setInventoryTab: (tab: InventoryTabId) => {
-        setInventoryTabId(resolveInventoryTab(tab));
+        setInventoryTabUrl(resolveInventoryTab(tab));
       },
     }),
-    [selectionTick, inventoryTabId, bump],
+    [selectionTick, urlInventoryTab, bump, setInventoryTabUrl],
   );
 
   return <WorkshopContext.Provider value={value}>{children}</WorkshopContext.Provider>;

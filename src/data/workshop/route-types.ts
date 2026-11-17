@@ -10,3 +10,11 @@ export type WorkshopRoute = {
   elementSub: ElementSub;
   skinsSub: SkinsSub;
 };
+
+export const DEFAULT_ROUTE: WorkshopRoute = {
+  tabId: "upgrade",
+  upgradeSub: "level",
+  piercingSub: "pierce",
+  elementSub: "upgrade",
+  skinsSub: "apply",
+};
