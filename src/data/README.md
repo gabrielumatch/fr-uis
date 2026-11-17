@@ -25,6 +25,8 @@ Não inferir por nome ou ícone. No hydrate, `category` vira `item.upgrade` via 
 
 Ex.: `hotter-sword` = `type: weapon`, `subtype: two-handed-sword`, `category: normal` → Sunstone + SProtect. Ultimate (Lusaka, etc.) = `category: ultimate` → Oricalkum + XProtect.
 
+**Jewelry** (`type: jewel`, ring/necklace/earring): só aba **Accessory Upgrade** — Moonstone + AProtect. Sem Element, Piercing, Awake, Skins nem sub-aba Jewels (sockets de arma).
+
 Ao cadastrar item novo: acerte `category` no JSON; o boot valida bag + coerência `category` ↔ `upgrade`.
 
 ### Skins (`isSkin: true`, `type: skin`)

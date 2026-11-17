@@ -5,6 +5,60 @@ import {
   opensWorkshopUpgrade,
 } from "../items/item";
 import { skinFitsHost } from "../systems/skin-rules";
+import type { WorkshopRoute } from "./route-types";
+
+export const WORKSHOP_MAIN_TAB_IDS = [
+  "upgrade",
+  "element",
+  "piercing",
+  "awake",
+  "skins",
+] as const;
+
+export type WorkshopMainTabId = (typeof WORKSHOP_MAIN_TAB_IDS)[number];
+
+export function isAccessoryJewelryItem(item: WorkshopItem): boolean {
+  return item.type === "jewel";
+}
+
+/** Abas principais do workshop para o item equipado. */
+export function getWorkshopTabIds(item: WorkshopItem): WorkshopMainTabId[] {
+  if (isAccessoryJewelryItem(item)) {
+    return ["upgrade"];
+  }
+  return [...WORKSHOP_MAIN_TAB_IDS];
+}
+
+/** Sub-abas em Upgrade — jewelry só Safe +, sem jewel sockets. */
+export function getUpgradeSubTabIds(
+  item: WorkshopItem,
+): readonly ("level" | "jewels")[] {
+  if (isAccessoryJewelryItem(item)) {
+    return ["level"];
+  }
+  return ["level", "jewels"];
+}
+
+export function coerceWorkshopRoute(
+  route: WorkshopRoute,
+  item: WorkshopItem,
+): WorkshopRoute {
+  const allowed = new Set(getWorkshopTabIds(item));
+  const tabId = allowed.has(route.tabId as WorkshopMainTabId)
+    ? route.tabId
+    : "upgrade";
+
+  let upgradeSub = route.upgradeSub;
+  if (tabId === "upgrade" && isAccessoryJewelryItem(item)) {
+    upgradeSub = "level";
+  }
+
+  return {
+    ...route,
+    tabId,
+    upgradeSub,
+  };
+}
 
 /** Bag click: só gear com upgrade abre o bloco workshop (scroll + painel). */
 export function itemOpensWorkshopUi(item: CatalogItem): boolean {

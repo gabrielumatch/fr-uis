@@ -3,18 +3,14 @@ import { getTabById, TAB_HASH_ALIASES } from "../tabs/registry";
 
 const DEFAULT_TAB = "upgrade";
 
-export type UpgradeSub = "level" | "jewels";
-export type PiercingSub = "pierce" | "cards";
-export type ElementSub = "upgrade" | "change";
-export type SkinsSub = "apply" | "remove";
-
-export type WorkshopRoute = {
-  tabId: string;
-  upgradeSub: UpgradeSub;
-  piercingSub: PiercingSub;
-  elementSub: ElementSub;
-  skinsSub: SkinsSub;
-};
+export type {
+  UpgradeSub,
+  PiercingSub,
+  ElementSub,
+  SkinsSub,
+  WorkshopRoute,
+} from "../data/workshop/route-types";
+import type { WorkshopRoute } from "../data/workshop/route-types";
 
 export const DEFAULT_ROUTE: WorkshopRoute = {
   tabId: DEFAULT_TAB,

@@ -4,12 +4,16 @@ import { isSkinItem, type SkinItem, type WorkshopItem } from "../items/item";
 import { INVENTORY_BAG_SLOTS } from "../inventory/inventory-bag";
 import { getBagSkinsForWorkshopHost } from "../inventory/bag-skins";
 import {
+  coerceWorkshopRoute,
   filterSkinsForWorkshopHost,
+  getUpgradeSubTabIds,
+  getWorkshopTabIds,
   isInventoryOnlyCatalogItem,
   isSkinListedInSkinsTab,
   itemOpensWorkshopUi,
   resolveWorkshopSidebarItem,
 } from "./ui-rules";
+import { DEFAULT_ROUTE } from "../../hooks/useWorkshopRoute";
 
 function requireWorkshopItem(id: string): WorkshopItem {
   const item = getItemById(id);
@@ -49,6 +53,26 @@ describe("workshop UI routing", () => {
     expect(isInventoryOnlyCatalogItem(requireSkin("spectre-axe"))).toBe(true);
     expect(isInventoryOnlyCatalogItem(getItemById("ankou-cloak")!)).toBe(true);
     expect(isInventoryOnlyCatalogItem(requireWorkshopItem("hotter-sword"))).toBe(false);
+  });
+});
+
+describe("accessory jewelry (ring/necklace/earring)", () => {
+  it("only upgrade main tab — no element/piercing/awake/skins", () => {
+    const ring = requireWorkshopItem("intelli-ring");
+    expect(getWorkshopTabIds(ring)).toEqual(["upgrade"]);
+    expect(getUpgradeSubTabIds(ring)).toEqual(["level"]);
+    expect(ring.upgrade.material).toBe("moonstone");
+    expect(ring.upgrade.protect).toBe("aprotect");
+  });
+
+  it("coerces illegal routes to accessory upgrade level", () => {
+    const ring = requireWorkshopItem("intelli-ring");
+    const coerced = coerceWorkshopRoute(
+      { ...DEFAULT_ROUTE, tabId: "element", upgradeSub: "jewels" },
+      ring,
+    );
+    expect(coerced.tabId).toBe("upgrade");
+    expect(coerced.upgradeSub).toBe("level");
   });
 });
 

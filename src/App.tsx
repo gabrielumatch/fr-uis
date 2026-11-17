@@ -43,7 +43,13 @@ import {
 } from "./data/workshop/equipped";
 import { getItemById } from "./data/items/catalog";
 import { opensWorkshopUpgrade } from "./data/items/item";
-import { itemOpensWorkshopUi, resolveWorkshopSidebarItem } from "./data/workshop/ui-rules";
+import {
+  coerceWorkshopRoute,
+  getWorkshopTabIds,
+  itemOpensWorkshopUi,
+  resolveWorkshopSidebarItem,
+} from "./data/workshop/ui-rules";
+import { useEffect, useMemo } from "react";
 
 const DEFAULT_TAB = "upgrade";
 
@@ -63,8 +69,24 @@ function attemptPlanKeyFromRoute(route: WorkshopRoute): AttemptPlanKey | null {
 export function App() {
   const { route, setRoute } = useWorkshopRoute();
   const workshop = useWorkshop();
+  const equipped = workshop.equippedItem;
 
-  let tab = getTabById(route.tabId) ?? getTabById(DEFAULT_TAB);
+  const effectiveRoute = useMemo(
+    () => coerceWorkshopRoute(route, equipped),
+    [route, equipped],
+  );
+
+  useEffect(() => {
+    const next = coerceWorkshopRoute(route, equipped);
+    if (
+      next.tabId !== route.tabId ||
+      next.upgradeSub !== route.upgradeSub
+    ) {
+      setRoute(next);
+    }
+  }, [equipped.id, route.tabId, route.upgradeSub, setRoute, equipped]);
+
+  let tab = getTabById(effectiveRoute.tabId) ?? getTabById(DEFAULT_TAB);
   if (!tab) return null;
 
   let panelTitle = tab.panelTitle;
@@ -75,27 +97,37 @@ export function App() {
   let Body = tab.Body;
 
   if (tab.id === "upgrade") {
-    const view = getUpgradePanelView(route.upgradeSub);
+    const view = getUpgradePanelView(effectiveRoute.upgradeSub, equipped);
     ({ panelTitle, panelSubtitle, materials, materialsVariant, materialsTitle } = view);
     Body = view.Body;
   }
   if (tab.id === "piercing") {
-    const view = getPiercingPanelView(route.piercingSub);
+    const view = getPiercingPanelView(effectiveRoute.piercingSub);
     ({ panelTitle, panelSubtitle, materials, materialsVariant, materialsTitle } = view);
     Body = view.Body;
   }
   if (tab.id === "element") {
-    const view = getElementPanelView(route.elementSub);
+    const view = getElementPanelView(effectiveRoute.elementSub);
     ({ panelTitle, panelSubtitle, materials, materialsVariant, materialsTitle } = view);
     Body = view.Body;
   }
   if (tab.id === "skins") {
-    const view = getSkinsPanelView(route.skinsSub);
+    const view = getSkinsPanelView(effectiveRoute.skinsSub);
     ({ panelTitle, panelSubtitle, materials, materialsVariant, materialsTitle } = view);
     Body = view.Body;
   }
 
-  const tabDefs = tabRegistry.map(({ id, label, icon }) => ({ id, label, icon }));
+  const visibleTabIds = getWorkshopTabIds(equipped);
+  const tabDefs = tabRegistry
+    .filter((t) => visibleTabIds.includes(t.id as (typeof visibleTabIds)[number]))
+    .map(({ id, label, icon }) => ({
+      id,
+      label:
+        id === "upgrade" && equipped.type === "jewel"
+          ? "Accessory Upgrade"
+          : label,
+      icon,
+    }));
 
   const handleSelectCatalogItem = (itemId: string) => {
     const item = getItemById(itemId);
@@ -114,7 +146,7 @@ export function App() {
         clearAttemptPlan("upgrade-level");
         syncSkinToEquippedItem();
 
-        const upgradeSub = panelItem.type === "jewel" ? "jewels" : "level";
+        const upgradeSub = "level";
         setRoute({
           ...DEFAULT_ROUTE,
           tabId: "upgrade",
@@ -332,7 +364,7 @@ export function App() {
     <div onClick={handleClick}>
       <section className="workshop" id="equipment-workshop" aria-labelledby="equipment-workshop-title">
         <WorkshopHeader />
-        <TabBar tabs={tabDefs} activeId={tab.id} />
+        <TabBar tabs={tabDefs} activeId={effectiveRoute.tabId} />
         <div className="workshop__layout">
           <ItemSidebar item={resolveWorkshopSidebarItem(workshop.equippedItem)} />
           <OperationPanel

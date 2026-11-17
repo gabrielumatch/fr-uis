@@ -1,4 +1,7 @@
+import { equippedItem } from "../data/workshop/equipped";
 import { getUpgradeLevelMaterials } from "../data/upgrade/materials";
+import { getUpgradeSubTabIds } from "../data/workshop/ui-rules";
+import type { WorkshopItem } from "../data/items/item";
 import { UpgradeLevelBody } from "./upgrade-level-body";
 import { UpgradeJewelsBody, upgradeJewelsMaterials } from "./upgrade-jewels-body";
 import { UPGRADE_SUB_TABS } from "./upgrade-sub-tabs";
@@ -10,7 +13,13 @@ export function resolveUpgradeSub(sub?: string): UpgradeSubId {
   return sub === "jewels" ? "jewels" : "level";
 }
 
-export function getUpgradePanelView(sub: UpgradeSubId) {
+export function getUpgradePanelView(
+  sub: UpgradeSubId,
+  item: WorkshopItem = equippedItem,
+) {
+  if (sub === "jewels" && !getUpgradeSubTabIds(item).includes("jewels")) {
+    sub = "level";
+  }
   if (sub === "jewels") {
     return {
       panelTitle: "Jewel Management",
@@ -27,7 +36,7 @@ export function getUpgradePanelView(sub: UpgradeSubId) {
     panelSubtitle: "Plan protected upgrade attempts to your target level.",
     materialsVariant: "grid" as const,
     materialsTitle: "Materials Required / Available",
-    materials: getUpgradeLevelMaterials(),
+    materials: getUpgradeLevelMaterials(item),
     Body: UpgradeLevelBody,
   };
 }
