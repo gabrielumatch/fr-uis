@@ -56,7 +56,6 @@ import {
   equipBeadInSlot,
   getEquippedPickupPet,
   setPickupFilter,
-  togglePickupSummon,
   unlockBeadSlot,
 } from "./data/systems/pickup-pet-workshop";
 import { getPetBeadsPanelMaterials } from "./tabs/pet-beads-panel";
@@ -433,11 +432,6 @@ export function App() {
         }
         if (action === "Apply Pet Blessing") {
           if (applyPickupBlessing(pickup).ok) workshop.bump();
-          return;
-        }
-        if (action === "Toggle Pickup Summon") {
-          togglePickupSummon(pickup);
-          workshop.bump();
           return;
         }
         if (action === "Equip Demo Bead" && actionBtn.dataset.beadId) {

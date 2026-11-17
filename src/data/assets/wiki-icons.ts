@@ -44,6 +44,8 @@ export const WIKI = {
   petLion: wikiImg("images/thumb/4/40/Pet_Lion.PNG/70px-Pet_Lion.png"),
   petDragon: wikiImg("images/thumb/8/85/Pet_Dragon.PNG/70px-Pet_Dragon.png"),
   petUnicorn: wikiImg("images/thumb/1/10/Pet_Unicorn.PNG/70px-Pet_Unicorn.png"),
+  petBabyLuia: wikiImg("images/e/e0/Babyluia.png"),
+  petMocomochi: wikiImg("images/d/d0/Mocomochi.png"),
   petFeed: wikiImg("images/8/89/Pet_PetFeed.png"),
   scrollSProtect: wikiImg("images/b/b7/ScrollofSprotect.png"),
   scrollAProtect: wikiImg("images/a/a9/ScrollofAprotect.png"),

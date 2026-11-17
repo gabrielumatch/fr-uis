@@ -26,10 +26,7 @@ export function convertPickupToBuff(pet: WorkshopPickupPetItem): { ok: boolean; 
   }
   const inv = pet.workshopPickup.inventory;
   if (inv.pickupUpgradeScroll < 1) {
-    return { ok: false, message: "Need Pick-up Pet Upgrade scroll (pet must be summoned)." };
-  }
-  if (!pet.summoned) {
-    return { ok: false, message: "Summon your pick-up pet before using the upgrade scroll." };
+    return { ok: false, message: "Need Pick-up Pet Upgrade scroll." };
   }
   inv.pickupUpgradeScroll -= 1;
   pet.mode = "buff";

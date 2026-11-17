@@ -1,40 +1,61 @@
 import { getEquippedPickupPet } from "../data/systems/pickup-pet-workshop";
 import { ActionButtons } from "../components/upgrade/action-buttons";
+import { ItemIcon } from "../utils/item-icon";
 
 export function PetConvertBody() {
   const pet = getEquippedPickupPet();
   if (!pet || pet.mode !== "pickup") return null;
   const inv = pet.workshopPickup.inventory;
+  const canConvert = inv.pickupUpgradeScroll >= 1;
 
   return (
     <>
       <p className="upgrade-sub-hint muted">
-        Summon the pick-up pet, then use <strong>Pick-up Pet Upgrade</strong>. Unlocks 2 bead
-        slots and cannot be undone. Some mailable pets become non-mailable.
+        One <strong>Pick-up Pet Upgrade</strong> scroll turns this pet into a <strong>Buff Pet</strong>{" "}
+        (bead slots, blessings, same loot pickup). Conversion cannot be undone.
       </p>
-      <div className="frame upgrade-target">
-        <div className="upgrade-target__row">
-          <span className="muted">Upgrade scrolls</span>
-          <strong>{inv.pickupUpgradeScroll}</strong>
+
+      <div className="pet-convert-flow frame">
+        <div className="pet-convert-flow__step">
+          <ItemIcon
+            icon={pet.icon}
+            wrapperClass="pet-convert-flow__icon-wrap"
+            imgClass="pet-convert-flow__icon-img"
+            alt={pet.name}
+          />
+          <div className="pet-convert-flow__label">{pet.name}</div>
+          <div className="pet-convert-flow__kind muted">Pick-up</div>
         </div>
-        <div className="upgrade-target__row">
-          <span className="muted">Summoned</span>
-          <strong>{pet.summoned ? "Yes" : "No"}</strong>
+
+        <div className="pet-convert-flow__arrow" aria-hidden>
+          →
         </div>
-        <div className="upgrade-target__row">
-          <span className="muted">Mailable</span>
-          <strong>{pet.mailable ? "Yes" : "No"}</strong>
+
+        <div className="pet-convert-flow__step pet-convert-flow__step--after">
+          <ItemIcon
+            icon={pet.icon}
+            wrapperClass="pet-convert-flow__icon-wrap pet-convert-flow__icon-wrap--buff"
+            imgClass="pet-convert-flow__icon-img"
+            alt={`${pet.name} (Buff)`}
+          />
+          <div className="pet-convert-flow__label">Buff {pet.name}</div>
+          <div className="pet-convert-flow__kind muted">2 bead slots open</div>
         </div>
       </div>
-      <div className="btn-row">
-        <button type="button" className="btn btn--secondary" data-action="Toggle Pickup Summon">
-          {pet.summoned ? "Un-summon Pet" : "Summon Pet"}
-        </button>
-      </div>
+
+      <ul className="pet-convert-notes muted">
+        <li>Up to 9 bead slots with Bead Slot Keys (Beads tab after convert).</li>
+        {pet.mailable ? (
+          <li>Mailable pets become non-mailable after conversion.</li>
+        ) : (
+          <li>Already non-mailable.</li>
+        )}
+      </ul>
+
       <ActionButtons
-        primary="Convert to Buff Pet"
+        primary="Use Pick-up Pet Upgrade"
         secondary={[]}
-        primaryDisabled={!pet.summoned || inv.pickupUpgradeScroll < 1}
+        primaryDisabled={!canConvert}
       />
     </>
   );

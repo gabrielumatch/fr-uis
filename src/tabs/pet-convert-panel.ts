@@ -6,7 +6,7 @@ export const convertTab: TabDefinition = {
   label: "Convert",
   icon: "✨",
   panelTitle: "Pick-up → Buff",
-  panelSubtitle: "Pick-up Pet Upgrade scroll",
+  panelSubtitle: "Permanent — unlocks Beads tab",
   materialsVariant: "list",
   materialsTitle: "Materials",
   materials: [],

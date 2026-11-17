@@ -850,7 +850,7 @@
       "type": "pet",
       "subtype": "pickup",
       "category": "pet",
-      "iconKey": "petUnicorn",
+      "iconKey": "petBabyLuia",
       "typeLabel": "Pick-up Pet",
       "stackQty": 1,
       "pickupPet": {
@@ -872,7 +872,7 @@
       "type": "pet",
       "subtype": "pickup",
       "category": "pet",
-      "iconKey": "petUnicorn",
+      "iconKey": "petMocomochi",
       "typeLabel": "Buff Pet",
       "stackQty": 1,
       "pickupPet": {
