@@ -2,6 +2,7 @@ import { formatPenya, playerPenya, type InventoryTabId } from "../data/inventory
 import { SectionHeader } from "./workshop-header";
 import { CharacterEquipPane } from "./inventory/character-equip-pane";
 import { InventoryGridPane } from "./inventory/inventory-grid-pane";
+import { InventorySelectionHint } from "./inventory/inventory-selection-hint";
 
 export function InventorySection({
   activeCatalogItemId,
@@ -37,6 +38,7 @@ export function InventorySection({
           />
         </div>
       </div>
+      <InventorySelectionHint activeCatalogItemId={activeCatalogItemId} />
       <footer className="inventory-panel__penya" aria-label="Penya">
         <span className="inventory-panel__penya-icon" aria-hidden="true">
           🪙

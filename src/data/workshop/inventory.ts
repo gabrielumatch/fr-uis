@@ -1,11 +1,9 @@
 import { equipmentCatalog, getItemById } from "../items/catalog";
 import {
-  isSkinItem,
   isWorkshopItem,
   type CatalogItem,
   type WorkshopItem,
 } from "../items/item";
-import { skinFitsHost } from "../systems/skin-rules";
 
 const workshopItems: WorkshopItem[] = [...equipmentCatalog];
 
@@ -31,14 +29,6 @@ export function selectCatalogItem(id: string): boolean {
     activeWorkshopItemId = id;
     equippedItem = item;
     return true;
-  }
-
-  if (isSkinItem(item) && item.hostItemId) {
-    const host = getWorkshopItemById(item.hostItemId);
-    if (host && skinFitsHost(item, host)) {
-      activeWorkshopItemId = host.id;
-      equippedItem = host;
-    }
   }
 
   return true;

@@ -5,6 +5,7 @@ export type ItemType =
   | "armor"
   | "jewel"
   | "fashion"
+  | "wing"
   | "consumable"
   | "skin"
   | "pet"
@@ -17,6 +18,7 @@ export type ItemCategory =
   | "baruna"
   | "accessory"
   | "fashion"
+  | "wing"
   | "upgrade"
   | "skin"
   | "pet"
@@ -59,6 +61,8 @@ export type WeaponSubtype =
   | "yoyo";
 
 export type FashionSubtype = "hat" | "suit" | "gloves" | "boots" | "back";
+
+export type WingSubtype = "back" | "wings";
 
 /** Primary compatível com a skin (mesmo `subtype` do equip). */
 export type SkinSlot = WeaponSubtype | ArmorSubtype | FashionSubtype;

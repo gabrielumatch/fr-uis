@@ -2,7 +2,7 @@
 
 | Pasta | Conteúdo |
 |-------|----------|
-| **`items/`** | **`items.json`** — catálogo único (weapon, armor, jewel, fashion, **consumable**, **skin**); `types.ts`, `item.ts`, `hydrate-items.ts`, `catalog.ts` |
+| **`items/`** | **`items.json`** — catálogo único (weapon, armor, jewel, fashion, **wing**, **consumable**, **skin**); `types.ts`, `item.ts`, `hydrate-items.ts`, `catalog.ts` |
 | **`workshop/`** | Item equipado na UI |
 | **`upgrade/`** | Receitas `+` e painel de materiais |
 | **`inventory/`** | Grid do bag |
@@ -21,10 +21,12 @@ Não inferir por nome ou ícone. No hydrate, `category` vira `item.upgrade` via 
 | `ultimate` | Oricalkum | XProtect |
 | `baruna` | Stone of Balance | Blessing of Baruna |
 
+**Fashion** (`type: fashion`, `category: fashion`) → Lightning Stone (só peças CS que aceitam + de fashion). **Wings** (`type: wing`, `category: wing`) — slot costas; **sem** aba Upgrade (`opensWorkshopUpgrade` = false). **Helmet/armor** de set = `type: armor`, `category: normal` → Sunstone + SProtect.
+
 Ex.: `hotter-sword` = `type: weapon`, `subtype: two-handed-sword`, `category: normal` → Sunstone + SProtect. Ultimate (Lusaka, etc.) = `category: ultimate` → Oricalkum + XProtect.
 
 Ao cadastrar item novo: acerte `category` no JSON; o boot valida bag + coerência `category` ↔ `upgrade`.
 
 ### Skins (`isSkin: true`, `type: skin`)
 
-Não abrem **Upgrade**. Clique na bag → aba **Skins**. Compatibilidade: `skinSlot` (= `subtype` do primary: `two-handed-axe`, `bow`, `helmet`, …). `skinPoolIds` no gear só aceita skins com o mesmo slot.
+**Não abrem o workshop** (igual wing/pet). Não entram na sidebar **Workshop Item**. Na aba **Skins**, só aparecem skins da bag com `skinSlot` = `subtype` do gear selecionado no workshop. Testes: `npm test` → `ui-rules.test.ts`.

@@ -238,7 +238,7 @@
       "subtype": "equipment-look",
       "category": "skin",
       "iconKey": "cruentusHelmetF",
-      "typeLabel": "Fashion (Hat)",
+      "typeLabel": "Helmet",
       "hostItemId": "neo-hat"
     },
     {
@@ -248,8 +248,8 @@
       "subtype": "equipment-look",
       "category": "skin",
       "iconKey": "bilariHelmetF",
-      "typeLabel": "Fashion (Hat)",
-      "hostItemId": "ankou-cloak"
+      "typeLabel": "Helmet",
+      "hostItemId": "vigor-helm"
     },
     {
       "id": "lusaka-axe",
@@ -608,33 +608,20 @@
     {
       "id": "neo-hat",
       "name": "(M) Cruentus Helmet",
-      "type": "fashion",
-      "subtype": "hat",
-      "category": "fashion",
+      "type": "armor",
+      "subtype": "helmet",
+      "category": "normal",
       "iconKey": "cruentusHelmetM",
-      "typeLabel": "Fashion (Hat)",
+      "typeLabel": "Helmet",
       "elementHost": "suit",
       "upgradeLevel": 0,
-      "gearScore": 12,
+      "level": 125,
+      "defense": {
+        "min": 1080,
+        "max": 1086
+      },
+      "gearScore": 22,
       "awake": [],
-      "info": [
-        {
-          "label": "Category",
-          "value": "Rare / CS"
-        },
-        {
-          "label": "Set",
-          "value": "(M) Cruentus"
-        },
-        {
-          "label": "Source",
-          "value": "Knight Armor (Wiki)"
-        },
-        {
-          "label": "Appearance",
-          "value": "Original"
-        }
-      ],
       "skinPoolIds": [
         "cruentus-helm-f"
       ]
@@ -680,15 +667,12 @@
     {
       "id": "ankou-cloak",
       "name": "Fashion Wings",
-      "type": "fashion",
+      "type": "wing",
       "subtype": "back",
-      "category": "fashion",
+      "category": "wing",
       "iconKey": "fashionWings",
-      "typeLabel": "Fashion (Back / Wings)",
-      "elementHost": "suit",
-      "upgradeLevel": 0,
+      "typeLabel": "Wings (Back)",
       "gearScore": 18,
-      "awake": [],
       "info": [
         {
           "label": "Category",
@@ -706,9 +690,6 @@
           "label": "Appearance",
           "value": "Original"
         }
-      ],
-      "skinPoolIds": [
-        "bilari-helm"
       ]
     },
     {

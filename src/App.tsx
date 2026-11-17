@@ -39,12 +39,11 @@ import {
 import { useWorkshop } from "./context/WorkshopContext";
 import {
   activeWorkshopItemId,
-  getActiveCatalogItem,
   getWorkshopItemById,
 } from "./data/workshop/equipped";
 import { getItemById } from "./data/items/catalog";
-import { isSkinItem, opensWorkshopUpgrade } from "./data/items/item";
-import { canApplySkinIdToEquipped } from "./data/systems/skin-rules";
+import { opensWorkshopUpgrade } from "./data/items/item";
+import { itemOpensWorkshopUi, resolveWorkshopSidebarItem } from "./data/workshop/ui-rules";
 
 const DEFAULT_TAB = "upgrade";
 
@@ -105,18 +104,11 @@ export function App() {
     const ok = workshop.selectItem(itemId);
     if (!ok) return;
 
-    if (isSkinItem(item)) {
-      const host = getWorkshopItemById(activeWorkshopItemId);
-      if (!host || !canApplySkinIdToEquipped(itemId, host)) return;
+    if (!itemOpensWorkshopUi(item)) {
+      return;
+    }
 
-      syncSkinToEquippedItem();
-      setSelectedSkinId(itemId);
-      setRoute({
-        ...DEFAULT_ROUTE,
-        tabId: "skins",
-        skinsSub: "apply",
-      });
-    } else if (opensWorkshopUpgrade(item)) {
+    if (opensWorkshopUpgrade(item)) {
       const panelItem = getWorkshopItemById(activeWorkshopItemId);
       if (panelItem) {
         clearAttemptPlan("upgrade-level");
@@ -342,7 +334,7 @@ export function App() {
         <WorkshopHeader />
         <TabBar tabs={tabDefs} activeId={tab.id} />
         <div className="workshop__layout">
-          <ItemSidebar item={getActiveCatalogItem() ?? workshop.equippedItem} />
+          <ItemSidebar item={resolveWorkshopSidebarItem(workshop.equippedItem)} />
           <OperationPanel
             title={panelTitle}
             subtitle={panelSubtitle}

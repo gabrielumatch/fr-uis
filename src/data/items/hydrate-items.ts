@@ -79,6 +79,14 @@ export function assertItemRecord(record: ItemRecord): void {
         throw new Error(`Item "${record.id}": skin exige category skin`);
       }
       break;
+    case "wing":
+      if (record.category !== "wing") {
+        throw new Error(`Item "${record.id}": wing exige category wing`);
+      }
+      if (!record.info?.length) {
+        throw new Error(`Item "${record.id}": wing exige info[]`);
+      }
+      break;
     case "pet":
     case "quest":
       break;
@@ -94,7 +102,10 @@ function resolveSkinSlot(
     const host = recordsById.get(record.hostItemId);
     if (
       host &&
-      (host.type === "weapon" || host.type === "armor" || host.type === "fashion")
+      (host.type === "weapon" ||
+        host.type === "armor" ||
+        host.type === "fashion" ||
+        host.type === "wing")
     ) {
       return host.subtype as SkinSlot;
     }
@@ -105,7 +116,12 @@ function resolveSkinSlot(
 function hydrateSimpleItem(
   record: ItemRecord,
   recordsById: Map<string, ItemRecord>,
-): ConsumableItem | SkinItem | import("./item").PetItem | import("./item").QuestItem {
+):
+  | ConsumableItem
+  | SkinItem
+  | import("./item").PetItem
+  | import("./item").QuestItem
+  | import("./item").WingItem {
   const isSkin = record.type === "skin";
   const base = {
     id: record.id,
@@ -133,6 +149,16 @@ function hydrateSimpleItem(
   }
   if (record.type === "quest") {
     return { ...base, type: "quest", category: "quest" };
+  }
+  if (record.type === "wing") {
+    return {
+      ...base,
+      type: "wing",
+      subtype: record.subtype as import("./item").WingItem["subtype"],
+      category: "wing",
+      gearScore: record.gearScore ?? 0,
+      info: record.info ?? [],
+    };
   }
   return {
     ...base,
@@ -359,7 +385,8 @@ export function hydrateItemsCatalog(catalog: ItemsCatalog): CatalogItem[] {
       record.type === "consumable" ||
       record.type === "skin" ||
       record.type === "pet" ||
-      record.type === "quest"
+      record.type === "quest" ||
+      record.type === "wing"
     ) {
       byId.set(record.id, hydrateSimpleItem(record, recordsById));
     }

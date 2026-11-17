@@ -150,8 +150,8 @@ export const characterEquippedSlots = {
     {
       itemId: "ankou-cloak",
       icon: WIKI.fashionWings,
-      upgradeBadge: "F",
-      title: "Fashion wings",
+      upgradeBadge: "W",
+      title: "Wings",
     },
   ],
   footer: [{}, {}, {}, {}],

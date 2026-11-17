@@ -3,6 +3,7 @@ import { StatList } from "./stat-list";
 import { AwakeAttributes } from "./awake-attributes";
 import { GearScore } from "./gear-score";
 import {
+  isWingItem,
   isWorkshopItem,
   type CatalogItem,
 } from "../data/items/item";
@@ -16,6 +17,20 @@ export function ItemSidebar({ item }: { item: CatalogItem }) {
         <StatList rows={item.stats} />
         <AwakeAttributes stats={item.awake} />
         <GearScore score={item.gearScore} />
+      </aside>
+    );
+  }
+
+  if (isWingItem(item)) {
+    return (
+      <aside className="frame item-sidebar">
+        <h2 className="section-title">Wings</h2>
+        <ItemCard icon={item.icon} name={item.name} typeLabel={item.typeLabel} upgradeBadge="W" />
+        <StatList rows={item.info.map((row) => ({ label: row.label, value: row.value }))} />
+        <GearScore score={item.gearScore} />
+        <p className="muted item-sidebar__hint">
+          Wings are a separate slot — no Safe Upgrade or workshop + tab.
+        </p>
       </aside>
     );
   }

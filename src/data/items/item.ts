@@ -58,6 +58,14 @@ export type QuestItem = ItemBase & {
   category: "quest";
 };
 
+export type WingItem = ItemBase & {
+  type: "wing";
+  subtype: import("./types").WingSubtype;
+  category: "wing";
+  gearScore: number;
+  info: import("./types").InfoLine[];
+};
+
 export type SkinPoolEntry = Pick<SkinItem, "id" | "icon" | "name" | "typeLabel"> & {
   qty: number;
 };
@@ -131,7 +139,8 @@ export type CatalogItem =
   | ConsumableItem
   | SkinItem
   | PetItem
-  | QuestItem;
+  | QuestItem
+  | WingItem;
 
 export function isWorkshopItem(item: CatalogItem): item is WorkshopItem {
   return (
@@ -150,9 +159,25 @@ export function isSkinItem(item: CatalogItem): item is SkinItem {
   return item.isSkin || item.type === "skin";
 }
 
-/** Só gear de workshop usa Safe Upgrade, piercing com stats, etc. */
+export function isWingItem(item: CatalogItem): item is WingItem {
+  return item.type === "wing";
+}
+
+/** Weapon/armor/jewel com Safe Upgrade — não skin, wing, fashion CS, pet, etc. */
 export function opensWorkshopUpgrade(item: CatalogItem): boolean {
-  return isWorkshopItem(item);
+  return (
+    item.type === "weapon" || item.type === "armor" || item.type === "jewel"
+  );
+}
+
+/** @deprecated import from `../workshop/ui-rules` */
+export function itemOpensWorkshopUi(item: CatalogItem): boolean {
+  return opensWorkshopUpgrade(item);
+}
+
+/** Doll / bag: seleciona no sidebar sem obrigar aba Upgrade. */
+export function isEquipSelectableItem(item: CatalogItem): boolean {
+  return opensWorkshopUpgrade(item) || isWingItem(item);
 }
 
 export function isPetItem(item: CatalogItem): item is PetItem {

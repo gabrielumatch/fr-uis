@@ -4,7 +4,7 @@ import {
   type EquipSlot,
 } from "../../data/inventory/display";
 import { getItemById } from "../../data/items/catalog";
-import { isWorkshopItem } from "../../data/items/item";
+import { isEquipSelectableItem } from "../../data/items/item";
 import { InventorySlot } from "./inventory-slot";
 
 function EquipSlotCell({
@@ -21,7 +21,7 @@ function EquipSlotCell({
   const icon = slot.icon ?? catalogItem?.icon;
   const empty = !icon;
   const title = slot.title ?? catalogItem?.name ?? "";
-  const selectable = Boolean(itemId && catalogItem && isWorkshopItem(catalogItem));
+  const selectable = Boolean(itemId && catalogItem && isEquipSelectableItem(catalogItem));
 
   return (
     <InventorySlot
