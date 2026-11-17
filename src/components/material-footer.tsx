@@ -22,7 +22,9 @@ export function MaterialFooter({
             <div key={m.name} className="material-list__row">
               <div className="material-card__name">
                 <span className="material-card__icon">{m.icon}</span>
-                {m.name}
+                <span className="material-card__label" title={m.name}>
+                  {m.name}
+                </span>
               </div>
               {m.quantity === 0 ? (
                 <button type="button" className="btn btn--buy" data-buy={m.name}>

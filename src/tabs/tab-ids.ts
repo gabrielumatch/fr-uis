@@ -9,7 +9,6 @@ export const WORKSHOP_TAB_IDS = [
   "growth",
   "convert",
   "beads",
-  "blessing",
   "pickup",
 ] as const;
 
@@ -28,6 +27,7 @@ export const TAB_HASH_ALIASES: Record<string, string> = {
   transmutation: "skins",
   "transmutation-apply": "skins",
   "transmutation-revert": "skins",
+  blessing: "awake",
 };
 
 export function isKnownWorkshopTabId(id: string): id is WorkshopTabId {

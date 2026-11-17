@@ -22,11 +22,11 @@ export const RAISED_PET_TAB_IDS = ["feed", "growth", "awake"] as const;
 
 export type RaisedPetTabId = (typeof RAISED_PET_TAB_IDS)[number];
 
-export const PICKUP_ONLY_TAB_IDS = ["convert", "blessing", "pickup"] as const;
+export const PICKUP_ONLY_TAB_IDS = ["convert", "awake", "pickup"] as const;
 
 export type PickupOnlyTabId = (typeof PICKUP_ONLY_TAB_IDS)[number];
 
-export const BUFF_PET_TAB_IDS = ["beads", "blessing", "pickup"] as const;
+export const BUFF_PET_TAB_IDS = ["beads", "awake", "pickup"] as const;
 
 export type BuffPetTabId = (typeof BUFF_PET_TAB_IDS)[number];
 

@@ -29,7 +29,6 @@ export const WORKSHOP_MAIN_TAB_IDS = [
   "growth",
   "convert",
   "beads",
-  "blessing",
   "pickup",
 ] as const;
 
@@ -76,8 +75,7 @@ export function defaultTabForHost(item: WorkshopHostItem): WorkshopHostTabId {
 }
 
 export function workshopTabLabel(tabId: string, item: WorkshopHostItem): string {
-  if (tabId === "blessing" && isPickupPetItem(item)) return "Blessing";
-  if (tabId === "awake" && isRaisedPetItem(item)) return "Pet Awake";
+  if (tabId === "awake" && (isRaisedPetItem(item) || isPickupPetItem(item))) return "Awake";
   if (tabId === "pickup") return "Pickup";
   if (tabId === "convert") return "Convert";
   if (tabId === "beads") return "Beads";

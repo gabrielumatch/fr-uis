@@ -51,14 +51,18 @@ import {
   opensWorkshopHost,
 } from "./data/items/item";
 import {
-  applyPickupBlessing,
   convertPickupToBuff,
-  equipBeadInSlot,
   getEquippedPickupPet,
   setPickupFilter,
   unlockBeadSlot,
 } from "./data/systems/pickup-pet-workshop";
 import { getPetBeadsPanelMaterials } from "./tabs/pet-beads-panel";
+import { PetPickupAwakeBody } from "./tabs/pet-pickup-awake-body";
+import {
+  pickupAwakeAutoFill,
+  pickupAwakePrevious,
+  pickupAwakeStart,
+} from "./data/systems/pickup-pet-awake";
 import {
   advancePetStatLevel,
   craftPetFeed,
@@ -175,7 +179,20 @@ export function App() {
     ({ panelTitle, panelSubtitle, materials, materialsVariant, materialsTitle } = view);
     Body = view.Body;
   }
-  if (tab.id === "awake" && isRaisedPetItem(equipped)) {
+  if (tab.id === "awake" && isPickupPetItem(equipped)) {
+    panelTitle = "Awake Pet";
+    panelSubtitle = "Scroll of Pet Blessing (Pick-up Pets) — can roll negative.";
+    materials = [
+      {
+        icon: "📜",
+        name: "Scroll of Pet Blessing (Pick-up)",
+        quantity: equipped.workshopPickup.inventory.blessingScroll,
+      },
+    ];
+    materialsVariant = "grid";
+    materialsTitle = "Materials";
+    Body = PetPickupAwakeBody;
+  } else if (tab.id === "awake" && isRaisedPetItem(equipped)) {
     panelTitle = "Awake Pet";
     panelSubtitle = "Scroll of Pet Awakening (Peach) — can roll negative.";
     materials = [
@@ -207,17 +224,6 @@ export function App() {
       },
     ];
     materialsVariant = "list";
-    materialsTitle = "Materials";
-  }
-  if (tab.id === "blessing" && isPickupPetItem(equipped)) {
-    materials = [
-      {
-        icon: "📜",
-        name: "Scroll of Pet Blessing (Pick-up)",
-        quantity: equipped.workshopPickup.inventory.blessingScroll,
-      },
-    ];
-    materialsVariant = "grid";
     materialsTitle = "Materials";
   }
 
@@ -430,17 +436,6 @@ export function App() {
           if (unlockBeadSlot(pickup).ok) workshop.bump();
           return;
         }
-        if (action === "Apply Pet Blessing") {
-          if (applyPickupBlessing(pickup).ok) workshop.bump();
-          return;
-        }
-        if (action === "Equip Demo Bead" && actionBtn.dataset.beadId) {
-          const slot = Number(actionBtn.dataset.beadSlot ?? "0");
-          if (equipBeadInSlot(pickup, slot, actionBtn.dataset.beadId).ok) {
-            workshop.bump();
-          }
-          return;
-        }
         if (action === "Toggle Pickup Filter" && actionBtn.dataset.pickupFilterId) {
           const filterId = actionBtn.dataset
             .pickupFilterId as import("./data/pets/pickup-types").PickupFilterId;
@@ -516,6 +511,26 @@ export function App() {
           workshop.bump();
         }
         return;
+      }
+
+      const pickupAwake = getEquippedPickupPet();
+      if (
+        pickupAwake &&
+        effectiveRoute.tabId === "awake"
+      ) {
+        if (action === "Start") {
+          if (pickupAwakeStart(pickupAwake).ok) workshop.bump();
+          return;
+        }
+        if (action === "Previous") {
+          if (pickupAwakePrevious(pickupAwake).ok) workshop.bump();
+          return;
+        }
+        if (action === "Auto Fill") {
+          pickupAwakeAutoFill(pickupAwake);
+          workshop.bump();
+          return;
+        }
       }
 
       if (action === "Start") {

@@ -9,7 +9,6 @@ import {
 import type { WorkshopPickupPetItem } from "../items/item";
 import { isPickupPetItem } from "../items/item";
 import { equippedItem } from "../workshop/inventory";
-import type { AwakeStat } from "../items/item";
 import { getBuffBeadDefinition } from "../pets/bead-catalog";
 
 const MAX_BEAD_SLOTS = 9;
@@ -54,25 +53,6 @@ export function unlockBeadSlot(pet: WorkshopPickupPetItem): { ok: boolean; messa
   return { ok: true, message: "Unlocked one bead slot." };
 }
 
-export function applyPickupBlessing(pet: WorkshopPickupPetItem): {
-  ok: boolean;
-  message: string;
-} {
-  const inv = pet.workshopPickup.inventory;
-  if (inv.blessingScroll < 1) {
-    return { ok: false, message: "Need Scroll of Pet Blessing (Pick-up Pets)." };
-  }
-  inv.blessingScroll -= 1;
-  const roll: AwakeStat = {
-    label: "Blessing",
-    value: `+${1 + Math.floor(Math.random() * 3)}% pickup radius`,
-    tone: Math.random() > 0.15 ? "blue" : "red",
-  };
-  pet.blessing = [roll];
-  syncPickupPetStats(pet);
-  return { ok: true, message: "Blessing applied — can be negative." };
-}
-
 export function togglePickupSummon(pet: WorkshopPickupPetItem): void {
   pet.summoned = !pet.summoned;
   syncPickupPetStats(pet);
@@ -84,6 +64,18 @@ export function setPickupFilter(
   enabled: boolean,
 ): void {
   pet.pickupFilter = { ...pet.pickupFilter, [id]: enabled };
+}
+
+export function canEquipBeadFromHand(
+  pet: WorkshopPickupPetItem,
+  beadId: string,
+): boolean {
+  const inv = pet.workshopPickup.inventory;
+  if ((inv.beadsOnHand[beadId] ?? 0) < 1) return false;
+  const def = getBuffBeadDefinition(beadId);
+  if (!def) return false;
+  if (!def.requiresBeadIds?.length) return true;
+  return def.requiresBeadIds.every((id) => isBeadActiveInPet(pet, id));
 }
 
 export function equipBeadInSlot(

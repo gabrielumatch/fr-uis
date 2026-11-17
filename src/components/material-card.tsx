@@ -20,7 +20,9 @@ export function MaterialCard({
           imgClass="material-card__icon-img"
           alt={name}
         />
-        {name}
+        <span className="material-card__label" title={name}>
+          {name}
+        </span>
       </div>
       {showBuy ? (
         <button type="button" className="btn btn--buy" data-buy={name}>

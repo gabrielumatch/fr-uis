@@ -103,14 +103,14 @@ describe("raised pet workshop tabs", () => {
 });
 
 describe("pick-up / buff pet workshop tabs", () => {
-  it("pick-up only: convert, blessing, pickup filter", () => {
+  it("pick-up only: convert, awake, pickup filter", () => {
     const luia = requireWorkshopHost("pet-unicorn");
-    expect(getWorkshopTabIds(luia)).toEqual(["convert", "blessing", "pickup"]);
+    expect(getWorkshopTabIds(luia)).toEqual(["convert", "awake", "pickup"]);
   });
 
-  it("buff pet: beads, blessing, pickup filter", () => {
+  it("buff pet: beads, awake, pickup filter", () => {
     const moco = requireWorkshopHost("pet-mocomochi");
-    expect(getWorkshopTabIds(moco)).toEqual(["beads", "blessing", "pickup"]);
+    expect(getWorkshopTabIds(moco)).toEqual(["beads", "awake", "pickup"]);
   });
 });
 

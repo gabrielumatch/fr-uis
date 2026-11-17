@@ -6,14 +6,7 @@ export function getPetBeadsPanelMaterials() {
   const pet = getEquippedPickupPet();
   if (!pet) return [];
   const inv = pet.workshopPickup.inventory;
-  return [
-    { icon: "🔑", name: "Bead Slot Key", quantity: inv.beadSlotKeys },
-    ...Object.entries(inv.beadsOnHand).map(([id, qty]) => ({
-      icon: "🔮",
-      name: id.replace(/-/g, " "),
-      quantity: qty,
-    })),
-  ];
+  return [{ icon: "🔑", name: "Bead Slot Key", quantity: inv.beadSlotKeys }];
 }
 
 export const beadsTab: TabDefinition = {

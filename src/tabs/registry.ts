@@ -9,7 +9,6 @@ import { feedTab } from "./pet-feed-panel";
 import { growthTab } from "./pet-growth-panel";
 import { convertTab } from "./pet-convert-panel";
 import { beadsTab } from "./pet-beads-panel";
-import { blessingPickupTab } from "./pet-blessing-pickup-panel";
 import { pickupFilterTab } from "./pet-pickup-filter-panel";
 export { TAB_HASH_ALIASES } from "./tab-ids";
 
@@ -35,7 +34,6 @@ export const tabRegistry: TabDefinition[] = [
   growthTab,
   convertTab,
   beadsTab,
-  blessingPickupTab,
   pickupFilterTab,
 ];
 
