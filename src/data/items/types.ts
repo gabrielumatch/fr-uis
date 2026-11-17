@@ -69,6 +69,12 @@ export type SkinSlot = WeaponSubtype | ArmorSubtype | FashionSubtype;
 
 export type ConsumableRecipeSlot = "material" | "protect" | "smelting";
 
+/**
+ * Regra de furos para gemas em **armas** (diamond/sapphire/ruby):
+ * - `none` — normal/green: max +10, sem sockets
+ * - `ultimate` — max +10; +6…+10 libera até 5 sockets
+ * - `baruna` — max +20; sockets em +12, +14, +16, +18, +20
+ */
 export type WeaponJewelSocketRule = "ultimate" | "baruna" | "none";
 
 export type ItemCombatStats = {

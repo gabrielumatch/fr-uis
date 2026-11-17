@@ -24,6 +24,7 @@ export const WIKI = {
   nemosFury: wikiImg("images/4/42/Nemo%27s_Fury.png"),
   baronessBow: wikiImg("images/9/9a/Baroness.png"),
   gladiatorGoldBow: wikiImg("images/d/d8/Gladiator%27s_Gold_Bow.png"),
+  roikasStave: wikiImg("images/3/30/Roikas_Stave.png"),
   bilariHelmetF: wikiImg("images/3/33/Bilari_HelmetF.png"),
   bilariSuitF: wikiImg("images/d/d3/Bilari_SuitF.png"),
   bilariGauntletF: wikiImg("images/c/c5/Bilari_GauntletF.png"),

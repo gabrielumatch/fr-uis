@@ -21,6 +21,16 @@ Não inferir por nome ou ícone. No hydrate, `category` vira `item.upgrade` via 
 | `ultimate` | Oricalkum | XProtect |
 | `baruna` | Stone of Balance | Blessing of Baruna |
 
+**Max + e sockets em armas** (`gear-upgrade-policy.ts`, `jewel-slot-rules.ts`):
+
+| `category` | Max + | Gemas (diamond/sapphire/ruby) |
+|------------|-------|------------------------------|
+| normal/green | 10 | nenhum (`weaponJewelSocketRule: none`) |
+| ultimate | 10 | +6…+10 → até 5 furos |
+| baruna | 20 | +12, +14, +16, +18, +20 → 5 furos |
+
+Testes: `src/data/systems/jewel-slot-rules.test.ts`.
+
 **Fashion** (`type: fashion`, `category: fashion`) → Lightning Stone (só peças CS que aceitam + de fashion). **Wings** (`type: wing`, `category: wing`) — slot costas; **sem** aba Upgrade (`opensWorkshopUpgrade` = false). **Helmet/armor** de set = `type: armor`, `category: normal` → Sunstone + SProtect.
 
 Ex.: `hotter-sword` = `type: weapon`, `subtype: two-handed-sword`, `category: normal` → Sunstone + SProtect. Ultimate (Lusaka, etc.) = `category: ultimate` → Oricalkum + XProtect.

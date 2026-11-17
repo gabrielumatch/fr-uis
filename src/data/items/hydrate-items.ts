@@ -17,6 +17,10 @@ import type {
 import { createSkinState } from "./item";
 import type { ArmorSubtype, SkinSlot, WeaponSubtype } from "./types";
 import { upgradeProfile } from "../upgrade/recipes";
+import {
+  maxJewelSlotsForRule,
+  unlockedJewelSlotCount,
+} from "../systems/jewel-slot-rules";
 
 type WikiIconKey = keyof typeof WIKI;
 
@@ -203,7 +207,18 @@ function buildGearStats(
   });
   if (record.piercing) rows.push({ label: "Piercing", value: formatSlot(record.piercing) });
   if (record.cards) rows.push({ label: "Cards", value: formatSlot(record.cards) });
-  if (record.jewels) {
+  if (record.type === "weapon") {
+    const rule = upgrade.weaponJewelSocketRule;
+    const capacity = maxJewelSlotsForRule(rule);
+    if (capacity > 0) {
+      const level = record.upgradeLevel ?? 0;
+      const unlocked = unlockedJewelSlotCount(level, rule);
+      rows.push({
+        label: "Jewels",
+        value: `${unlocked} / ${capacity} unlocked`,
+      });
+    }
+  } else if (record.jewels) {
     rows.push({
       label: "Jewels",
       value: `${record.jewels.unlocked} / ${record.jewels.capacity} unlocked`,

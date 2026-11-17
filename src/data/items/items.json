@@ -532,6 +532,49 @@
       "skinPoolIds": []
     },
     {
+      "id": "roikas-stave-baruna",
+      "name": "Roika's Stave",
+      "type": "weapon",
+      "subtype": "staff",
+      "category": "baruna",
+      "iconKey": "roikasStave",
+      "typeLabel": "Two-Handed Staff",
+      "elementHost": "weapon",
+      "upgradeLevel": 5,
+      "level": 135,
+      "attack": {
+        "min": 631,
+        "max": 756
+      },
+      "bonus": "Decreased Casting Time+31%, Increased Attack+38%, INT+37, Electric vs Monster+8%, Hit+10%",
+      "element": {
+        "name": "Lightning",
+        "level": 8,
+        "max": 20
+      },
+      "piercing": {
+        "current": 2,
+        "max": 10
+      },
+      "cards": {
+        "current": 1,
+        "max": 10
+      },
+      "jewels": {
+        "unlocked": 3,
+        "capacity": 4
+      },
+      "gearScore": 132,
+      "awake": [
+        {
+          "label": "INT",
+          "value": "+18",
+          "tone": "blue"
+        }
+      ],
+      "skinPoolIds": []
+    },
+    {
       "id": "mystique-suit",
       "name": "Bilari Suit",
       "type": "armor",

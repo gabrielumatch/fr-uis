@@ -14,6 +14,7 @@ export const INVENTORY_BAG_SLOTS: InventoryBagSlot[] = [
   { tab: "weapons", itemId: "piecenition" },
   { tab: "weapons", itemId: "hotter-sword" },
   { tab: "weapons", itemId: "gladiator-gold-bow" },
+  { tab: "weapons", itemId: "roikas-stave-baruna" },
   { tab: "weapons", itemId: "spectre-axe", upgradeBadge: "Skin" },
   { tab: "weapons", itemId: "nautilus-axe", upgradeBadge: "Skin" },
   { tab: "weapons", itemId: "bishop-axe", upgradeBadge: "Skin" },

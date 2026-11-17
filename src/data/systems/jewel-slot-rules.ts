@@ -1,4 +1,9 @@
 import type { WeaponJewelSocketRule } from "../items/types";
+import {
+  BARUNA_JEWEL_UNLOCK_PLUS,
+  ULTIMATE_JEWEL_FIRST_PLUS,
+  ULTIMATE_JEWEL_LAST_PLUS,
+} from "../upgrade/gear-upgrade-policy";
 
 export const MAX_JEWEL_SLOTS = 5;
 
@@ -16,25 +21,26 @@ export function unlockedJewelSlotCount(
   if (rule === "none") return 0;
 
   if (rule === "baruna") {
-    if (upgradeLevel < 12) return 0;
-    if (upgradeLevel <= 13) return 1;
-    if (upgradeLevel <= 15) return 2;
-    if (upgradeLevel <= 17) return 3;
-    if (upgradeLevel <= 19) return 4;
-    return 5;
+    return BARUNA_JEWEL_UNLOCK_PLUS.filter((plus) => upgradeLevel >= plus).length;
   }
 
-  if (upgradeLevel < 6) return 0;
-  return Math.min(upgradeLevel - 5, MAX_JEWEL_SLOTS);
+  if (upgradeLevel < ULTIMATE_JEWEL_FIRST_PLUS) return 0;
+  return Math.min(
+    upgradeLevel - (ULTIMATE_JEWEL_FIRST_PLUS - 1),
+    MAX_JEWEL_SLOTS,
+    ULTIMATE_JEWEL_LAST_PLUS - (ULTIMATE_JEWEL_FIRST_PLUS - 1),
+  );
 }
 
 export function requiredUpgradeForJewelSlot(
   slotIndex: number,
   rule: WeaponJewelSocketRule = "ultimate",
 ): number {
-  if (rule === "baruna") {
-    const thresholds = [12, 14, 16, 18, 20];
-    return thresholds[slotIndex - 1] ?? 20;
+  if (rule === "none") {
+    throw new Error("Normal gear has no weapon jewel sockets");
   }
-  return slotIndex + 5;
+  if (rule === "baruna") {
+    return BARUNA_JEWEL_UNLOCK_PLUS[slotIndex - 1] ?? BARUNA_JEWEL_UNLOCK_PLUS.at(-1)!;
+  }
+  return ULTIMATE_JEWEL_FIRST_PLUS + slotIndex - 1;
 }

@@ -15,6 +15,11 @@ import {
   upgradeAttributesValid,
 } from "../upgrade/recipes";
 import { gearCategoryToRecipeId } from "../upgrade/rules";
+import { GEAR_MAX_PLUS_BY_RECIPE } from "../upgrade/gear-upgrade-policy";
+import {
+  maxJewelSlotsForRule,
+  unlockedJewelSlotCount,
+} from "../systems/jewel-slot-rules";
 
 const items: CatalogItem[] = hydrateItemsCatalog(parseItemsCatalog(itemsJson));
 
@@ -95,5 +100,39 @@ for (const item of equipmentCatalog) {
     throw new Error(
       `Item "${item.id}": materiais de upgrade inválidos (category "${item.category}" → ${canonical.material}+${canonical.protect ?? "—"})`,
     );
+  }
+
+  if (item.type === "weapon") {
+    const recipeKey = item.upgrade.id;
+    if (recipeKey in GEAR_MAX_PLUS_BY_RECIPE) {
+      const expectedMax =
+        GEAR_MAX_PLUS_BY_RECIPE[
+          recipeKey as keyof typeof GEAR_MAX_PLUS_BY_RECIPE
+        ];
+      if (item.upgrade.maxPlus !== expectedMax) {
+        throw new Error(
+          `Item "${item.id}": maxPlus ${item.upgrade.maxPlus} ≠ ${expectedMax} para ${recipeKey}`,
+        );
+      }
+    }
+
+    const rule = item.upgrade.weaponJewelSocketRule;
+    const jewelsRow = item.stats.find((s) => s.label === "Jewels");
+    if (rule === "none" && jewelsRow) {
+      throw new Error(`Item "${item.id}": normal/ultimate-tier rule "none" não exibe Jewels`);
+    }
+    if (rule !== "none") {
+      if (!jewelsRow) {
+        throw new Error(`Item "${item.id}": esperado stat Jewels para rule "${rule}"`);
+      }
+      const unlocked = unlockedJewelSlotCount(item.upgradeLevel, rule);
+      const capacity = maxJewelSlotsForRule(rule);
+      const expected = `${unlocked} / ${capacity} unlocked`;
+      if (jewelsRow.value !== expected) {
+        throw new Error(
+          `Item "${item.id}": Jewels "${jewelsRow.value}" ≠ "${expected}" (+${item.upgradeLevel}, ${rule})`,
+        );
+      }
+    }
   }
 }

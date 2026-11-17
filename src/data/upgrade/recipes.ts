@@ -3,6 +3,7 @@ import type {
   UpgradeProtectKey,
   WeaponJewelSocketRule,
 } from "../items/types";
+import { GEAR_MAX_PLUS_BY_RECIPE } from "./gear-upgrade-policy";
 
 /**
  * Receita de Safe Upgrade (`+`) — gPotato v21.
@@ -62,26 +63,26 @@ export function recipeFromId(id: UpgradeRecipeId): ItemUpgradeAttributes {
         smeltingMaxPlus: null,
         weaponJewelSocketRule: "none",
       };
-    case "baruna":
-      return {
-        id: "baruna",
-        maxPlus: 20,
-        ...UPGRADE_RECIPE_PAIRS.baruna,
-        smeltingMaxPlus: null,
-        weaponJewelSocketRule: "baruna",
-      };
     case "ultimate":
       return {
         id: "ultimate",
-        maxPlus: 20,
+        maxPlus: GEAR_MAX_PLUS_BY_RECIPE.ultimate,
         ...UPGRADE_RECIPE_PAIRS.ultimate,
         smeltingMaxPlus: null,
         weaponJewelSocketRule: "ultimate",
       };
+    case "baruna":
+      return {
+        id: "baruna",
+        maxPlus: GEAR_MAX_PLUS_BY_RECIPE.baruna,
+        ...UPGRADE_RECIPE_PAIRS.baruna,
+        smeltingMaxPlus: null,
+        weaponJewelSocketRule: "baruna",
+      };
     default:
       return {
         id: "normal",
-        maxPlus: 10,
+        maxPlus: GEAR_MAX_PLUS_BY_RECIPE.normal,
         ...UPGRADE_RECIPE_PAIRS.normal,
         smeltingMaxPlus: 7,
         weaponJewelSocketRule: "none",

@@ -1,3 +1,4 @@
+import { equippedItem } from "../data/workshop/equipped";
 import { buildJewelManagementState } from "../data/systems/jewel-management";
 import { JewelSlotList } from "../components/jewels/jewel-slot-list";
 import { JewelInventory } from "../components/jewels/jewel-inventory";
@@ -15,8 +16,17 @@ export function UpgradeJewelsBody() {
         ariaLabel="Upgrade mode"
       />
       <p className="upgrade-sub-hint muted">
-        Jewel sockets unlock as the item upgrades: first slot at <strong>+6</strong>, up to{" "}
-        <strong>5</strong> at +10 on Ultimate weapons.
+        {equippedItem.upgrade.weaponJewelSocketRule === "baruna" ? (
+          <>
+            Baruna weapons: sockets at <strong>+12</strong>, <strong>+14</strong>,{" "}
+            <strong>+16</strong>, <strong>+18</strong>, <strong>+20</strong> (max +20).
+          </>
+        ) : (
+          <>
+            Ultimate weapons: first socket at <strong>+6</strong>, up to <strong>5</strong> at{" "}
+            <strong>+10</strong>.
+          </>
+        )}
       </p>
       <JewelSlotList state={state} />
       <JewelInventory inventory={state.inventory} selectedId={state.selectedJewelId} />
