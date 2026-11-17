@@ -34,7 +34,8 @@ export type ConsumableSubtype =
   | "upgrade-stone"
   | "upgrade-scroll"
   | "smelting"
-  | "buff-bead";
+  | "buff-bead"
+  | "gear-service";
 
 /** Cor/tier visual no jogo — normal (azul), precious (amarelo), sacred (vermelho). */
 export type BuffBeadGrade = "normal" | "precious" | "sacred" | "permanent";
@@ -157,6 +158,8 @@ export type ItemRecord = {
   pickupPet?: PickupPetRecord;
   /** Consumable buff-bead equipável no Buff Pet (subtype `buff-bead`). */
   buffBead?: BuffBeadRecord;
+  /** Reduction / Transy / Unbinding (Peach services). */
+  gearFunctional?: import("../gear/gear-functional-types").GearFunctionalRecord;
 };
 
 export type BuffBeadRecord = {

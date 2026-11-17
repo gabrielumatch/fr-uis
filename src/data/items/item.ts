@@ -142,6 +142,7 @@ type WorkshopRuntimeCore = ItemBase & {
   elementHost: "weapon" | "suit";
   activeSkinName?: string | null;
   workshopSkin: WorkshopSkinState;
+  workshopGear: import("../gear/gear-functional-types").GearFunctionalRuntime;
   combat?: ItemCombatStats;
 };
 

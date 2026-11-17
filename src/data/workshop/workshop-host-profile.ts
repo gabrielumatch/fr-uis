@@ -6,10 +6,12 @@ import {
   isRaisedPetItem,
   isWorkshopGearItem,
 } from "../items/item";
+import { gearShowsServicesSubTab } from "../gear/gear-service-rules";
 import { workshopGearProfile, type WorkshopGearProfile } from "./workshop-capabilities";
 
 export const GEAR_WORKSHOP_TAB_IDS = [
   "upgrade",
+  "services",
   "element",
   "piercing",
   "awake",
@@ -83,9 +85,14 @@ export function workshopHostProfile(item: WorkshopHostItem): WorkshopHostProfile
     throw new Error(`Pickup pet "${item.id}": mode inválido`);
   }
   const gear = workshopGearProfile(item);
+  const mainTabs = [...gear.mainTabs] as GearWorkshopTabId[];
+  if (gearShowsServicesSubTab(item)) {
+    const afterUpgrade = mainTabs.indexOf("upgrade") + 1;
+    mainTabs.splice(afterUpgrade > 0 ? afterUpgrade : 1, 0, "services");
+  }
   return {
     kind: "gear",
-    mainTabs: [...gear.mainTabs] as GearWorkshopTabId[],
+    mainTabs,
     gear,
   };
 }

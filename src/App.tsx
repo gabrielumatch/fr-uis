@@ -81,6 +81,13 @@ import {
   resolveWorkshopSidebarItem,
   workshopTabLabel,
 } from "./data/workshop/ui-rules";
+import {
+  applyGenderTransy,
+  applyLevelReduction,
+  applyScrollUnbinding,
+  removeReductionPeach,
+} from "./data/systems/gear-workshop";
+import { gearServicesMaterials } from "./tabs/gear-services-body";
 import { useEffect, useMemo } from "react";
 
 const DEFAULT_TAB = "upgrade";
@@ -151,6 +158,11 @@ export function App() {
     const view = getUpgradePanelView(effectiveRoute.upgradeSub, equipped);
     ({ panelTitle, panelSubtitle, materials, materialsVariant, materialsTitle } = view);
     Body = view.Body;
+  }
+  if (tab.id === "services" && isWorkshopGearItem(equipped)) {
+    materials = gearServicesMaterials();
+    materialsVariant = "grid";
+    materialsTitle = "Service scrolls in bag";
   }
   if (tab.id === "piercing") {
     const view = getPiercingPanelView(effectiveRoute.piercingSub);
@@ -422,6 +434,29 @@ export function App() {
       if (action === "Apply Skin" && !actionBtn.disabled) {
         if (applySkin().ok) workshop.bump();
         return;
+      }
+
+      if (isWorkshopGearItem(equipped) && !actionBtn.disabled) {
+        if (action === "gear-reduction-a") {
+          if (applyLevelReduction(equipped, "scroll-reduction-a").ok) workshop.bump();
+          return;
+        }
+        if (action === "gear-reduction-b") {
+          if (applyLevelReduction(equipped, "scroll-reduction-b").ok) workshop.bump();
+          return;
+        }
+        if (action === "gear-transy") {
+          if (applyGenderTransy(equipped).ok) workshop.bump();
+          return;
+        }
+        if (action === "gear-unbind") {
+          if (applyScrollUnbinding(equipped).ok) workshop.bump();
+          return;
+        }
+        if (action === "gear-peach-remove") {
+          if (removeReductionPeach(equipped).ok) workshop.bump();
+          return;
+        }
       }
 
       const pickup = getEquippedPickupPet();

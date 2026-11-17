@@ -1,5 +1,6 @@
 import itemsJson from "./items.json";
 import { BUFF_BEAD_ITEM_RECORDS } from "../pets/buff-bead-items";
+import { GEAR_SERVICE_ITEM_RECORDS } from "../gear/gear-service-items";
 import { registerBuffBeadCatalogAccess } from "../pets/bead-catalog";
 import { INVENTORY_BAG_SLOTS } from "../inventory/inventory-bag";
 import {
@@ -29,7 +30,7 @@ import {
 
 const mergedCatalog = {
   ...itemsJson,
-  items: [...itemsJson.items, ...BUFF_BEAD_ITEM_RECORDS],
+  items: [...itemsJson.items, ...BUFF_BEAD_ITEM_RECORDS, ...GEAR_SERVICE_ITEM_RECORDS],
 };
 
 const items: CatalogItem[] = hydrateItemsCatalog(parseItemsCatalog(mergedCatalog));

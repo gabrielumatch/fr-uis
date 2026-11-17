@@ -37,6 +37,10 @@ import {
   workshopGearProfileFromParts,
   type WorkshopGearProfile,
 } from "../workshop/workshop-capabilities";
+import {
+  appendGearFunctionalStatRows,
+  mergeGearFunctionalFromRecord,
+} from "../gear/gear-functional-sync";
 
 type WikiIconKey = keyof typeof WIKI;
 
@@ -512,6 +516,8 @@ function hydrateWorkshopItem(
     record.subtype,
   );
 
+  const workshopGear = mergeGearFunctionalFromRecord(record);
+
   const base = {
     id: record.id,
     name: record.name,
@@ -529,6 +535,7 @@ function hydrateWorkshopItem(
     gearScore: record.gearScore ?? 0,
     elementHost: record.elementHost ?? "suit",
     workshopSkin: createSkinState(skinPool, scrolls),
+    workshopGear,
   };
 
   switch (record.type) {
@@ -544,6 +551,7 @@ function hydrateWorkshopItem(
         stats: buildGearStats(record, upgrade, profile),
         combat: combatFromRecord(record),
       };
+      item.stats = appendGearFunctionalStatRows(item, item.stats);
       return item;
     }
     case "armor": {
@@ -558,6 +566,7 @@ function hydrateWorkshopItem(
         stats: buildGearStats(record, upgrade, profile),
         combat: combatFromRecord(record),
       };
+      item.stats = appendGearFunctionalStatRows(item, item.stats);
       return item;
     }
     case "jewel": {

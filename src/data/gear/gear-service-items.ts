@@ -1,0 +1,55 @@
+import type { ItemRecord } from "../items/types";
+
+/** Consumíveis da Peach / Equipment Enhancement (protótipo — ícones wiki quando existirem). */
+export const GEAR_SERVICE_ITEM_RECORDS: ItemRecord[] = [
+  {
+    id: "scroll-reduction-a",
+    name: "Scroll of Reduction A",
+    type: "consumable",
+    subtype: "gear-service",
+    category: "upgrade",
+    iconEmoji: "📜",
+    typeLabel: "Reduction Scroll",
+    stackQty: 99,
+  },
+  {
+    id: "scroll-reduction-b",
+    name: "Scroll of Reduction B",
+    type: "consumable",
+    subtype: "gear-service",
+    category: "upgrade",
+    iconEmoji: "📜",
+    typeLabel: "Reduction Scroll",
+    stackQty: 99,
+  },
+  {
+    id: "item-transy-a",
+    name: "Item Transy A",
+    type: "consumable",
+    subtype: "gear-service",
+    category: "upgrade",
+    iconEmoji: "🔄",
+    typeLabel: "Gender Transy",
+    stackQty: 99,
+  },
+  {
+    id: "item-transy-b",
+    name: "Item Transy B",
+    type: "consumable",
+    subtype: "gear-service",
+    category: "upgrade",
+    iconEmoji: "🔄",
+    typeLabel: "Gender Transy",
+    stackQty: 99,
+  },
+  {
+    id: "scroll-unbinding",
+    name: "Scroll of Unbinding",
+    type: "consumable",
+    subtype: "gear-service",
+    category: "upgrade",
+    iconEmoji: "🔓",
+    typeLabel: "Unbinding Scroll",
+    stackQty: 99,
+  },
+];

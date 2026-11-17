@@ -99,6 +99,9 @@ function routeFromLegacyHash(raw: string): WorkshopRoute | null {
   if (raw === "upgrade-level") {
     return { ...DEFAULT_ROUTE, tabId: "upgrade", upgradeSub: "level" };
   }
+  if (raw === "services" || raw === "upgrade-services" || raw === "peach") {
+    return { ...DEFAULT_ROUTE, tabId: "services" };
+  }
   if (raw === "piercing-cards") {
     return { ...DEFAULT_ROUTE, tabId: "piercing", piercingSub: "cards" };
   }
@@ -141,7 +144,14 @@ export function parseWorkshopAppUrl(href = location.href): WorkshopAppUrlState {
     route = { ...DEFAULT_ROUTE, tabId: workshopTab };
     const subtab = params.get(Q.subtab);
     if (subtab) {
-      route = applySubtab(route, subtab);
+      if (
+        workshopTab === "upgrade" &&
+        (subtab === "services" || subtab === "service" || subtab === "peach")
+      ) {
+        route = { ...DEFAULT_ROUTE, tabId: "services" };
+      } else {
+        route = applySubtab(route, subtab);
+      }
     }
   } else {
     const hash = url.hash.replace(/^#/, "").trim();

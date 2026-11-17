@@ -1,4 +1,5 @@
 import { requireEquippedGear } from "../data/workshop/equipped";
+import { getUpgradeSubTabIds } from "../data/workshop/ui-rules";
 import { buildJewelManagementState } from "../data/systems/jewel-management";
 import { JewelSlotList } from "../components/jewels/jewel-slot-list";
 import { JewelInventory } from "../components/jewels/jewel-inventory";
@@ -11,7 +12,7 @@ export function UpgradeJewelsBody() {
   return (
     <>
       <PanelSubTabBar
-        tabs={[...UPGRADE_SUB_TABS]}
+        tabs={[...UPGRADE_SUB_TABS.filter((t) => getUpgradeSubTabIds(equippedItem).includes(t.id))]}
         activeId="jewels"
         dataAttr="upgrade-sub"
         ariaLabel="Upgrade mode"

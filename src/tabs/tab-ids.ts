@@ -1,6 +1,7 @@
 /** IDs válidos na URL — sem importar painéis React (evita ciclo com route-url). */
 export const WORKSHOP_TAB_IDS = [
   "upgrade",
+  "services",
   "element",
   "piercing",
   "awake",
@@ -29,6 +30,8 @@ export const TAB_HASH_ALIASES: Record<string, string> = {
   "transmutation-revert": "skins",
   blessing: "awake",
   filter: "pickup",
+  peach: "services",
+  "upgrade-services": "services",
 };
 
 export function isKnownWorkshopTabId(id: string): id is WorkshopTabId {

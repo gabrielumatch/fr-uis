@@ -307,7 +307,10 @@
         "nautilus-axe",
         "bishop-axe",
         "lasternition"
-      ]
+      ],
+      "gearFunctional": {
+        "trade": "tradeable"
+      }
     },
     {
       "id": "ryvius-sword",
@@ -651,7 +654,10 @@
       ],
       "skinPoolIds": [
         "cruentus-helm"
-      ]
+      ],
+      "gearFunctional": {
+        "requiredGender": "F"
+      }
     },
     {
       "id": "neo-hat",

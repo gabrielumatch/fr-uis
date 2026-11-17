@@ -49,6 +49,21 @@ describe("workshop URL query params", () => {
     expect(parsed.workshopItemId).toBe("lusaka-axe");
   });
 
+  it("migrates upgrade+subtab=services to main services tab", () => {
+    const legacy = parseWorkshopAppUrl(
+      `${BASE}?workshop_tab=upgrade&subtab=services&workshop_item=lusaka-axe`,
+    );
+    expect(legacy.route.tabId).toBe("services");
+    expect(legacy.route.upgradeSub).toBe("level");
+  });
+
+  it("parses workshop_tab=services", () => {
+    const state = parseWorkshopAppUrl(
+      `${BASE}?workshop_tab=services&workshop_item=lusaka-axe`,
+    );
+    expect(state.route.tabId).toBe("services");
+  });
+
   it("legacy hash still works when query missing", () => {
     const state = parseWorkshopAppUrl(`${BASE}#upgrade-jewels`);
     expect(state.route.tabId).toBe("upgrade");

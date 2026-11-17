@@ -13,6 +13,7 @@ import { skinFitsHost } from "../systems/skin-rules";
 import type { FeedSub, GrowthSub, SkinsSub } from "./route-types";
 import type { WorkshopRoute } from "./route-types";
 import { workshopGearProfile } from "./workshop-capabilities";
+import type { UpgradeSub } from "./route-types";
 import {
   workshopHostProfile,
   workshopHostTabIds,
@@ -21,6 +22,7 @@ import {
 
 export const WORKSHOP_MAIN_TAB_IDS = [
   "upgrade",
+  "services",
   "element",
   "piercing",
   "awake",
@@ -43,9 +45,7 @@ export function getWorkshopTabIds(item: WorkshopHostItem): WorkshopHostTabId[] {
   return workshopHostTabIds(item);
 }
 
-export function getUpgradeSubTabIds(
-  item: WorkshopHostItem,
-): readonly ("level" | "jewels")[] {
+export function getUpgradeSubTabIds(item: WorkshopHostItem): readonly UpgradeSub[] {
   if (!isWorkshopGearItem(item)) return ["level"];
   return workshopGearProfile(item).upgradeSubs;
 }
@@ -79,6 +79,7 @@ export function workshopTabLabel(tabId: string, item: WorkshopHostItem): string 
   if (tabId === "pickup") return "Filter";
   if (tabId === "convert") return "Convert";
   if (tabId === "beads") return "Beads";
+  if (tabId === "services") return "Services";
   return tabId.charAt(0).toUpperCase() + tabId.slice(1);
 }
 
@@ -140,7 +141,8 @@ export function coerceWorkshopRoute(
 
   let upgradeSub = route.upgradeSub;
   if (tabId === "upgrade" && isWorkshopGearItem(item)) {
-    if (!workshopGearProfile(item).upgradeSubs.includes("jewels")) {
+    const allowedSubs = new Set(getUpgradeSubTabIds(item));
+    if (!allowedSubs.has(upgradeSub)) {
       upgradeSub = "level";
     }
   }

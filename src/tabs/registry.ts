@@ -10,6 +10,7 @@ import { growthTab } from "./pet-growth-panel";
 import { convertTab } from "./pet-convert-panel";
 import { beadsTab } from "./pet-beads-panel";
 import { pickupFilterTab } from "./pet-pickup-filter-panel";
+import { servicesTab } from "./gear-services-panel";
 export { TAB_HASH_ALIASES } from "./tab-ids";
 
 export type TabDefinition = {
@@ -26,6 +27,7 @@ export type TabDefinition = {
 
 export const tabRegistry: TabDefinition[] = [
   upgradeTab,
+  servicesTab,
   elementTab,
   piercingTab,
   awakeTab,
