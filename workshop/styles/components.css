@@ -173,6 +173,17 @@
   opacity: 0.85;
 }
 
+.inv-slot--equip.inv-slot--workshop {
+  cursor: pointer;
+}
+
+.inv-slot--equip.inv-slot--workshop.is-active {
+  border-color: #f0d060;
+  box-shadow:
+    0 0 0 1px #f0d060,
+    inset 0 0 10px #fffaa44;
+}
+
 .inv-slot--grid {
   display: block;
   width: 100%;

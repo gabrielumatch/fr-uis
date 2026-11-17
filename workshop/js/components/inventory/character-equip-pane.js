@@ -2,16 +2,15 @@ import {
   characterEquippedSlots,
   characterGearScore,
 } from "../../data/inventory-display.js";
-import { getWorkshopItemById } from "../../data/equipped-item.js";
+import { activeWorkshopItemId, getWorkshopItemById } from "../../data/equipped-item.js";
 import { renderInventorySlot } from "./inventory-slot.js";
 
 /**
  * @param {import("../../data/inventory-display.js").EquipSlot | Record<string, never>} slot
  */
 function slotHtml(slot) {
-  const wsItem = slot.workshopItemId
-    ? getWorkshopItemById(slot.workshopItemId)
-    : undefined;
+  const wsId = slot.workshopItemId;
+  const wsItem = wsId ? getWorkshopItemById(wsId) : undefined;
   const icon = slot.icon ?? wsItem?.icon;
   const empty = !icon;
   const title = slot.title ?? wsItem?.name ?? "";
@@ -19,9 +18,12 @@ function slotHtml(slot) {
   return renderInventorySlot({
     icon,
     upgradeBadge: slot.upgradeBadge,
+    workshopItemId: wsId,
+    active: Boolean(wsId && wsId === activeWorkshopItemId),
     empty,
     title,
     className: "inv-slot--equip",
+    as: wsId ? "button" : "div",
   });
 }
 

@@ -51,6 +51,12 @@ export const WIKI = {
   vigRoenierHelm: wikiImg("images/c/cf/BileireHelmM.png"),
   yggForceMasterSuit: wikiImg("images/d/d3/Bilari_SuitF.png"),
 
+  // —— Jewelry (top row: ring, earring, necklace, earring, ring) ——
+  jewelryRing: wikiImg("images/2/2c/Intelli_Ring.gif"),
+  jewelryEarring: wikiImg("images/0/03/PlugEarring.gif"),
+  jewelryNecklace: wikiImg("images/6/62/GoreNecklace.gif"),
+  jewelryEarringRight: wikiImg("images/6/6b/DemolEarring.gif"),
+
   // —— Fashion back (wings) / cape slots on doll ——
   /** CS back slot (wings); wiki asset TBD — thumb used so the slot does not 404 */
   fashionWings: wikiImg("images/thumb/8/85/Pet_Dragon.PNG/70px-Pet_Dragon.png"),

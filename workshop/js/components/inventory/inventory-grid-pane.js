@@ -1,5 +1,9 @@
 import { getWorkshopItemById } from "../../data/equipped-item.js";
-import { INVENTORY_TABS, getInventoryGridCells } from "../../data/inventory-display.js";
+import {
+  INVENTORY_TABS,
+  getInventoryGridCells,
+  resolveInventoryCellWorkshopId,
+} from "../../data/inventory-display.js";
 import { renderInventorySlot } from "./inventory-slot.js";
 
 /**
@@ -11,10 +15,13 @@ function renderBagCell(cell, activeWorkshopItemId) {
     return `<div class="inv-grid__cell inv-grid__cell--empty" role="gridcell" aria-label="Empty slot"></div>`;
   }
 
-  const wsId = cell.workshopItemId;
+  const wsId = resolveInventoryCellWorkshopId(cell);
   const item = wsId ? getWorkshopItemById(wsId) : undefined;
   const title =
-    item?.name ?? (cell.skinDonor ? "Skin item (transmute donor)" : "");
+    item?.name ??
+    (cell.skinDonor
+      ? "Skin item — opens matching gear in workshop"
+      : "");
   const active = Boolean(wsId && wsId === activeWorkshopItemId);
 
   const slotHtml = renderInventorySlot({

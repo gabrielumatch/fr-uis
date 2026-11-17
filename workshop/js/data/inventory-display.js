@@ -44,9 +44,24 @@ export const inventoryGridItems = [
     upgradeBadge: "+5",
     tab: "weapons",
   },
-  { icon: WIKI.piecenition, upgradeBadge: "+4", tab: "weapons" },
-  { icon: WIKI.hotterSword, upgradeBadge: "+3", tab: "weapons" },
-  { icon: WIKI.gladiatorGoldBow, upgradeBadge: "+2", tab: "weapons" },
+  {
+    icon: WIKI.piecenition,
+    upgradeBadge: "+4",
+    tab: "weapons",
+    workshopItemId: "lusaka-axe",
+  },
+  {
+    icon: WIKI.hotterSword,
+    upgradeBadge: "+3",
+    tab: "weapons",
+    workshopItemId: "ryvius-sword",
+  },
+  {
+    icon: WIKI.gladiatorGoldBow,
+    upgradeBadge: "+2",
+    tab: "weapons",
+    workshopItemId: "carnian-bow",
+  },
   { icon: WIKI.spectreAxe, upgradeBadge: "Skin", tab: "weapons", skinDonor: true },
   { icon: WIKI.nautilusAxe, upgradeBadge: "Skin", tab: "weapons", skinDonor: true },
   { icon: WIKI.bishopAxe, upgradeBadge: "Skin", tab: "weapons", skinDonor: true },
@@ -55,6 +70,18 @@ export const inventoryGridItems = [
   { icon: WIKI.nemosFury, upgradeBadge: "Skin", tab: "weapons", skinDonor: true },
 
   // —— Armor ——
+  {
+    workshopItemId: "intelli-ring",
+    icon: WIKI.jewelryRing,
+    upgradeBadge: "+2",
+    tab: "armor",
+  },
+  {
+    workshopItemId: "gore-necklace",
+    icon: WIKI.jewelryNecklace,
+    upgradeBadge: "+12",
+    tab: "armor",
+  },
   {
     workshopItemId: "mystique-suit",
     icon: WIKI.bilariSuitF,
@@ -75,12 +102,22 @@ export const inventoryGridItems = [
   },
   {
     workshopItemId: "ankou-cloak",
-    icon: WIKI.cruentusHelmetF,
+    icon: WIKI.fashionWings,
     upgradeBadge: "F",
     tab: "armor",
   },
-  { icon: WIKI.bilariGauntletF, upgradeBadge: "+2", tab: "armor" },
-  { icon: WIKI.bilariBootsF, upgradeBadge: "+6", tab: "armor" },
+  {
+    icon: WIKI.bilariGauntletF,
+    upgradeBadge: "+2",
+    tab: "armor",
+    workshopItemId: "mystique-suit",
+  },
+  {
+    icon: WIKI.bilariBootsF,
+    upgradeBadge: "+6",
+    tab: "armor",
+    workshopItemId: "mystique-suit",
+  },
   { icon: WIKI.bileireSuitM, upgradeBadge: "Skin", tab: "armor", skinDonor: true },
   { icon: WIKI.cruentusSuitM, upgradeBadge: "Skin", tab: "armor", skinDonor: true },
   { icon: WIKI.cruentusHelmetM, upgradeBadge: "Skin", tab: "armor", skinDonor: true },
@@ -111,15 +148,35 @@ export const characterGearScore = 1118;
 /** @type {{ accessories: EquipSlot[]; left: EquipSlot[]; right: EquipSlot[]; footer: EquipSlot[] }} */
 export const characterEquippedSlots = {
   accessories: [
-    { icon: "💍", upgradeBadge: "+2" },
-    { icon: "📿", upgradeBadge: "+12" },
-    { icon: "💍", upgradeBadge: "+2" },
-    { icon: "💍", upgradeBadge: "+2" },
-    {},
+    {
+      icon: WIKI.jewelryRing,
+      upgradeBadge: "+2",
+      title: "Ring",
+      workshopItemId: "intelli-ring",
+    },
+    { icon: WIKI.jewelryEarring, upgradeBadge: "+6", title: "Earring" },
+    {
+      icon: WIKI.jewelryNecklace,
+      upgradeBadge: "+12",
+      title: "Necklace",
+      workshopItemId: "gore-necklace",
+    },
+    { icon: WIKI.jewelryEarring, upgradeBadge: "+6", title: "Earring" },
+    {
+      icon: WIKI.jewelryRing,
+      upgradeBadge: "+2",
+      title: "Ring",
+      workshopItemId: "intelli-ring",
+    },
   ],
   // Esquerda: arma, escudo, (vazio), capa, máscara
   left: [
-    { icon: WIKI.lusakaHeavyAxe, upgradeBadge: "+9", title: "Weapon" },
+    {
+      icon: WIKI.lusakaHeavyAxe,
+      upgradeBadge: "+9",
+      title: "Weapon",
+      workshopItemId: "lusaka-axe",
+    },
     { title: "Shield" },
     {},
     { title: "Cloak" },
@@ -127,10 +184,30 @@ export const characterEquippedSlots = {
   ],
   // Direita: elmo, suit, luva, bota, asas (fashion)
   right: [
-    { icon: WIKI.bilariHelmetF, upgradeBadge: "+4", title: "Helmet" },
-    { icon: WIKI.bilariSuitF, upgradeBadge: "+7", title: "Suit" },
-    { icon: WIKI.bilariGauntletF, upgradeBadge: "+2", title: "Gauntlet" },
-    { icon: WIKI.bilariBootsF, upgradeBadge: "+8", title: "Boots" },
+    {
+      icon: WIKI.bilariHelmetF,
+      upgradeBadge: "+4",
+      title: "Helmet",
+      workshopItemId: "vigor-helm",
+    },
+    {
+      icon: WIKI.bilariSuitF,
+      upgradeBadge: "+7",
+      title: "Suit",
+      workshopItemId: "mystique-suit",
+    },
+    {
+      icon: WIKI.bilariGauntletF,
+      upgradeBadge: "+2",
+      title: "Gauntlet",
+      workshopItemId: "mystique-suit",
+    },
+    {
+      icon: WIKI.bilariBootsF,
+      upgradeBadge: "+8",
+      title: "Boots",
+      workshopItemId: "mystique-suit",
+    },
     {
       workshopItemId: "ankou-cloak",
       icon: WIKI.fashionWings,
@@ -176,4 +253,67 @@ export function getInventoryGridCells(tab) {
  */
 export function formatPenya(value) {
   return value.toLocaleString("de-DE");
+}
+
+const AXE_ICONS = new Set([
+  WIKI.spectreAxe,
+  WIKI.nautilusAxe,
+  WIKI.bishopAxe,
+  WIKI.piecenition,
+  WIKI.lasternition,
+  WIKI.lusakaHeavyAxe,
+]);
+
+const SWORD_ICONS = new Set([
+  WIKI.smiterSword,
+  WIKI.hotterSword,
+  WIKI.lusakaHeavySword,
+  WIKI.lusakaCrystalSword,
+  WIKI.gladiatorGold2hSword,
+]);
+
+const BOW_ICONS = new Set([
+  WIKI.baronessBow,
+  WIKI.nemosFury,
+  WIKI.bowOfEchoes,
+  WIKI.gladiatorGoldBow,
+  WIKI.lusakaBow,
+]);
+
+const SUIT_ICONS = new Set([
+  WIKI.bilariSuitF,
+  WIKI.bileireSuitM,
+  WIKI.cruentusSuitM,
+  WIKI.bilariGauntletF,
+  WIKI.bilariBootsF,
+]);
+
+const HELMET_ICONS = new Set([
+  WIKI.bilariHelmetF,
+  WIKI.bileireHelmetM,
+  WIKI.cruentusHelmetM,
+  WIKI.cruentusHelmetF,
+]);
+
+/**
+ * Qual item do workshop abrir ao clicar uma célula da bag (inclui skin donors).
+ * @param {InventoryGridItem | null | undefined} cell
+ * @returns {string | undefined}
+ */
+export function resolveInventoryCellWorkshopId(cell) {
+  if (!cell?.icon) return undefined;
+  if (cell.workshopItemId) return cell.workshopItemId;
+
+  if (cell.tab === "weapons" || cell.tab === "armor") {
+    if (AXE_ICONS.has(cell.icon)) return "lusaka-axe";
+    if (SWORD_ICONS.has(cell.icon)) return "ryvius-sword";
+    if (BOW_ICONS.has(cell.icon)) return "carnian-bow";
+    if (SUIT_ICONS.has(cell.icon)) return "mystique-suit";
+    if (HELMET_ICONS.has(cell.icon)) return "vigor-helm";
+    if (cell.icon === WIKI.fashionWings) return "ankou-cloak";
+    if (cell.icon === WIKI.jewelryRing) return "intelli-ring";
+    if (cell.icon === WIKI.jewelryNecklace) return "gore-necklace";
+  }
+
+  return undefined;
 }
