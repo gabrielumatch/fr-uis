@@ -28,6 +28,7 @@ export const TAB_HASH_ALIASES: Record<string, string> = {
   "transmutation-apply": "skins",
   "transmutation-revert": "skins",
   blessing: "awake",
+  filter: "pickup",
 };
 
 export function isKnownWorkshopTabId(id: string): id is WorkshopTabId {

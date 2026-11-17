@@ -12,7 +12,7 @@ import type {
 import type { RaisedPetRuntime, RaisedPetSpecies, PetRank, PetStatTier } from "../pets/types";
 import type {
   BuffBeadEquipped,
-  PickupFilterState,
+  PetFilterState,
   PickupPetMode,
   PickupPetRuntime,
 } from "../pets/pickup-types";
@@ -74,7 +74,7 @@ export type WorkshopPickupPetItem = ItemBase & {
   _beadSlotIds: (string | null)[];
   stats: StatRow[];
   blessing: AwakeStat[];
-  pickupFilter: PickupFilterState;
+  pickupFilter: PetFilterState;
   workshopPickup: PickupPetRuntime;
 };
 

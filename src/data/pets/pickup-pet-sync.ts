@@ -1,5 +1,6 @@
-import { getBuffBeadDefinition, defaultPickupFilter } from "./bead-catalog";
-import type { BuffBeadEquipped, PickupFilterState } from "./pickup-types";
+import { getBuffBeadDefinition } from "./bead-catalog";
+import { mergePetFilterFromRecord } from "./pet-filter-catalog";
+import type { BuffBeadEquipped } from "./pickup-types";
 import type { AwakeStat, WorkshopPickupPetItem } from "../items/item";
 
 const MAX_BEAD_SLOTS = 9;
@@ -86,11 +87,7 @@ export function ensureBeadSlotStorage(pet: WorkshopPickupPetItem): void {
   }
 }
 
-export function mergePickupFilterFromRecord(
-  partial?: Partial<PickupFilterState>,
-): PickupFilterState {
-  return { ...defaultPickupFilter(), ...partial };
-}
+export { mergePetFilterFromRecord as mergePickupFilterFromRecord };
 
 export function defaultPickupWorkshopInventory(): import("./pickup-types").PickupPetWorkshopInventory {
   return {

@@ -64,16 +64,3 @@ export const BUFF_BEAD_GRADE_LABEL: Record<BuffBeadGrade, string> = {
   sacred: "Sacred (red)",
   permanent: "Permanent",
 };
-
-export function defaultPickupFilter(): import("./pickup-types").PickupFilterState {
-  return {
-    penya: true,
-    equipment: true,
-    quest: true,
-    food: true,
-    material: true,
-    card: true,
-    jewel: false,
-    etc: true,
-  };
-}

@@ -3,10 +3,10 @@ import type { TabDefinition } from "./registry";
 
 export const pickupFilterTab: TabDefinition = {
   id: "pickup",
-  label: "Pickup",
+  label: "Filter",
   icon: "🧺",
-  panelTitle: "Pickup Filter",
-  panelSubtitle: "Loot categories while summoned",
+  panelTitle: "Pet Filter",
+  panelSubtitle: "What your summoned pet picks up",
   materials: [],
   Body: PetPickupFilterBody,
 };

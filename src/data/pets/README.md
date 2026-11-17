@@ -3,8 +3,8 @@
 | `subtype` | `pickupPet.mode` | Workshop hosts | Abas |
 |-----------|------------------|----------------|------|
 | `raised` | — | Sim | Feed, Growth, Awake |
-| `pickup` | `pickup` | Sim | Convert, Awake, Pickup |
-| `pickup` | `buff` | Sim | Beads, Awake, Pickup |
+| `pickup` | `pickup` | Sim | Convert, Awake, Filter |
+| `pickup` | `buff` | Sim | Beads, Awake, Filter |
 
 **Raised:** `items.json` → `raisedPet{}`; runtime `workshopPet.inventory`; `systems/raised-pet-workshop.ts`.
 

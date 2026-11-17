@@ -6,17 +6,7 @@ export type PickupPetMode = "pickup" | "buff";
 /** Tiers de Buff Bead — nível anterior precisa estar ativo para o próximo. */
 export type BuffBeadTier = 1 | 2 | 3 | 4;
 
-export type PickupFilterId =
-  | "penya"
-  | "equipment"
-  | "quest"
-  | "food"
-  | "material"
-  | "card"
-  | "jewel"
-  | "etc";
-
-export type PickupFilterState = Record<PickupFilterId, boolean>;
+import type { PetFilterRecord, PetFilterState } from "./pet-filter-catalog";
 
 export type PickupPetRecord = {
   mode: PickupPetMode;
@@ -28,8 +18,11 @@ export type PickupPetRecord = {
   beadSlotBeadIds?: (string | null)[];
   /** Scroll of Pet Blessing (Pick-up Pets) — não é awake de raised. */
   blessing?: AwakeRecord[];
-  pickupFilter?: Partial<PickupFilterState>;
+  /** Pet Filter (opções + My class only). Aceita chaves legadas no hydrate. */
+  pickupFilter?: PetFilterRecord;
 };
+
+export type { PetFilterState, PetFilterRecord };
 
 export type BuffBeadEquipped = {
   beadId: string;

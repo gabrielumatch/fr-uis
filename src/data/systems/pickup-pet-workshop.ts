@@ -1,4 +1,7 @@
-import type { PickupFilterId } from "../pets/pickup-types";
+import {
+  PET_FILTER_CATEGORIES,
+  type PetFilterOptionId,
+} from "../pets/pet-filter-catalog";
 import {
   ensureBeadSlotStorage,
   isBeadActiveInPet,
@@ -69,12 +72,36 @@ export function togglePickupSummon(pet: WorkshopPickupPetItem): void {
   syncPickupPetStats(pet);
 }
 
-export function setPickupFilter(
+export function setPetFilterOption(
   pet: WorkshopPickupPetItem,
-  id: PickupFilterId,
+  id: PetFilterOptionId,
   enabled: boolean,
 ): void {
-  pet.pickupFilter = { ...pet.pickupFilter, [id]: enabled };
+  pet.pickupFilter = {
+    ...pet.pickupFilter,
+    options: { ...pet.pickupFilter.options, [id]: enabled },
+  };
+}
+
+export function setPetFilterClassOnly(
+  pet: WorkshopPickupPetItem,
+  key: "armorMyClassOnly" | "weaponMyClassOnly",
+  enabled: boolean,
+): void {
+  pet.pickupFilter = { ...pet.pickupFilter, [key]: enabled };
+}
+
+export function setAllPetFilterOptions(
+  pet: WorkshopPickupPetItem,
+  enabled: boolean,
+): void {
+  const options = { ...pet.pickupFilter.options };
+  for (const cat of PET_FILTER_CATEGORIES) {
+    for (const opt of cat.options) {
+      options[opt.id] = enabled;
+    }
+  }
+  pet.pickupFilter = { ...pet.pickupFilter, options };
 }
 
 export function canEquipBeadFromHand(

@@ -53,7 +53,6 @@ import {
 import {
   convertPickupToBuff,
   getEquippedPickupPet,
-  setPickupFilter,
 } from "./data/systems/pickup-pet-workshop";
 import { getPetBeadsPanelMaterials } from "./tabs/pet-beads-panel";
 import { PetPickupAwakeBody } from "./tabs/pet-pickup-awake-body";
@@ -429,13 +428,6 @@ export function App() {
       if (pickup) {
         if (action === "Convert to Buff Pet") {
           if (convertPickupToBuff(pickup).ok) workshop.bump();
-          return;
-        }
-        if (action === "Toggle Pickup Filter" && actionBtn.dataset.pickupFilterId) {
-          const filterId = actionBtn.dataset
-            .pickupFilterId as import("./data/pets/pickup-types").PickupFilterId;
-          setPickupFilter(pickup, filterId, !pickup.pickupFilter[filterId]);
-          workshop.bump();
           return;
         }
       }

@@ -76,7 +76,7 @@ export function defaultTabForHost(item: WorkshopHostItem): WorkshopHostTabId {
 
 export function workshopTabLabel(tabId: string, item: WorkshopHostItem): string {
   if (tabId === "awake" && (isRaisedPetItem(item) || isPickupPetItem(item))) return "Awake";
-  if (tabId === "pickup") return "Pickup";
+  if (tabId === "pickup") return "Filter";
   if (tabId === "convert") return "Convert";
   if (tabId === "beads") return "Beads";
   return tabId.charAt(0).toUpperCase() + tabId.slice(1);
