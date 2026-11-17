@@ -1,3 +1,5 @@
+import { WIKI } from "./flyff-wiki-icons.js";
+
 /** @typedef {'weapons' | 'armor' | 'pets' | 'quest' | 'consumables'} InventoryTabId */
 
 /** @typedef {{
@@ -23,40 +25,75 @@ export const INVENTORY_GRID_CELL_COUNT = 168;
 
 /** @type {InventoryGridItem[]} */
 export const inventoryGridItems = [
-  // —— Weapons (workshop) ——
-  { workshopItemId: "lusaka-axe", icon: "🪓", upgradeBadge: "+9", tab: "weapons" },
-  { workshopItemId: "ryvius-sword", icon: "⚔️", upgradeBadge: "+6", tab: "weapons" },
-  { workshopItemId: "carnian-bow", icon: "🏹", upgradeBadge: "+5", tab: "weapons" },
-  { icon: "🪓", upgradeBadge: "+4", tab: "weapons" },
-  { icon: "⚔️", upgradeBadge: "+3", tab: "weapons" },
-  { icon: "🏹", upgradeBadge: "+2", tab: "weapons" },
-  // Skin donors (transmute look — same type rules)
-  { icon: "🌲", upgradeBadge: "Skin", tab: "weapons", skinDonor: true },
-  { icon: "🔱", upgradeBadge: "Skin", tab: "weapons", skinDonor: true },
-  { icon: "🌙", upgradeBadge: "Skin", tab: "weapons", skinDonor: true },
-  { icon: "🗡️", upgradeBadge: "Skin", tab: "weapons", skinDonor: true },
-  { icon: "🎯", upgradeBadge: "Skin", tab: "weapons", skinDonor: true },
-  { icon: "🏹", upgradeBadge: "Skin", tab: "weapons", skinDonor: true },
+  // —— Weapons (workshop) — gPotato Wiki ——
+  {
+    workshopItemId: "lusaka-axe",
+    icon: WIKI.lusakaHeavyAxe,
+    upgradeBadge: "+9",
+    tab: "weapons",
+  },
+  {
+    workshopItemId: "ryvius-sword",
+    icon: WIKI.lusakaHeavySword,
+    upgradeBadge: "+6",
+    tab: "weapons",
+  },
+  {
+    workshopItemId: "carnian-bow",
+    icon: WIKI.lusakaBow,
+    upgradeBadge: "+5",
+    tab: "weapons",
+  },
+  { icon: WIKI.piecenition, upgradeBadge: "+4", tab: "weapons" },
+  { icon: WIKI.hotterSword, upgradeBadge: "+3", tab: "weapons" },
+  { icon: WIKI.gladiatorGoldBow, upgradeBadge: "+2", tab: "weapons" },
+  { icon: WIKI.spectreAxe, upgradeBadge: "Skin", tab: "weapons", skinDonor: true },
+  { icon: WIKI.nautilusAxe, upgradeBadge: "Skin", tab: "weapons", skinDonor: true },
+  { icon: WIKI.bishopAxe, upgradeBadge: "Skin", tab: "weapons", skinDonor: true },
+  { icon: WIKI.smiterSword, upgradeBadge: "Skin", tab: "weapons", skinDonor: true },
+  { icon: WIKI.baronessBow, upgradeBadge: "Skin", tab: "weapons", skinDonor: true },
+  { icon: WIKI.nemosFury, upgradeBadge: "Skin", tab: "weapons", skinDonor: true },
 
   // —— Armor ——
-  { workshopItemId: "mystique-suit", icon: "🛡️", upgradeBadge: "+7", tab: "armor" },
-  { workshopItemId: "vigor-helm", icon: "⛑️", upgradeBadge: "+4", tab: "armor" },
-  { workshopItemId: "neo-hat", icon: "🎩", upgradeBadge: "F", tab: "armor" },
-  { workshopItemId: "ankou-cloak", icon: "🦇", upgradeBadge: "F", tab: "armor" },
-  { icon: "🧤", upgradeBadge: "+2", tab: "armor" },
-  { icon: "👢", upgradeBadge: "+6", tab: "armor" },
-  { icon: "⚔️", upgradeBadge: "Skin", tab: "armor", skinDonor: true },
-  { icon: "🔮", upgradeBadge: "Skin", tab: "armor", skinDonor: true },
-  { icon: "💀", upgradeBadge: "Skin", tab: "armor", skinDonor: true },
-  { icon: "🎃", upgradeBadge: "Skin", tab: "armor", skinDonor: true },
-  { icon: "👼", upgradeBadge: "Skin", tab: "armor", skinDonor: true },
+  {
+    workshopItemId: "mystique-suit",
+    icon: WIKI.bilariSuitF,
+    upgradeBadge: "+7",
+    tab: "armor",
+  },
+  {
+    workshopItemId: "vigor-helm",
+    icon: WIKI.bilariHelmetF,
+    upgradeBadge: "+4",
+    tab: "armor",
+  },
+  {
+    workshopItemId: "neo-hat",
+    icon: WIKI.cruentusHelmetM,
+    upgradeBadge: "F",
+    tab: "armor",
+  },
+  {
+    workshopItemId: "ankou-cloak",
+    icon: WIKI.cruentusHelmetF,
+    upgradeBadge: "F",
+    tab: "armor",
+  },
+  { icon: WIKI.bilariGauntletF, upgradeBadge: "+2", tab: "armor" },
+  { icon: WIKI.bilariBootsF, upgradeBadge: "+6", tab: "armor" },
+  { icon: WIKI.bileireSuitM, upgradeBadge: "Skin", tab: "armor", skinDonor: true },
+  { icon: WIKI.cruentusSuitM, upgradeBadge: "Skin", tab: "armor", skinDonor: true },
+  { icon: WIKI.cruentusHelmetM, upgradeBadge: "Skin", tab: "armor", skinDonor: true },
+  { icon: WIKI.bilariHelmetF, upgradeBadge: "Skin", tab: "armor", skinDonor: true },
+  { icon: WIKI.bileireHelmetM, upgradeBadge: "Skin", tab: "armor", skinDonor: true },
 
-  { icon: "🐣", tab: "pets" },
-  { icon: "🐉", upgradeBadge: "Lv12", tab: "pets" },
-  { icon: "📜", tab: "quest" },
-  { icon: "📜", tab: "quest" },
-  { icon: "🧪", tab: "consumables" },
-  { icon: "🍖", tab: "consumables" },
+  { icon: WIKI.petLion, tab: "pets" },
+  { icon: WIKI.petDragon, upgradeBadge: "Lv12", tab: "pets" },
+  { icon: WIKI.petUnicorn, tab: "pets" },
+  { icon: WIKI.petHelper, tab: "quest" },
+  { icon: WIKI.scrollSProtect, tab: "quest" },
+  { icon: WIKI.petFeed, tab: "consumables" },
+  { icon: WIKI.scrollSProtect, tab: "consumables" },
 ];
 
 export let inventoryTabId = /** @type {InventoryTabId} */ ("weapons");
@@ -65,7 +102,13 @@ export const playerPenya = 5_671_297;
 
 export const characterGearScore = 1118;
 
-/** Slots equipados no boneco (só visual). */
+/**
+ * Slots do boneco (layout FlyFF): 5 acessórios, 5 esquerda, 5 direita, 4 fashion embaixo.
+ * @typedef {{ icon?: string; upgradeBadge?: string; workshopItemId?: string; title?: string }} EquipSlot
+ * @export
+ */
+
+/** @type {{ accessories: EquipSlot[]; left: EquipSlot[]; right: EquipSlot[]; footer: EquipSlot[] }} */
 export const characterEquippedSlots = {
   accessories: [
     { icon: "💍", upgradeBadge: "+2" },
@@ -74,29 +117,29 @@ export const characterEquippedSlots = {
     { icon: "💍", upgradeBadge: "+2" },
     {},
   ],
+  // Esquerda: arma, escudo, (vazio), capa, máscara
   left: [
-    { icon: "🪓", upgradeBadge: "+9" },
-    { icon: "⚔️", upgradeBadge: "+6" },
+    { icon: WIKI.lusakaHeavyAxe, upgradeBadge: "+9", title: "Weapon" },
+    { title: "Shield" },
     {},
-    { icon: "🏹", upgradeBadge: "+5" },
-    {},
-    { icon: "🎒" },
+    { title: "Cloak" },
+    { title: "Mask" },
   ],
+  // Direita: elmo, suit, luva, bota, asas (fashion)
   right: [
-    { icon: "🛡️", upgradeBadge: "+7" },
-    { icon: "🦇", upgradeBadge: "F" },
-    {},
-    { icon: "👼" },
-    {},
-    {},
+    { icon: WIKI.bilariHelmetF, upgradeBadge: "+4", title: "Helmet" },
+    { icon: WIKI.bilariSuitF, upgradeBadge: "+7", title: "Suit" },
+    { icon: WIKI.bilariGauntletF, upgradeBadge: "+2", title: "Gauntlet" },
+    { icon: WIKI.bilariBootsF, upgradeBadge: "+8", title: "Boots" },
+    {
+      workshopItemId: "ankou-cloak",
+      icon: WIKI.fashionWings,
+      upgradeBadge: "F",
+      title: "Fashion wings",
+    },
   ],
-  footer: [
-    { icon: "⛑️", upgradeBadge: "+4" },
-    { icon: "🎩", upgradeBadge: "F" },
-    {},
-    { icon: "🧤", upgradeBadge: "+2" },
-    { icon: "👢", upgradeBadge: "+8" },
-  ],
+  // Fashion overrides (chapéu, suit, luva, bota) — vazio = slot do jogo
+  footer: [{}, {}, {}, {}],
 };
 
 /**

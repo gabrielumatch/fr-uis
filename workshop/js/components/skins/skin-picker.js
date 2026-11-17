@@ -1,5 +1,6 @@
 import { equippedItem } from "../../data/equipped-item.js";
 import { getItemSkinState } from "../../data/skin-management.js";
+import { renderItemIcon } from "../../utils/item-icon.js";
 
 export function renderSkinPicker() {
   const skinState = getItemSkinState();
@@ -25,7 +26,11 @@ export function renderSkinPicker() {
           data-skin-id="${item.id}"
           aria-pressed="${active ? "true" : "false"}"
         >
-          <span class="transmute-pick__icon" aria-hidden="true">${item.icon}</span>
+          ${renderItemIcon(item.icon, {
+            wrapperClass: "transmute-pick__icon",
+            imgClass: "transmute-pick__icon-img",
+            alt: item.name,
+          })}
           <span class="transmute-pick__name">${item.name}</span>
           <span class="transmute-pick__qty muted">×${item.qty}</span>
         </button>

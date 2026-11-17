@@ -1,3 +1,5 @@
+import { renderItemIcon } from "../../utils/item-icon.js";
+
 /**
  * @param {{
  *   icon?: string;
@@ -42,7 +44,10 @@ export function renderInventorySlot({
     : "";
 
   const inner = filled
-    ? `<span class="inv-slot__icon" aria-hidden="true">${icon}</span>${badge}`
+    ? `${renderItemIcon(icon, {
+        wrapperClass: "inv-slot__icon",
+        imgClass: "inv-slot__icon-img",
+      })}${badge}`
     : "";
 
   if (as === "button" && workshopItemId) {

@@ -210,13 +210,38 @@
   font-size: 8px;
 }
 
-.inv-slot__icon {
+.inv-slot__icon,
+.item-icon {
   display: grid;
   place-items: center;
   width: 100%;
   height: 100%;
   font-size: 24px;
   line-height: 1;
+}
+
+.inv-slot__icon-img,
+.item-icon__img,
+.item-card__icon-img,
+.transmute-slot__icon-img,
+.transmute-pick__icon-img {
+  width: 88%;
+  height: 88%;
+  max-width: 46px;
+  max-height: 46px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.inv-slot--equip .inv-slot__icon-img {
+  max-width: 42px;
+  max-height: 42px;
+}
+
+.inv-slot--grid .inv-slot__icon-img {
+  max-width: 46px;
+  max-height: 46px;
 }
 
 .inv-slot--equip .inv-slot__icon {
@@ -410,6 +435,11 @@
   border: 2px solid #ad8a53;
   border-radius: 8px;
   box-shadow: inset 0 0 12px #fff9;
+}
+
+.item-card__icon-img {
+  max-width: 56px;
+  max-height: 56px;
 }
 
 .item-card__badge {

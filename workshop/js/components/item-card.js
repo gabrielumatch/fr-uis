@@ -1,3 +1,5 @@
+import { renderItemIcon } from "../utils/item-icon.js";
+
 /**
  * @param {{ icon: string; name: string; type: string; upgradeBadge: string; activeSkinName?: string | null }} item
  */
@@ -9,7 +11,11 @@ export function renderItemCard(item) {
   return `
     <article class="item-card">
       <div class="item-card__icon-wrap">
-        <div class="item-card__icon" aria-hidden="true">${item.icon}</div>
+        ${renderItemIcon(item.icon, {
+          wrapperClass: "item-card__icon",
+          imgClass: "item-card__icon-img",
+          alt: item.name,
+        })}
         <span class="item-card__badge">${item.upgradeBadge}</span>
       </div>
       <div class="item-card__name">${item.name}</div>

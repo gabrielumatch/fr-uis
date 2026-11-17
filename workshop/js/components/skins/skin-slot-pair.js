@@ -1,5 +1,6 @@
 import { equippedItem } from "../../data/equipped-item.js";
 import { getItemSkinState, getSkinById } from "../../data/skin-management.js";
+import { renderItemIcon } from "../../utils/item-icon.js";
 
 /**
  * @param {{ skinSelected: boolean }} props
@@ -12,7 +13,11 @@ export function renderSkinSlotPair({ skinSelected }) {
 
   const skinInner = selected
     ? `
-      <div class="transmute-slot__icon" aria-hidden="true">${selected.icon}</div>
+      ${renderItemIcon(selected.icon, {
+        wrapperClass: "transmute-slot__icon",
+        imgClass: "transmute-slot__icon-img",
+        alt: selected.name,
+      })}
       <div class="transmute-slot__name">${selected.name}</div>
       <div class="transmute-slot__type muted">${selected.type}</div>
     `
@@ -22,7 +27,11 @@ export function renderSkinSlotPair({ skinSelected }) {
     <div class="transmute-slots" role="group" aria-label="Apply skin slots">
       <div class="transmute-slot transmute-slot--primary">
         <div class="transmute-slot__tag">Primary</div>
-        <div class="transmute-slot__icon" aria-hidden="true">${equippedItem.icon}</div>
+        ${renderItemIcon(equippedItem.icon, {
+          wrapperClass: "transmute-slot__icon",
+          imgClass: "transmute-slot__icon-img",
+          alt: equippedItem.name,
+        })}
         <div class="transmute-slot__name">${equippedItem.name}</div>
         <div class="transmute-slot__type muted">${equippedItem.type}</div>
         <p class="transmute-slot__hint muted">Keeps +${equippedItem.upgradeLevel}, stats, element &amp; awake</p>

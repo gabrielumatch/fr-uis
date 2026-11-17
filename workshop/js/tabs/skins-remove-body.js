@@ -1,3 +1,4 @@
+import { renderItemIcon } from "../utils/item-icon.js";
 import { renderPanelSubTabBar } from "../components/upgrade/sub-tab-bar.js";
 import { SKINS_SUB_TABS } from "./skins-sub-tabs.js";
 import { equippedItem } from "../data/equipped-item.js";
@@ -29,7 +30,11 @@ export function renderSkinsRemoveBody() {
   const canRecover = hasSkinApplied && recoverScrolls > 0;
 
   const lookName = appliedLook?.name ?? "—";
-  const lookIcon = appliedLook?.icon ?? equippedItem.icon;
+  const lookIconSrc = appliedLook?.icon ?? equippedItem.icon;
+  const lookIconHtml = renderItemIcon(lookIconSrc, {
+    wrapperClass: "transmute-revert-status__look-icon",
+    imgClass: "item-icon__img",
+  });
 
   let footerHints = "";
   if (!hasSkinApplied) {
@@ -58,7 +63,7 @@ export function renderSkinsRemoveBody() {
       <div class="transmute-revert-status__row">
         <span class="muted">Current look</span>
         <span class="transmute-revert-status__look">
-          <span aria-hidden="true">${lookIcon}</span>
+          ${lookIconHtml}
           ${hasSkinApplied ? lookName : "Original"}
         </span>
       </div>
