@@ -1,4 +1,4 @@
-import { equippedItem } from "../data/workshop/equipped";
+import { requireEquippedGear } from "../data/workshop/equipped";
 import { buildJewelManagementState } from "../data/systems/jewel-management";
 import { JewelSlotList } from "../components/jewels/jewel-slot-list";
 import { JewelInventory } from "../components/jewels/jewel-inventory";
@@ -6,6 +6,7 @@ import { PanelSubTabBar } from "../components/upgrade/sub-tab-bar";
 import { UPGRADE_SUB_TABS } from "./upgrade-sub-tabs";
 
 export function UpgradeJewelsBody() {
+  const equippedItem = requireEquippedGear();
   const state = buildJewelManagementState();
   return (
     <>

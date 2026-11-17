@@ -3,16 +3,18 @@ import { StatList } from "./stat-list";
 import { AwakeAttributes } from "./awake-attributes";
 import { GearScore } from "./gear-score";
 import {
+  isRaisedPetItem,
   isWingItem,
-  isWorkshopItem,
+  isWorkshopHostItem,
   type CatalogItem,
 } from "../data/items/item";
 
 export function ItemSidebar({ item }: { item: CatalogItem }) {
-  if (isWorkshopItem(item)) {
+  if (isWorkshopHostItem(item)) {
+    const title = isRaisedPetItem(item) ? "Raised Pet" : "Workshop Item";
     return (
       <aside className="frame item-sidebar">
-        <h2 className="section-title">Workshop Item</h2>
+        <h2 className="section-title">{title}</h2>
         <ItemCard {...item} />
         <StatList rows={item.stats} />
         <AwakeAttributes stats={item.awake} />

@@ -1,4 +1,4 @@
-import { equippedItem } from "../data/workshop/equipped";
+import { requireEquippedGear } from "../data/workshop/equipped";
 import { getMaxUpgradeLevel } from "../data/upgrade/rules";
 import { getUpgradeSubTabIds } from "../data/workshop/ui-rules";
 import { getAttemptRows } from "../data/systems/attempt-plans";
@@ -10,6 +10,7 @@ import { ActionButtons } from "../components/upgrade/action-buttons";
 import { PanelSubTabBar } from "../components/upgrade/sub-tab-bar";
 
 export function UpgradeLevelBody() {
+  const equippedItem = requireEquippedGear();
   const subTabs = UPGRADE_SUB_TABS.filter((t) =>
     getUpgradeSubTabIds(equippedItem).includes(t.id),
   );

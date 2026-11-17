@@ -3,9 +3,11 @@ import { INVENTORY_BAG_SLOTS } from "../inventory/inventory-bag";
 import {
   type CatalogItem,
   type ConsumableItem,
+  type WorkshopHostItem,
   type WorkshopItem,
   isConsumableItem,
   isSkinItem,
+  isWorkshopHostItem,
   isWorkshopItem,
 } from "./item";
 import { skinFitsHost } from "../systems/skin-rules";
@@ -30,6 +32,8 @@ export const itemCatalog: readonly CatalogItem[] = items;
 
 export const equipmentCatalog: readonly WorkshopItem[] = items.filter(isWorkshopItem);
 
+export const workshopHostCatalog: readonly WorkshopHostItem[] = items.filter(isWorkshopHostItem);
+
 export const consumableCatalog: readonly ConsumableItem[] = items.filter(isConsumableItem);
 
 export function getItemById(id: string): CatalogItem | undefined {
@@ -39,6 +43,11 @@ export function getItemById(id: string): CatalogItem | undefined {
 export function getEquipmentById(id: string): WorkshopItem | undefined {
   const item = byId.get(id);
   return item && isWorkshopItem(item) ? item : undefined;
+}
+
+export function getWorkshopHostById(id: string): WorkshopHostItem | undefined {
+  const item = byId.get(id);
+  return item && isWorkshopHostItem(item) ? item : undefined;
 }
 
 export function getConsumableById(id: string): ConsumableItem | undefined {

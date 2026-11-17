@@ -2,6 +2,8 @@ export type UpgradeSub = "level" | "jewels";
 export type PiercingSub = "pierce" | "cards";
 export type ElementSub = "upgrade" | "change";
 export type SkinsSub = "apply" | "remove";
+export type FeedSub = "craft" | "give";
+export type GrowthSub = "advance" | "reroll";
 
 export type WorkshopRoute = {
   tabId: string;
@@ -9,6 +11,8 @@ export type WorkshopRoute = {
   piercingSub: PiercingSub;
   elementSub: ElementSub;
   skinsSub: SkinsSub;
+  feedSub: FeedSub;
+  growthSub: GrowthSub;
 };
 
 export const DEFAULT_ROUTE: WorkshopRoute = {
@@ -17,4 +21,6 @@ export const DEFAULT_ROUTE: WorkshopRoute = {
   piercingSub: "pierce",
   elementSub: "upgrade",
   skinsSub: "apply",
+  feedSub: "give",
+  growthSub: "advance",
 };

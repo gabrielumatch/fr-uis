@@ -796,32 +796,62 @@
     },
     {
       "id": "pet-lion",
-      "name": "Pet Lion",
+      "name": "Babari Lion",
       "type": "pet",
-      "subtype": "pickup",
+      "subtype": "raised",
       "category": "pet",
       "iconKey": "petLion",
-      "typeLabel": "Pet",
-      "stackQty": 1
+      "typeLabel": "Raised Pet",
+      "gearScore": 12,
+      "stackQty": 1,
+      "raisedPet": {
+        "species": "lion",
+        "rank": "C",
+        "statLevel": 3,
+        "rankExpPercent": 64.2,
+        "hp": 280,
+        "lives": 2,
+        "summoned": false,
+        "statTiers": ["D", "C", "B"]
+      },
+      "awake": []
     },
     {
       "id": "pet-dragon",
-      "name": "Pet Dragon",
+      "name": "Dragon",
       "type": "pet",
-      "subtype": "pickup",
+      "subtype": "raised",
       "category": "pet",
       "iconKey": "petDragon",
-      "typeLabel": "Pet",
-      "stackQty": 1
+      "typeLabel": "Raised Pet",
+      "gearScore": 22,
+      "stackQty": 1,
+      "raisedPet": {
+        "species": "dragon",
+        "rank": "B",
+        "statLevel": 5,
+        "rankExpPercent": 88.5,
+        "lives": 1,
+        "hp": 400,
+        "summoned": true,
+        "statTiers": ["D", "C", "B", "A", "B"]
+      },
+      "awake": [
+        {
+          "label": "ATK",
+          "value": "+3%",
+          "tone": "red"
+        }
+      ]
     },
     {
       "id": "pet-unicorn",
-      "name": "Pet Unicorn",
+      "name": "Baby Luia",
       "type": "pet",
       "subtype": "pickup",
       "category": "pet",
       "iconKey": "petUnicorn",
-      "typeLabel": "Pet",
+      "typeLabel": "Pick-up Pet",
       "stackQty": 1
     },
     {

@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { getItemById } from "../items/catalog";
-import { isSkinItem, type SkinItem, type WorkshopItem } from "../items/item";
+import {
+  isSkinItem,
+  isWorkshopHostItem,
+  type SkinItem,
+  type WorkshopHostItem,
+} from "../items/item";
 import { INVENTORY_BAG_SLOTS } from "../inventory/inventory-bag";
 import { getBagSkinsForWorkshopHost } from "../inventory/bag-skins";
 import {
@@ -16,12 +21,20 @@ import {
 } from "./ui-rules";
 import { DEFAULT_ROUTE } from "../../hooks/useWorkshopRoute";
 
-function requireWorkshopItem(id: string): WorkshopItem {
+function requireWorkshopHost(id: string): WorkshopHostItem {
   const item = getItemById(id);
-  if (!item || item.type === "skin" || item.type === "wing" || item.type === "pet") {
-    throw new Error(`Expected workshop gear "${id}"`);
+  if (!item || !isWorkshopHostItem(item)) {
+    throw new Error(`Expected workshop host "${id}"`);
   }
-  return item as WorkshopItem;
+  return item;
+}
+
+function requireWorkshopItem(id: string): import("../items/item").WorkshopItem {
+  const item = requireWorkshopHost(id);
+  if (item.type === "pet") {
+    throw new Error(`Expected gear, not pet "${id}"`);
+  }
+  return item;
 }
 
 function requireSkin(id: string): SkinItem {
@@ -37,10 +50,14 @@ describe("workshop UI routing", () => {
     expect(itemOpensWorkshopUi(requireWorkshopItem("intelli-ring"))).toBe(true);
   });
 
-  it("skin, wing, pet never open workshop UI from bag", () => {
+  it("raised pet opens workshop; pickup pet does not", () => {
+    expect(itemOpensWorkshopUi(requireWorkshopHost("pet-lion"))).toBe(true);
+    expect(itemOpensWorkshopUi(getItemById("pet-unicorn")!)).toBe(false);
+  });
+
+  it("skin, wing never open workshop UI from bag", () => {
     expect(itemOpensWorkshopUi(requireSkin("spectre-axe"))).toBe(false);
     expect(itemOpensWorkshopUi(getItemById("ankou-cloak")!)).toBe(false);
-    expect(itemOpensWorkshopUi(getItemById("pet-lion")!)).toBe(false);
   });
 
   it("workshop sidebar is always the equipped gear, never a bag skin", () => {
@@ -74,6 +91,13 @@ describe("accessory jewelry (ring/necklace/earring)", () => {
     );
     expect(coerced.tabId).toBe("upgrade");
     expect(coerced.upgradeSub).toBe("level");
+  });
+});
+
+describe("raised pet workshop tabs", () => {
+  it("exposes feed, growth, awake only", () => {
+    const lion = requireWorkshopHost("pet-lion");
+    expect(getWorkshopTabIds(lion)).toEqual(["feed", "growth", "awake"]);
   });
 });
 

@@ -9,6 +9,7 @@ import type {
   JewelSubtype,
   WeaponSubtype,
 } from "./types";
+import type { RaisedPetRuntime, RaisedPetSpecies, PetRank, PetStatTier } from "../pets/types";
 import type { ItemUpgradeAttributes } from "../upgrade/recipes";
 
 export type StatRow = { label: string; value: string; values?: string[] };
@@ -48,10 +49,33 @@ export type SkinItem = ItemBase & {
   hostItemId?: string;
 };
 
-export type PetItem = ItemBase & {
+export type PickupPetItem = ItemBase & {
   type: "pet";
+  subtype: "pickup";
   category: "pet";
 };
+
+export type WorkshopRaisedPetItem = ItemBase & {
+  type: "pet";
+  subtype: "raised";
+  category: "pet";
+  species: RaisedPetSpecies;
+  rank: PetRank;
+  statLevel: number;
+  rankExpPercent: number;
+  hp: number;
+  hpMax: number;
+  lives: number;
+  summoned: boolean;
+  statTiers: PetStatTier[];
+  stats: StatRow[];
+  awake: AwakeStat[];
+  gearScore: number;
+  upgradeBadge: string;
+  workshopPet: RaisedPetRuntime;
+};
+
+export type PetItem = PickupPetItem | WorkshopRaisedPetItem;
 
 export type QuestItem = ItemBase & {
   type: "quest";
@@ -134,11 +158,14 @@ export type WorkshopItem =
   | WorkshopJewelItem
   | WorkshopFashionItem;
 
+/** Gear + raised pet — painel Workshop Item. */
+export type WorkshopHostItem = WorkshopItem | WorkshopRaisedPetItem;
+
 export type CatalogItem =
-  | WorkshopItem
+  | WorkshopHostItem
   | ConsumableItem
   | SkinItem
-  | PetItem
+  | PickupPetItem
   | QuestItem
   | WingItem;
 
@@ -149,6 +176,22 @@ export function isWorkshopItem(item: CatalogItem): item is WorkshopItem {
     item.type === "jewel" ||
     item.type === "fashion"
   );
+}
+
+export function isWorkshopGearItem(item: CatalogItem): item is WorkshopItem {
+  return isWorkshopItem(item);
+}
+
+export function isRaisedPetItem(item: CatalogItem): item is WorkshopRaisedPetItem {
+  return item.type === "pet" && item.subtype === "raised";
+}
+
+export function isPickupPetItem(item: CatalogItem): item is PickupPetItem {
+  return item.type === "pet" && item.subtype === "pickup";
+}
+
+export function isWorkshopHostItem(item: CatalogItem): item is WorkshopHostItem {
+  return isWorkshopGearItem(item) || isRaisedPetItem(item);
 }
 
 export function isConsumableItem(item: CatalogItem): item is ConsumableItem {
@@ -170,9 +213,14 @@ export function opensWorkshopUpgrade(item: CatalogItem): boolean {
   );
 }
 
+/** Abre o bloco workshop (gear safe+ ou pet raised). */
+export function opensWorkshopHost(item: CatalogItem): boolean {
+  return opensWorkshopUpgrade(item) || isRaisedPetItem(item);
+}
+
 /** @deprecated import from `../workshop/ui-rules` */
 export function itemOpensWorkshopUi(item: CatalogItem): boolean {
-  return opensWorkshopUpgrade(item);
+  return opensWorkshopHost(item);
 }
 
 /** Doll / bag: seleciona no sidebar sem obrigar aba Upgrade. */
@@ -181,7 +229,7 @@ export function isEquipSelectableItem(item: CatalogItem): boolean {
 }
 
 export function isPetItem(item: CatalogItem): item is PetItem {
-  return item.type === "pet";
+  return item.type === "pet" && (item.subtype === "raised" || item.subtype === "pickup");
 }
 
 export function isQuestItem(item: CatalogItem): item is QuestItem {

@@ -1,4 +1,4 @@
-import { equippedItem } from "../data/workshop/equipped";
+import { requireEquippedGear } from "../data/workshop/equipped";
 import { getUpgradeLevelMaterials } from "../data/upgrade/materials";
 import { getUpgradeSubTabIds } from "../data/workshop/ui-rules";
 import type { WorkshopItem } from "../data/items/item";
@@ -15,7 +15,7 @@ export function resolveUpgradeSub(sub?: string): UpgradeSubId {
 
 export function getUpgradePanelView(
   sub: UpgradeSubId,
-  item: WorkshopItem = equippedItem,
+  item: WorkshopItem = requireEquippedGear(),
 ) {
   if (sub === "jewels" && !getUpgradeSubTabIds(item).includes("jewels")) {
     sub = "level";

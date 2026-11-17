@@ -1,5 +1,5 @@
 import { getTabById, TAB_HASH_ALIASES } from "../../tabs/registry";
-import { equipmentCatalog, getEquipmentById } from "../items/catalog";
+import { getWorkshopHostById, workshopHostCatalog } from "../items/catalog";
 import { resolveInventoryTab, type InventoryTabId } from "../inventory/display";
 import type { WorkshopRoute } from "./route-types";
 import { DEFAULT_ROUTE } from "./route-types";
@@ -18,13 +18,13 @@ export type WorkshopAppUrlState = {
 };
 
 export function defaultWorkshopItemId(): string {
-  return equipmentCatalog[0]?.id ?? "";
+  return workshopHostCatalog[0]?.id ?? "";
 }
 
 function resolveWorkshopItemId(raw: string | null): string {
   const fallback = defaultWorkshopItemId();
   if (!raw?.trim()) return fallback;
-  return getEquipmentById(raw.trim()) ? raw.trim() : fallback;
+  return getWorkshopHostById(raw.trim()) ? raw.trim() : fallback;
 }
 
 function normalizeUpgradeSub(raw: string): WorkshopRoute["upgradeSub"] {
@@ -44,6 +44,14 @@ function normalizeSkinsSub(raw: string): WorkshopRoute["skinsSub"] {
   return raw === "remove" ? "remove" : "apply";
 }
 
+function normalizeFeedSub(raw: string): WorkshopRoute["feedSub"] {
+  return raw === "craft" ? "craft" : "give";
+}
+
+function normalizeGrowthSub(raw: string): WorkshopRoute["growthSub"] {
+  return raw === "reroll" ? "reroll" : "advance";
+}
+
 function subtabFromRoute(route: WorkshopRoute): string {
   switch (route.tabId) {
     case "upgrade":
@@ -54,6 +62,10 @@ function subtabFromRoute(route: WorkshopRoute): string {
       return route.elementSub;
     case "skins":
       return route.skinsSub;
+    case "feed":
+      return route.feedSub;
+    case "growth":
+      return route.growthSub;
     default:
       return "level";
   }
@@ -69,6 +81,10 @@ function applySubtab(route: WorkshopRoute, subtab: string): WorkshopRoute {
       return { ...route, elementSub: normalizeElementSub(subtab) };
     case "skins":
       return { ...route, skinsSub: normalizeSkinsSub(subtab) };
+    case "feed":
+      return { ...route, feedSub: normalizeFeedSub(subtab) };
+    case "growth":
+      return { ...route, growthSub: normalizeGrowthSub(subtab) };
     default:
       return route;
   }

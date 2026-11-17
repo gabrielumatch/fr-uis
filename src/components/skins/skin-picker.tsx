@@ -1,9 +1,11 @@
-import { equippedItem } from "../../data/workshop/equipped";
+import { requireEquippedGear } from "../../data/workshop/equipped";
+import type { SkinPoolEntry } from "../../data/items/item";
 import { getItemSkinState } from "../../data/systems/skin-management";
 import { getBagSkinsForWorkshopHost } from "../../data/inventory/bag-skins";
 import { ItemIcon } from "../../utils/item-icon";
 
 export function SkinPicker() {
+  const equippedItem = requireEquippedGear();
   const skinState = getItemSkinState();
   const selectedId = skinState.selectedSkinId;
   const compatible = getBagSkinsForWorkshopHost(equippedItem);
@@ -23,7 +25,9 @@ export function SkinPicker() {
       <p className="section-title transmute-pick__title">Skin items (inventory)</p>
       <div className="transmute-pick-grid" role="listbox" aria-label="Skin items">
         {compatible.map((item) => {
-          const poolQty = skinState.skinPool.find((s) => s.id === item.id)?.qty;
+          const poolQty = skinState.skinPool.find(
+            (entry: SkinPoolEntry) => entry.id === item.id,
+          )?.qty;
           const qty = poolQty ?? 1;
           const active = item.id === selectedId;
           return (

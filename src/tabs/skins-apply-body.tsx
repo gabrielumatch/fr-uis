@@ -1,6 +1,6 @@
 import { PanelSubTabBar } from "../components/upgrade/sub-tab-bar";
 import { skinsSubTabsForItem } from "./skins-sub-tabs";
-import { equippedItem } from "../data/workshop/equipped";
+import { requireEquippedGear } from "../data/workshop/equipped";
 import { SkinSlotPair } from "../components/skins/skin-slot-pair";
 import { SkinPicker } from "../components/skins/skin-picker";
 import { getItemSkinState, getSkinById } from "../data/systems/skin-management";
@@ -11,6 +11,7 @@ export function getSkinsApplyMaterials() {
 }
 
 export function SkinsApplyBody() {
+  const equippedItem = requireEquippedGear();
   const skinState = getItemSkinState();
   const blocked = skinState.hasSkinApplied;
   const selectedId = skinState.selectedSkinId;

@@ -1,5 +1,5 @@
-import type { WorkshopItem } from "../items/workshop-item";
-import { equippedItem } from "../workshop/equipped";
+import type { WorkshopItem } from "../items/item";
+import { requireEquippedGear } from "../workshop/equipped";
 import { requireConsumableById } from "../items/catalog";
 import {
   getUpgradeLevelRecipe,
@@ -69,22 +69,22 @@ function materialsFromRecipe(recipe: UpgradeLevelRecipe): UpgradeMaterialDef[] {
   return mats;
 }
 
-export function isJewelryWorkshopItem(item: WorkshopItem = equippedItem): boolean {
+export function isJewelryWorkshopItem(item: WorkshopItem = requireEquippedGear()): boolean {
   return isJewelryItem(item);
 }
 
-export function isUltimateWorkshopItem(item: WorkshopItem = equippedItem): boolean {
+export function isUltimateWorkshopItem(item: WorkshopItem = requireEquippedGear()): boolean {
   return isUltimateUpgradeItem(item);
 }
 
 export function getUpgradeLevelMaterials(
-  item: WorkshopItem = equippedItem,
+  item: WorkshopItem = requireEquippedGear(),
 ): UpgradeMaterialDef[] {
   return materialsFromRecipe(getUpgradeLevelRecipe(item));
 }
 
 export function getUpgradeLevelAttemptDefaults(
-  item: WorkshopItem = equippedItem,
+  item: WorkshopItem = requireEquippedGear(),
 ): UpgradeAttemptSlotIcons {
   const recipe = getUpgradeLevelRecipe(item);
   const icons = { ...UPGRADE_ATTEMPT_ICONS[recipe.id] };

@@ -1,4 +1,4 @@
-import { equippedItem } from "../data/workshop/equipped";
+import { requireEquippedGear } from "../data/workshop/equipped";
 import { elementUpgradeState, getElementById } from "../data/systems/element-upgrade";
 import { PanelSubTabBar } from "../components/upgrade/sub-tab-bar";
 import { ELEMENT_SUB_TABS } from "./element-sub-tabs";
@@ -16,6 +16,7 @@ export function getElementChangeMaterials() {
 }
 
 export function ElementChangeBody() {
+  const equippedItem = requireEquippedGear();
   const { appliedElementId, changeTargetElementId, level, maxLevel } =
     elementUpgradeState;
   const applied = getElementById(appliedElementId);

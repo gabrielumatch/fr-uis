@@ -1,7 +1,7 @@
 import { ItemIcon } from "../utils/item-icon";
 import { PanelSubTabBar } from "../components/upgrade/sub-tab-bar";
 import { skinsSubTabsForItem } from "./skins-sub-tabs";
-import { equippedItem } from "../data/workshop/equipped";
+import { requireEquippedGear } from "../data/workshop/equipped";
 import { getItemSkinState } from "../data/systems/skin-management";
 
 export function getSkinsRemoveMaterials() {
@@ -13,6 +13,7 @@ export function getSkinsRemoveMaterials() {
 }
 
 export function SkinsRemoveBody() {
+  const equippedItem = requireEquippedGear();
   const skinState = getItemSkinState();
   const { hasSkinApplied, appliedLook } = skinState;
   const purgeScrolls = skinState.inventory.purgeSkinScrolls;

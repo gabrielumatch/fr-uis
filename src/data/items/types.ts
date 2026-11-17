@@ -1,5 +1,7 @@
 /** Campos comuns a **todo** item do jogo (equip, consumível, skin, …). */
 
+import type { RaisedPetRecord } from "../pets/types";
+
 export type ItemType =
   | "weapon"
   | "armor"
@@ -63,6 +65,8 @@ export type WeaponSubtype =
 export type FashionSubtype = "hat" | "suit" | "gloves" | "boots" | "back";
 
 export type WingSubtype = "back" | "wings";
+
+export type PetSubtype = "raised" | "pickup";
 
 /** Primary compatível com a skin (mesmo `subtype` do equip). */
 export type SkinSlot = WeaponSubtype | ArmorSubtype | FashionSubtype;
@@ -139,6 +143,8 @@ export type ItemRecord = {
   hostItemId?: string;
   /** Skin: mesmo `subtype` do primary (machado→machado, espada→espada). */
   skinSlot?: SkinSlot;
+  /** Pet raised: progressão D–S, feed, stat levels (subtype `raised`). */
+  raisedPet?: RaisedPetRecord;
 };
 
 export type ItemsCatalog = {

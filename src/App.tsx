@@ -31,6 +31,8 @@ import { getUpgradePanelView } from "./tabs/upgrade-panel";
 import { getPiercingPanelView } from "./tabs/piercing-panel";
 import { getElementPanelView } from "./tabs/element-panel";
 import { getSkinsPanelView } from "./tabs/skins-panel";
+import { getPetFeedPanelView } from "./tabs/pet-feed-panel";
+import { getPetGrowthPanelView } from "./tabs/pet-growth-panel";
 import {
   useWorkshopRoute,
   DEFAULT_ROUTE,
@@ -42,9 +44,25 @@ import {
   getWorkshopItemById,
 } from "./data/workshop/equipped";
 import { getItemById } from "./data/items/catalog";
-import { opensWorkshopUpgrade } from "./data/items/item";
+import {
+  isRaisedPetItem,
+  isWorkshopGearItem,
+  opensWorkshopHost,
+} from "./data/items/item";
+import {
+  advancePetStatLevel,
+  craftPetFeed,
+  getEquippedRaisedPet,
+  givePetFeed,
+  promotePetRank,
+  rerollLastStatTier,
+  revertLastStatLevel,
+  togglePetSummoned,
+} from "./data/systems/raised-pet-workshop";
 import {
   coerceWorkshopRoute,
+  defaultRouteForHost,
+  defaultTabForHost,
   getSkinsSubTabIds,
   getWorkshopTabIds,
   itemOpensWorkshopUi,
@@ -71,7 +89,8 @@ export function App() {
   const { route, setRoute } = useWorkshopRoute();
   const workshop = useWorkshop();
   const equipped = workshop.equippedItem;
-  const hasSkinApplied = equipped.workshopSkin.hasSkinApplied;
+  const hasSkinApplied =
+    isWorkshopGearItem(equipped) && equipped.workshopSkin.hasSkinApplied;
 
   const effectiveRoute = useMemo(
     () => coerceWorkshopRoute(route, equipped),
@@ -85,13 +104,16 @@ export function App() {
       next.upgradeSub !== route.upgradeSub ||
       next.piercingSub !== route.piercingSub ||
       next.elementSub !== route.elementSub ||
-      next.skinsSub !== route.skinsSub
+      next.skinsSub !== route.skinsSub ||
+      next.feedSub !== route.feedSub ||
+      next.growthSub !== route.growthSub
     ) {
       setRoute(next);
     }
   }, [equipped.id, hasSkinApplied, route, setRoute, equipped]);
 
-  let tab = getTabById(effectiveRoute.tabId) ?? getTabById(DEFAULT_TAB);
+  const hostFallbackTab = defaultTabForHost(equipped);
+  let tab = getTabById(effectiveRoute.tabId) ?? getTabById(hostFallbackTab);
   if (!tab) return null;
 
   let panelTitle = tab.panelTitle;
@@ -101,7 +123,7 @@ export function App() {
   let materialsTitle = tab.materialsTitle;
   let Body = tab.Body;
 
-  if (tab.id === "upgrade") {
+  if (tab.id === "upgrade" && isWorkshopGearItem(equipped)) {
     const view = getUpgradePanelView(effectiveRoute.upgradeSub, equipped);
     ({ panelTitle, panelSubtitle, materials, materialsVariant, materialsTitle } = view);
     Body = view.Body;
@@ -116,10 +138,38 @@ export function App() {
     ({ panelTitle, panelSubtitle, materials, materialsVariant, materialsTitle } = view);
     Body = view.Body;
   }
-  if (tab.id === "skins") {
+  if (tab.id === "skins" && isWorkshopGearItem(equipped)) {
     const view = getSkinsPanelView(effectiveRoute.skinsSub, equipped);
     ({ panelTitle, panelSubtitle, materials, materialsVariant, materialsTitle } = view);
     Body = view.Body;
+  }
+  if (tab.id === "feed" && isRaisedPetItem(equipped)) {
+    const view = getPetFeedPanelView(effectiveRoute.feedSub);
+    ({ panelTitle, panelSubtitle, materials, materialsVariant, materialsTitle } = view);
+    Body = view.Body;
+  }
+  if (tab.id === "growth" && isRaisedPetItem(equipped)) {
+    const view = getPetGrowthPanelView(effectiveRoute.growthSub);
+    ({ panelTitle, panelSubtitle, materials, materialsVariant, materialsTitle } = view);
+    Body = view.Body;
+  }
+  if (tab.id === "awake" && isRaisedPetItem(equipped)) {
+    panelTitle = "Awake Pet";
+    panelSubtitle = "Scroll of Pet Awakening (Peach) — can roll negative.";
+    materials = [
+      {
+        icon: "🔮",
+        name: "Scroll of Pet Awakening",
+        quantity: equipped.workshopPet.inventory.awakeningScroll,
+      },
+      {
+        icon: "📜",
+        name: "Scroll of Pet Reversion",
+        quantity: equipped.workshopPet.inventory.reversionScroll,
+      },
+    ];
+    materialsVariant = "grid";
+    materialsTitle = "Materials";
   }
 
   const visibleTabIds = getWorkshopTabIds(equipped);
@@ -128,9 +178,11 @@ export function App() {
     .map(({ id, label, icon }) => ({
       id,
       label:
-        id === "upgrade" && equipped.type === "jewel"
+        id === "upgrade" && isWorkshopGearItem(equipped) && equipped.type === "jewel"
           ? "Accessory Upgrade"
-          : label,
+          : id === "awake" && isRaisedPetItem(equipped)
+            ? "Pet Awake"
+            : label,
       icon,
     }));
 
@@ -145,18 +197,14 @@ export function App() {
       return;
     }
 
-    if (opensWorkshopUpgrade(item)) {
+    if (opensWorkshopHost(item)) {
       const panelItem = getWorkshopItemById(activeWorkshopItemId);
       if (panelItem) {
-        clearAttemptPlan("upgrade-level");
-        syncSkinToEquippedItem();
-
-        const upgradeSub = "level";
-        setRoute({
-          ...DEFAULT_ROUTE,
-          tabId: "upgrade",
-          upgradeSub,
-        });
+        if (isWorkshopGearItem(panelItem)) {
+          clearAttemptPlan("upgrade-level");
+          syncSkinToEquippedItem();
+        }
+        setRoute(defaultRouteForHost(panelItem));
       }
     }
 
@@ -201,11 +249,31 @@ export function App() {
       return;
     }
 
+    const feedSubBtn = target.closest("[data-feed-sub]");
+    if (feedSubBtn instanceof HTMLButtonElement) {
+      setRoute({
+        ...DEFAULT_ROUTE,
+        tabId: "feed",
+        feedSub: feedSubBtn.dataset.feedSub === "craft" ? "craft" : "give",
+      });
+      return;
+    }
+
+    const growthSubBtn = target.closest("[data-growth-sub]");
+    if (growthSubBtn instanceof HTMLButtonElement) {
+      setRoute({
+        ...DEFAULT_ROUTE,
+        tabId: "growth",
+        growthSub: growthSubBtn.dataset.growthSub === "reroll" ? "reroll" : "advance",
+      });
+      return;
+    }
+
     const skinsSubBtn = target.closest("[data-skins-sub]");
     if (skinsSubBtn instanceof HTMLButtonElement) {
       const skinsSub =
         skinsSubBtn.dataset.skinsSub === "remove" ? ("remove" as const) : ("apply" as const);
-      if (!getSkinsSubTabIds(equipped).includes(skinsSub)) {
+      if (!isWorkshopGearItem(equipped) || !getSkinsSubTabIds(equipped).includes(skinsSub)) {
         return;
       }
       setRoute({
@@ -301,6 +369,43 @@ export function App() {
       if (action === "Apply Skin" && !actionBtn.disabled) {
         if (applySkin().ok) workshop.bump();
         return;
+      }
+
+      const raised = getEquippedRaisedPet();
+      if (raised) {
+        if (action === "Craft Pet Feed") {
+          if (craftPetFeed(raised).ok) workshop.bump();
+          return;
+        }
+        if (action === "Give Pet Feed") {
+          if (givePetFeed(raised).ok) workshop.bump();
+          return;
+        }
+        if (action === "Toggle Summon") {
+          togglePetSummoned(raised);
+          workshop.bump();
+          return;
+        }
+        if (action === "Advance Stat Level") {
+          if (advancePetStatLevel(raised).ok) workshop.bump();
+          return;
+        }
+        if (action === "Promote Pet Rank") {
+          if (promotePetRank(raised).ok) workshop.bump();
+          return;
+        }
+        if (action === "Blessing Reroll") {
+          if (rerollLastStatTier(raised, "blessing").ok) workshop.bump();
+          return;
+        }
+        if (action === "Chance Reroll") {
+          if (rerollLastStatTier(raised, "chance").ok) workshop.bump();
+          return;
+        }
+        if (action === "Revert Stat Level") {
+          if (revertLastStatLevel(raised).ok) workshop.bump();
+          return;
+        }
       }
 
       if ((action === "Purge Skin" || action === "Recover Skin") && !actionBtn.disabled) {

@@ -1,8 +1,9 @@
-import { equippedItem } from "../../data/workshop/equipped";
+import { requireEquippedGear } from "../../data/workshop/equipped";
 import { getItemSkinState, getSkinById } from "../../data/systems/skin-management";
 import { ItemIcon } from "../../utils/item-icon";
 
 export function SkinSlotPair({ skinSelected }: { skinSelected: boolean }) {
+  const equippedItem = requireEquippedGear();
   const skinState = getItemSkinState();
   const selected = skinState.selectedSkinId
     ? getSkinById(skinState.selectedSkinId)

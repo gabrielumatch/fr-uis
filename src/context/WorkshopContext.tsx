@@ -18,7 +18,7 @@ import {
   type InventoryTabId,
 } from "../data/inventory/display";
 import { getItemById } from "../data/items/catalog";
-import { isWorkshopItem } from "../data/items/item";
+import { isWorkshopHostItem } from "../data/items/item";
 import { useWorkshopRoute } from "../hooks/useWorkshopRoute";
 
 type WorkshopContextValue = {
@@ -46,7 +46,7 @@ export function WorkshopProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!urlWorkshopItemId || urlWorkshopItemId === activeWorkshopItemId) return;
     const item = getItemById(urlWorkshopItemId);
-    if (item && isWorkshopItem(item)) {
+    if (item && isWorkshopHostItem(item)) {
       selectCatalogItem(urlWorkshopItemId);
       setSelectionTick((n) => n + 1);
     }
@@ -72,7 +72,7 @@ export function WorkshopProvider({ children }: { children: ReactNode }) {
         if (ok) {
           setSelectionTick((n) => n + 1);
           const item = getItemById(id);
-          if (item && isWorkshopItem(item) && id !== urlWorkshopItemId) {
+          if (item && isWorkshopHostItem(item) && id !== urlWorkshopItemId) {
             setWorkshopItemId(id);
           }
         }

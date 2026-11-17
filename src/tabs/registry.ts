@@ -5,6 +5,8 @@ import { elementTab } from "./element-panel";
 import { piercingTab } from "./piercing-panel";
 import { awakeTab } from "./awake-panel";
 import { skinsTab } from "./skins-panel";
+import { feedTab } from "./pet-feed-panel";
+import { growthTab } from "./pet-growth-panel";
 
 export type TabDefinition = {
   id: string;
@@ -24,6 +26,8 @@ export const tabRegistry: TabDefinition[] = [
   piercingTab,
   awakeTab,
   skinsTab,
+  feedTab,
+  growthTab,
 ];
 
 export const TAB_HASH_ALIASES: Record<string, string> = {

@@ -12,9 +12,14 @@ import type {
   WorkshopFashionItem,
   WorkshopItem,
   WorkshopJewelItem,
+  WorkshopRaisedPetItem,
   WorkshopWeaponItem,
 } from "./item";
 import { createSkinState } from "./item";
+import type { RaisedPetRecord } from "../pets/types";
+import { PET_HP_BY_RANK } from "../pets/rank-tables";
+import { speciesDef } from "../pets/species";
+import { formatPetBonusTotal, statBonusForLevel } from "../pets/rank-tables";
 import type { ArmorSubtype, SkinSlot, WeaponSubtype } from "./types";
 import { upgradeProfile } from "../upgrade/recipes";
 import {
@@ -115,6 +120,21 @@ export function assertItemRecord(record: ItemRecord): void {
       }
       break;
     case "pet":
+      if (record.subtype === "raised") {
+        if (!record.raisedPet) {
+          throw new Error(`Item "${record.id}": pet raised exige raisedPet{}`);
+        }
+        const rp = record.raisedPet;
+        if (rp.statLevel < 1 || rp.statLevel > 9) {
+          throw new Error(`Item "${record.id}": raisedPet.statLevel 1–9`);
+        }
+        if (rp.statTiers.length !== rp.statLevel) {
+          throw new Error(`Item "${record.id}": statTiers.length deve ser statLevel`);
+        }
+      } else if (record.subtype !== "pickup") {
+        throw new Error(`Item "${record.id}": pet.subtype deve ser raised|pickup`);
+      }
+      break;
     case "quest":
       break;
   }
@@ -171,8 +191,8 @@ function hydrateSimpleItem(
       recipeSlot: record.recipeSlot,
     };
   }
-  if (record.type === "pet") {
-    return { ...base, type: "pet", category: "pet" };
+  if (record.type === "pet" && record.subtype === "pickup") {
+    return { ...base, type: "pet", subtype: "pickup", category: "pet" };
   }
   if (record.type === "quest") {
     return { ...base, type: "quest", category: "quest" };
@@ -335,6 +355,78 @@ function combatFromRecord(record: ItemRecord): ItemCombatStats | undefined {
   };
 }
 
+function defaultRaisedPetInventory() {
+  return {
+    petFeed: 120,
+    questDrops: { monsterHeart: 40, stem: 28 },
+    blessingOfTamer: 2,
+    chanceOfTamer: 1,
+    reversionScroll: 3,
+    awakeningScroll: 8,
+  };
+}
+
+function buildRaisedPetStats(
+  species: import("../pets/types").RaisedPetSpecies,
+  rp: RaisedPetRecord,
+): StatRow[] {
+  const def = speciesDef(species);
+  const tierLines = rp.statTiers.map((tier, i) => {
+    const val = statBonusForLevel(species, i + 1, tier);
+    return `Lv${i + 1} (${tier}): +${val} ${def.bonusStat}`;
+  });
+  const hpMax = PET_HP_BY_RANK[rp.rank];
+  return [
+    { label: "Species", value: def.displayName },
+    { label: "Rank", value: rp.rank },
+    { label: "Stat level", value: `${rp.statLevel} / 9` },
+    {
+      label: "Rank EXP",
+      value: rp.rank === "S" ? "—" : `${rp.rankExpPercent.toFixed(2)}%`,
+    },
+    { label: "HP", value: `${rp.hp} / ${hpMax}` },
+    { label: "Lives", value: String(rp.lives) },
+    { label: "Total bonus", value: formatPetBonusTotal(species, rp.statTiers) },
+    {
+      label: "Stat rolls",
+      value: "",
+      values: tierLines.length ? tierLines : ["—"],
+    },
+    { label: "Summoned", value: rp.summoned ? "Yes" : "No" },
+  ];
+}
+
+function hydrateRaisedPetItem(record: ItemRecord): WorkshopRaisedPetItem {
+  const rp = record.raisedPet!;
+  const icon = resolveIcon(record);
+  const item: WorkshopRaisedPetItem = {
+    id: record.id,
+    name: record.name,
+    type: "pet",
+    subtype: "raised",
+    category: "pet",
+    typeLabel: record.typeLabel,
+    icon,
+    stackQty: record.stackQty ?? 1,
+    isSkin: false,
+    species: rp.species,
+    rank: rp.rank,
+    statLevel: rp.statLevel,
+    rankExpPercent: rp.rankExpPercent,
+    hp: rp.hp,
+    hpMax: PET_HP_BY_RANK[rp.rank],
+    lives: rp.lives,
+    summoned: rp.summoned ?? false,
+    statTiers: [...rp.statTiers],
+    stats: buildRaisedPetStats(rp.species, rp),
+    awake: record.awake ?? [],
+    gearScore: record.gearScore ?? 0,
+    upgradeBadge: `${rp.rank} · Lv${rp.statLevel}`,
+    workshopPet: { inventory: defaultRaisedPetInventory() },
+  };
+  return item;
+}
+
 function hydrateWorkshopItem(
   record: ItemRecord,
   catalog: Map<string, CatalogItem>,
@@ -449,7 +541,9 @@ export function hydrateItemsCatalog(catalog: ItemsCatalog): CatalogItem[] {
   const byId = new Map<string, CatalogItem>();
 
   for (const record of catalog.items) {
-    if (
+    if (record.type === "pet" && record.subtype === "raised") {
+      byId.set(record.id, hydrateRaisedPetItem(record));
+    } else if (
       record.type === "consumable" ||
       record.type === "skin" ||
       record.type === "pet" ||

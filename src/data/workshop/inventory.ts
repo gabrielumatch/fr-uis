@@ -1,19 +1,19 @@
-import { equipmentCatalog, getItemById } from "../items/catalog";
+import { workshopHostCatalog, getItemById } from "../items/catalog";
 import {
-  isWorkshopItem,
+  isWorkshopHostItem,
   type CatalogItem,
-  type WorkshopItem,
+  type WorkshopHostItem,
 } from "../items/item";
 
-const workshopItems: WorkshopItem[] = [...equipmentCatalog];
+const workshopHosts: WorkshopHostItem[] = [...workshopHostCatalog];
 
-export const workshopInventory: readonly WorkshopItem[] = workshopItems;
+export const workshopInventory: readonly WorkshopHostItem[] = workshopHosts;
 
-export let activeCatalogItemId: string = workshopItems[0]?.id ?? "";
+export let activeCatalogItemId: string = workshopHosts[0]?.id ?? "";
 
 export let activeWorkshopItemId: string = activeCatalogItemId;
 
-export let equippedItem: WorkshopItem = workshopItems[0];
+export let equippedItem: WorkshopHostItem = workshopHosts[0];
 
 export function getActiveCatalogItem(): CatalogItem | undefined {
   return getItemById(activeCatalogItemId);
@@ -25,7 +25,7 @@ export function selectCatalogItem(id: string): boolean {
 
   activeCatalogItemId = id;
 
-  if (isWorkshopItem(item)) {
+  if (isWorkshopHostItem(item)) {
     activeWorkshopItemId = id;
     equippedItem = item;
     return true;
@@ -37,9 +37,12 @@ export function selectCatalogItem(id: string): boolean {
 /** @deprecated use selectCatalogItem */
 export const selectWorkshopItem = selectCatalogItem;
 
-export function getWorkshopItemById(id: string): WorkshopItem | undefined {
+export function getWorkshopHostById(id: string): WorkshopHostItem | undefined {
   const item = getItemById(id);
-  return item && isWorkshopItem(item) ? item : undefined;
+  return item && isWorkshopHostItem(item) ? item : undefined;
 }
 
-export type { WorkshopItem } from "../items/item";
+/** @deprecated use getWorkshopHostById */
+export const getWorkshopItemById = getWorkshopHostById;
+
+export type { WorkshopHostItem, WorkshopItem } from "../items/item";

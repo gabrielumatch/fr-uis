@@ -14,6 +14,8 @@ export type {
   PiercingSub,
   ElementSub,
   SkinsSub,
+  FeedSub,
+  GrowthSub,
   WorkshopRoute,
 } from "../data/workshop/route-types";
 
