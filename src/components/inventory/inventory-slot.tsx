@@ -11,6 +11,7 @@ export function InventorySlot({
   variant = "equip",
   skinDonor = false,
   className = "",
+  onSelectWorkshopItem,
 }: {
   icon?: string;
   upgradeBadge?: string;
@@ -22,6 +23,7 @@ export function InventorySlot({
   variant?: "grid" | "equip";
   skinDonor?: boolean;
   className?: string;
+  onSelectWorkshopItem?: (id: string) => void;
 }) {
   const filled = !empty && icon;
   const classes = [
@@ -57,6 +59,10 @@ export function InventorySlot({
         data-workshop-item-id={workshopItemId}
         aria-pressed={active}
         title={title}
+        onClick={(event) => {
+          event.stopPropagation();
+          onSelectWorkshopItem?.(workshopItemId);
+        }}
       >
         {inner}
       </button>

@@ -1,0 +1,1 @@
+export type InventoryTabId = "weapons" | "armor" | "pets" | "quest" | "consumables";

@@ -4,13 +4,15 @@ import { CharacterEquipPane } from "./inventory/character-equip-pane";
 import { InventoryGridPane } from "./inventory/inventory-grid-pane";
 
 export function InventorySection({
-  activeId,
+  activeCatalogItemId,
   tabId,
   onInventoryTabChange,
+  onSelectWorkshopItem,
 }: {
-  activeId: string;
+  activeCatalogItemId: string;
   tabId: InventoryTabId;
   onInventoryTabChange: (tab: InventoryTabId) => void;
+  onSelectWorkshopItem: (id: string) => void;
 }) {
   return (
     <section
@@ -21,13 +23,17 @@ export function InventorySection({
       <SectionHeader id="inventory-section-title" title="INVENTORY" />
       <div className="inventory-layout">
         <div className="inventory-layout__char">
-          <CharacterEquipPane />
+          <CharacterEquipPane
+            activeWorkshopItemId={activeCatalogItemId}
+            onSelectWorkshopItem={onSelectWorkshopItem}
+          />
         </div>
         <div className="inventory-layout__bag">
           <InventoryGridPane
             tabId={tabId}
-            activeWorkshopItemId={activeId}
+            activeCatalogItemId={activeCatalogItemId}
             onTabChange={onInventoryTabChange}
+            onSelectCatalogItem={onSelectWorkshopItem}
           />
         </div>
       </div>

@@ -2,11 +2,25 @@
 
 | Pasta | Conteúdo |
 |-------|----------|
-| **`items/`** | Tipos, JSON de catálogo (`equipment.json`, `consumables.json`), hydrate, `catalog.ts` |
-| **`workshop/`** | Item equipado na workshop, seleção, inventário ativo |
-| **`upgrade/`** | Receitas `+`, regras por `type`/`category`, UI de materiais |
-| **`inventory/`** | Grid do personagem / abas do bag (mock) |
-| **`assets/`** | Ícones wiki (`wiki-icons.ts`) |
-| **`systems/`** | Estado volátil de abas (element, piercing, skins, awake, plans) |
+| **`items/`** | **`items.json`** — catálogo único (weapon, armor, jewel, fashion, **consumable**, **skin**); `types.ts`, `item.ts`, `hydrate-items.ts`, `catalog.ts` |
+| **`workshop/`** | Item equipado na UI |
+| **`upgrade/`** | Receitas `+` e painel de materiais |
+| **`inventory/`** | Grid do bag |
+| **`assets/`** | Ícones wiki |
+| **`systems/`** | Estado das abas |
 
-**Catálogo:** todo item (equip ou consumível) vive em JSON. Consumíveis de upgrade são `type: "consumable"`, `category: "upgrade"` — mesmo modelo conceitual que uma arma, outra categoria.
+Todo item no JSON tem os mesmos campos raiz: `id`, `name`, `type`, `subtype`, `category`, `typeLabel`, ícone, etc. Skins e consumíveis são linhas no mesmo arquivo; o equip referencia skins via `skinPoolIds`.
+
+### Gear weapon/armor: `type` + `category` → materiais de `+`
+
+Não inferir por nome ou ícone. No hydrate, `category` vira `item.upgrade` via `gearCategoryToRecipeId` + `UPGRADE_RECIPE_PAIRS` (`upgrade/rules.ts`, `upgrade/recipes.ts`):
+
+| `category` (weapon/armor) | Material | Protect |
+|---------------------------|----------|---------|
+| `normal`, `green` | Sunstone | SProtect |
+| `ultimate` | Oricalkum | XProtect |
+| `baruna` | Stone of Balance | Blessing of Baruna |
+
+Ex.: `hotter-sword` = `type: weapon`, `subtype: two-handed-sword`, `category: normal` → Sunstone + SProtect. Ultimate (Lusaka, etc.) = `category: ultimate` → Oricalkum + XProtect.
+
+Ao cadastrar item novo: acerte `category` no JSON; o boot valida bag + coerência `category` ↔ `upgrade`.

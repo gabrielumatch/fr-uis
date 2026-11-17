@@ -1,46 +1,47 @@
-import equipmentJson from "./equipment.json";
-import consumablesJson from "./consumables.json";
-import type { ConsumableItem } from "./consumable-item";
-import type { WorkshopItem } from "./workshop-item";
+import itemsJson from "./items.json";
+import { INVENTORY_BAG_SLOTS } from "../inventory/inventory-bag";
 import {
-  hydrateConsumableCatalog,
-  parseConsumablesCatalog,
-} from "./hydrate-consumables";
+  type CatalogItem,
+  type ConsumableItem,
+  type WorkshopItem,
+  isConsumableItem,
+  isWorkshopItem,
+} from "./item";
+import { hydrateItemsCatalog, parseItemsCatalog } from "./hydrate-items";
 import {
-  hydrateEquipmentCatalog,
-  parseEquipmentCatalog,
-} from "./hydrate-equipment";
-import { UPGRADE_RECIPE_PAIRS } from "../upgrade/recipes";
+  UPGRADE_RECIPE_PAIRS,
+  upgradeAttributesValid,
+} from "../upgrade/recipes";
+import { gearCategoryToRecipeId } from "../upgrade/rules";
 
-const equipment = hydrateEquipmentCatalog(parseEquipmentCatalog(equipmentJson));
-const consumables = hydrateConsumableCatalog(parseConsumablesCatalog(consumablesJson));
+const items: CatalogItem[] = hydrateItemsCatalog(parseItemsCatalog(itemsJson));
 
-const consumableById = new Map<string, ConsumableItem>(
-  consumables.map((item) => [item.id, item]),
-);
+const byId = new Map<string, CatalogItem>(items.map((item) => [item.id, item]));
 
-const equipmentById = new Map<string, WorkshopItem>(
-  equipment.map((item) => [item.id, item]),
-);
+export const itemCatalog: readonly CatalogItem[] = items;
 
-/** Equipamentos workshop (armas, armaduras, joias, fashion). */
-export const equipmentCatalog: readonly WorkshopItem[] = equipment;
+export const equipmentCatalog: readonly WorkshopItem[] = items.filter(isWorkshopItem);
 
-/** Itens de consumo — pedras, scrolls, smelting (`category: upgrade`). */
-export const consumableCatalog: readonly ConsumableItem[] = consumables;
+export const consumableCatalog: readonly ConsumableItem[] = items.filter(isConsumableItem);
+
+export function getItemById(id: string): CatalogItem | undefined {
+  return byId.get(id);
+}
 
 export function getEquipmentById(id: string): WorkshopItem | undefined {
-  return equipmentById.get(id);
+  const item = byId.get(id);
+  return item && isWorkshopItem(item) ? item : undefined;
 }
 
 export function getConsumableById(id: string): ConsumableItem | undefined {
-  return consumableById.get(id);
+  const item = byId.get(id);
+  return item && isConsumableItem(item) ? item : undefined;
 }
 
 export function requireConsumableById(id: string): ConsumableItem {
   const item = getConsumableById(id);
   if (!item) {
-    throw new Error(`Consumable "${id}" não está em consumables.json`);
+    throw new Error(`Item "${id}" não é consumable em items.json`);
   }
   return item;
 }
@@ -52,3 +53,27 @@ for (const recipe of Object.values(UPGRADE_RECIPE_PAIRS)) {
   }
 }
 requireConsumableById("smelting-scroll");
+
+for (const slot of INVENTORY_BAG_SLOTS) {
+  if (!byId.has(slot.itemId)) {
+    throw new Error(
+      `Inventory bag references "${slot.itemId}" but it is missing from items.json`,
+    );
+  }
+}
+
+for (const item of equipmentCatalog) {
+  if (item.type !== "weapon" && item.type !== "armor") continue;
+  const recipeId = gearCategoryToRecipeId(item.category);
+  if (item.upgrade.id !== recipeId) {
+    throw new Error(
+      `Item "${item.id}": upgrade recipe "${item.upgrade.id}" ≠ category "${item.category}" (esperado "${recipeId}")`,
+    );
+  }
+  if (!upgradeAttributesValid(item.upgrade)) {
+    const canonical = UPGRADE_RECIPE_PAIRS[recipeId];
+    throw new Error(
+      `Item "${item.id}": materiais de upgrade inválidos (category "${item.category}" → ${canonical.material}+${canonical.protect ?? "—"})`,
+    );
+  }
+}

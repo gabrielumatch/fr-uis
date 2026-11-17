@@ -3,45 +3,69 @@ import {
   characterGearScore,
   type EquipSlot,
 } from "../../data/inventory/display";
-import {
-  activeWorkshopItemId,
-  getWorkshopItemById,
-} from "../../data/workshop/equipped";
+import { getItemById } from "../../data/items/catalog";
+import { isWorkshopItem } from "../../data/items/item";
 import { InventorySlot } from "./inventory-slot";
 
-function EquipSlotCell({ slot }: { slot: EquipSlot | Record<string, never> }) {
-  const wsId = slot.workshopItemId;
-  const wsItem = wsId ? getWorkshopItemById(wsId) : undefined;
-  const icon = slot.icon ?? wsItem?.icon;
+function EquipSlotCell({
+  slot,
+  activeWorkshopItemId,
+  onSelectWorkshopItem,
+}: {
+  slot: EquipSlot | Record<string, never>;
+  activeWorkshopItemId: string;
+  onSelectWorkshopItem: (id: string) => void;
+}) {
+  const itemId = slot.itemId ?? slot.workshopItemId;
+  const catalogItem = itemId ? getItemById(itemId) : undefined;
+  const icon = slot.icon ?? catalogItem?.icon;
   const empty = !icon;
-  const title = slot.title ?? wsItem?.name ?? "";
+  const title = slot.title ?? catalogItem?.name ?? "";
+  const selectable = Boolean(itemId && catalogItem && isWorkshopItem(catalogItem));
 
   return (
     <InventorySlot
       icon={icon}
       upgradeBadge={slot.upgradeBadge}
-      workshopItemId={wsId}
-      active={Boolean(wsId && wsId === activeWorkshopItemId)}
+      workshopItemId={selectable ? itemId : undefined}
+      active={Boolean(itemId && itemId === activeWorkshopItemId)}
       empty={empty}
       title={title}
       className="inv-slot--equip"
-      as={wsId ? "button" : "div"}
+      as={selectable ? "button" : "div"}
+      onSelectWorkshopItem={onSelectWorkshopItem}
     />
   );
 }
 
-export function CharacterEquipPane() {
+export function CharacterEquipPane({
+  activeWorkshopItemId,
+  onSelectWorkshopItem,
+}: {
+  activeWorkshopItemId: string;
+  onSelectWorkshopItem: (id: string) => void;
+}) {
   return (
     <div className="inv-char" aria-label="Character equipment">
       <div className="inv-char__accessories">
         {characterEquippedSlots.accessories.map((slot, i) => (
-          <EquipSlotCell key={i} slot={slot} />
+          <EquipSlotCell
+            key={i}
+            slot={slot}
+            activeWorkshopItemId={activeWorkshopItemId}
+            onSelectWorkshopItem={onSelectWorkshopItem}
+          />
         ))}
       </div>
       <div className="inv-char__body">
         <div className="inv-char__col inv-char__col--left">
           {characterEquippedSlots.left.map((slot, i) => (
-            <EquipSlotCell key={i} slot={slot} />
+            <EquipSlotCell
+              key={i}
+              slot={slot}
+              activeWorkshopItemId={activeWorkshopItemId}
+              onSelectWorkshopItem={onSelectWorkshopItem}
+            />
           ))}
         </div>
         <div className="inv-char__doll">
@@ -57,13 +81,23 @@ export function CharacterEquipPane() {
         </div>
         <div className="inv-char__col inv-char__col--right">
           {characterEquippedSlots.right.map((slot, i) => (
-            <EquipSlotCell key={i} slot={slot} />
+            <EquipSlotCell
+              key={i}
+              slot={slot}
+              activeWorkshopItemId={activeWorkshopItemId}
+              onSelectWorkshopItem={onSelectWorkshopItem}
+            />
           ))}
         </div>
       </div>
       <div className="inv-char__footer">
         {characterEquippedSlots.footer.map((slot, i) => (
-          <EquipSlotCell key={i} slot={slot} />
+          <EquipSlotCell
+            key={i}
+            slot={slot}
+            activeWorkshopItemId={activeWorkshopItemId}
+            onSelectWorkshopItem={onSelectWorkshopItem}
+          />
         ))}
       </div>
     </div>

@@ -7,9 +7,10 @@ import {
   type ReactNode,
 } from "react";
 import {
+  activeCatalogItemId,
   activeWorkshopItemId,
   equippedItem,
-  selectWorkshopItem,
+  selectCatalogItem,
 } from "../data/workshop/equipped";
 import {
   resolveInventoryTab,
@@ -17,6 +18,7 @@ import {
 } from "../data/inventory/display";
 
 type WorkshopContextValue = {
+  activeCatalogItemId: string;
   activeWorkshopItemId: string;
   equippedItem: typeof equippedItem;
   inventoryTabId: InventoryTabId;
@@ -28,13 +30,16 @@ type WorkshopContextValue = {
 const WorkshopContext = createContext<WorkshopContextValue | null>(null);
 
 export function WorkshopProvider({ children }: { children: ReactNode }) {
-  const [, setTick] = useState(0);
+  const [selectionTick, setSelectionTick] = useState(0);
   const [inventoryTabId, setInventoryTabId] =
     useState<InventoryTabId>("weapons");
-  const bump = useCallback(() => setTick((n) => n + 1), []);
+  const bump = useCallback(() => setSelectionTick((n) => n + 1), []);
 
   const value = useMemo<WorkshopContextValue>(
     () => ({
+      get activeCatalogItemId() {
+        return activeCatalogItemId;
+      },
       get activeWorkshopItemId() {
         return activeWorkshopItemId;
       },
@@ -44,15 +49,15 @@ export function WorkshopProvider({ children }: { children: ReactNode }) {
       inventoryTabId,
       bump,
       selectItem: (id) => {
-        const ok = selectWorkshopItem(id);
-        if (ok) bump();
+        const ok = selectCatalogItem(id);
+        if (ok) setSelectionTick((n) => n + 1);
         return ok;
       },
       setInventoryTab: (tab: InventoryTabId) => {
         setInventoryTabId(resolveInventoryTab(tab));
       },
     }),
-    [bump, inventoryTabId],
+    [selectionTick, inventoryTabId, bump],
   );
 
   return <WorkshopContext.Provider value={value}>{children}</WorkshopContext.Provider>;

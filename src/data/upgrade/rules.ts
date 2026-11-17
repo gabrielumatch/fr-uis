@@ -1,5 +1,5 @@
 import type { GearItemCategory } from "../items/types";
-import type { WorkshopItemRecord } from "../items/equipment-record";
+import type { ItemRecord } from "../items/types";
 import type { ItemUpgradeAttributes, UpgradeRecipeId } from "./recipes";
 import { upgradeProfile } from "./recipes";
 import type { WorkshopItem } from "../items/workshop-item";
@@ -17,7 +17,7 @@ export function gearCategoryToRecipeId(
   }
 }
 
-export function upgradeFromRecord(record: WorkshopItemRecord): ItemUpgradeAttributes {
+export function upgradeFromRecord(record: ItemRecord): ItemUpgradeAttributes {
   switch (record.type) {
     case "jewel":
       return upgradeProfile("jewel");
@@ -25,7 +25,11 @@ export function upgradeFromRecord(record: WorkshopItemRecord): ItemUpgradeAttrib
       return upgradeProfile("fashion");
     case "weapon":
     case "armor":
-      return upgradeProfile(gearCategoryToRecipeId(record.category));
+      return upgradeProfile(
+        gearCategoryToRecipeId(record.category as import("../items/types").GearItemCategory),
+      );
+    default:
+      throw new Error(`upgradeFromRecord: type "${record.type}" não tem receita +`);
   }
 }
 

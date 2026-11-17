@@ -37,6 +37,12 @@ import {
   type WorkshopRoute,
 } from "./hooks/useWorkshopRoute";
 import { useWorkshop } from "./context/WorkshopContext";
+import {
+  activeWorkshopItemId,
+  getActiveCatalogItem,
+  getWorkshopItemById,
+} from "./data/workshop/equipped";
+import { getItemById } from "./data/items/catalog";
 
 const DEFAULT_TAB = "upgrade";
 
@@ -90,6 +96,32 @@ export function App() {
 
   const tabDefs = tabRegistry.map(({ id, label, icon }) => ({ id, label, icon }));
 
+  const handleSelectCatalogItem = (itemId: string) => {
+    if (!getItemById(itemId)) return;
+
+    const ok = workshop.selectItem(itemId);
+    if (!ok) return;
+
+    const panelItem = getWorkshopItemById(activeWorkshopItemId);
+    if (panelItem) {
+      clearAttemptPlan("upgrade-level");
+      syncSkinToEquippedItem();
+
+      const upgradeSub = panelItem.type === "jewel" ? "jewels" : "level";
+      setRoute({
+        ...DEFAULT_ROUTE,
+        tabId: "upgrade",
+        upgradeSub,
+      });
+    }
+
+    requestAnimationFrame(() => {
+      document
+        .getElementById("equipment-workshop")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
+
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     const target = event.target;
     if (!(target instanceof Element)) return;
@@ -141,16 +173,6 @@ export function App() {
         const skinState = getItemSkinState();
         setSelectedSkinId(id === skinState.selectedSkinId ? null : id);
         workshop.bump();
-      }
-      return;
-    }
-
-    const workshopItemBtn = target.closest("[data-workshop-item-id]");
-    if (workshopItemBtn instanceof HTMLButtonElement) {
-      const itemId = workshopItemBtn.dataset.workshopItemId;
-      if (itemId && workshop.selectItem(itemId)) {
-        clearAttemptPlan("upgrade-level");
-        syncSkinToEquippedItem();
       }
       return;
     }
@@ -304,7 +326,7 @@ export function App() {
         <WorkshopHeader />
         <TabBar tabs={tabDefs} activeId={tab.id} />
         <div className="workshop__layout">
-          <ItemSidebar item={workshop.equippedItem} />
+          <ItemSidebar item={getActiveCatalogItem() ?? workshop.equippedItem} />
           <OperationPanel
             title={panelTitle}
             subtitle={panelSubtitle}
@@ -318,9 +340,10 @@ export function App() {
         </div>
       </section>
       <InventorySection
-        activeId={workshop.activeWorkshopItemId}
+        activeCatalogItemId={workshop.activeCatalogItemId}
         tabId={workshop.inventoryTabId}
         onInventoryTabChange={workshop.setInventoryTab}
+        onSelectWorkshopItem={handleSelectCatalogItem}
       />
     </div>
   );

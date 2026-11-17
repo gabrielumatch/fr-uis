@@ -1,25 +1,54 @@
-import { equipmentCatalog } from "../items/catalog";
-import type { WorkshopItem } from "../items/workshop-item";
+import { equipmentCatalog, getItemById } from "../items/catalog";
+import {
+  isSkinItem,
+  isWorkshopItem,
+  type CatalogItem,
+  type WorkshopItem,
+} from "../items/item";
 
-const inventory: WorkshopItem[] = [...equipmentCatalog];
+const workshopItems: WorkshopItem[] = [...equipmentCatalog];
 
-export const workshopInventory: readonly WorkshopItem[] = inventory;
+export const workshopInventory: readonly WorkshopItem[] = workshopItems;
 
-export let activeWorkshopItemId: string = inventory[0].id;
+export let activeCatalogItemId: string = workshopItems[0]?.id ?? "";
 
-export let equippedItem: WorkshopItem = inventory[0];
+export let activeWorkshopItemId: string = activeCatalogItemId;
 
-export function selectWorkshopItem(id: string): boolean {
-  if (id === activeWorkshopItemId) return false;
-  const next = inventory.find((item) => item.id === id);
-  if (!next) return false;
-  activeWorkshopItemId = id;
-  equippedItem = next;
+export let equippedItem: WorkshopItem = workshopItems[0];
+
+export function getActiveCatalogItem(): CatalogItem | undefined {
+  return getItemById(activeCatalogItemId);
+}
+
+export function selectCatalogItem(id: string): boolean {
+  const item = getItemById(id);
+  if (!item) return false;
+
+  activeCatalogItemId = id;
+
+  if (isWorkshopItem(item)) {
+    activeWorkshopItemId = id;
+    equippedItem = item;
+    return true;
+  }
+
+  if (isSkinItem(item) && item.hostItemId) {
+    const host = getWorkshopItemById(item.hostItemId);
+    if (host) {
+      activeWorkshopItemId = host.id;
+      equippedItem = host;
+    }
+  }
+
   return true;
 }
 
+/** @deprecated use selectCatalogItem */
+export const selectWorkshopItem = selectCatalogItem;
+
 export function getWorkshopItemById(id: string): WorkshopItem | undefined {
-  return inventory.find((item) => item.id === id);
+  const item = getItemById(id);
+  return item && isWorkshopItem(item) ? item : undefined;
 }
 
-export type { WorkshopItem } from "../items/workshop-item";
+export type { WorkshopItem } from "../items/item";

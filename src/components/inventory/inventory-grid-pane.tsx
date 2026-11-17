@@ -1,18 +1,19 @@
-import { getWorkshopItemById } from "../../data/workshop/equipped";
+import { getItemById } from "../../data/items/catalog";
 import {
   INVENTORY_TABS,
   getInventoryGridCells,
-  resolveInventoryCellWorkshopId,
   type InventoryTabId,
 } from "../../data/inventory/display";
 import { InventorySlot } from "./inventory-slot";
 
 function BagCell({
   cell,
-  activeWorkshopItemId,
+  activeCatalogItemId,
+  onSelectCatalogItem,
 }: {
   cell: ReturnType<typeof getInventoryGridCells>[number];
-  activeWorkshopItemId: string;
+  activeCatalogItemId: string;
+  onSelectCatalogItem: (id: string) => void;
 }) {
   if (!cell?.icon) {
     return (
@@ -24,24 +25,21 @@ function BagCell({
     );
   }
 
-  const wsId = resolveInventoryCellWorkshopId(cell);
-  const item = wsId ? getWorkshopItemById(wsId) : undefined;
-  const title =
-    item?.name ??
-    (cell.skinDonor ? "Skin item — opens matching gear in workshop" : "");
-  const active = Boolean(wsId && wsId === activeWorkshopItemId);
+  const item = getItemById(cell.itemId);
+  const title = item?.name ?? cell.itemId;
+  const active = cell.itemId === activeCatalogItemId;
 
   return (
     <div className="inv-grid__cell" role="gridcell">
       <InventorySlot
         icon={cell.icon}
         upgradeBadge={cell.upgradeBadge}
-        workshopItemId={wsId}
+        workshopItemId={cell.itemId}
         active={active}
         title={title}
         variant="grid"
-        as={wsId ? "button" : "div"}
-        skinDonor={Boolean(cell.skinDonor)}
+        as="button"
+        onSelectWorkshopItem={onSelectCatalogItem}
       />
     </div>
   );
@@ -49,12 +47,14 @@ function BagCell({
 
 export function InventoryGridPane({
   tabId,
-  activeWorkshopItemId,
+  activeCatalogItemId,
   onTabChange,
+  onSelectCatalogItem,
 }: {
   tabId: InventoryTabId;
-  activeWorkshopItemId: string;
+  activeCatalogItemId: string;
   onTabChange: (tab: InventoryTabId) => void;
+  onSelectCatalogItem: (id: string) => void;
 }) {
   const cells = getInventoryGridCells(tabId);
 
@@ -75,7 +75,12 @@ export function InventoryGridPane({
       </nav>
       <div className="inv-grid" role="grid" aria-label="Item slots">
         {cells.map((cell, i) => (
-          <BagCell key={i} cell={cell} activeWorkshopItemId={activeWorkshopItemId} />
+          <BagCell
+            key={i}
+            cell={cell}
+            activeCatalogItemId={activeCatalogItemId}
+            onSelectCatalogItem={onSelectCatalogItem}
+          />
         ))}
       </div>
       <div className="inv-bag__tools">
