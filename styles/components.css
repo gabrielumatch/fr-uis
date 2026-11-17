@@ -507,6 +507,18 @@
   font-weight: bold;
 }
 
+.stat-list__row--stacked {
+  align-items: flex-start;
+}
+
+.stat-list__value-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  text-align: right;
+}
+
 /* AwakeAttributes */
 .awake-block {
   margin-top: 14px;

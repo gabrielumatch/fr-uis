@@ -11,7 +11,7 @@ import type {
 } from "./types";
 import type { ItemUpgradeAttributes } from "../upgrade/recipes";
 
-export type StatRow = { label: string; value: string };
+export type StatRow = { label: string; value: string; values?: string[] };
 
 export type AwakeStat = {
   label: string;

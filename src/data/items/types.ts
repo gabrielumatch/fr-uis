@@ -129,7 +129,7 @@ export type ItemRecord = {
   piercing?: SlotProgress;
   cards?: SlotProgress;
   jewels?: JewelSockets;
-  setBonus?: string;
+  setBonus?: string | string[];
   info?: InfoLine[];
   awake?: AwakeRecord[];
   skinPoolIds?: string[];

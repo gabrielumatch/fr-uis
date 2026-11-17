@@ -589,7 +589,12 @@
         "min": 1743,
         "max": 1749
       },
-      "setBonus": "DEF+20%, HP+20%, Melee Block+20%, Ranged Block+20%",
+      "setBonus": [
+        "DEF+20%",
+        "HP+20%",
+        "Melee Block+20%",
+        "Ranged Block+20%"
+      ],
       "element": {
         "name": "Wind",
         "level": 12,

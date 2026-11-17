@@ -205,6 +205,17 @@ function formatSlot(p: { current: number; max: number }): string {
   return `${p.current} / ${p.max}`;
 }
 
+function normalizeSetBonusLines(setBonus: string | string[] | undefined): string[] {
+  if (!setBonus) return [];
+  if (Array.isArray(setBonus)) {
+    return setBonus.map((line) => line.trim()).filter(Boolean);
+  }
+  return setBonus
+    .split(/,\s*/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
 function buildGearStats(
   record: ItemRecord,
   upgrade: ReturnType<typeof upgradeProfile>,
@@ -218,7 +229,14 @@ function buildGearStats(
     rows.push({ label: "DEF", value: formatRange(record.defense.min, record.defense.max) });
   }
   if (record.bonus) rows.push({ label: "Bonus", value: record.bonus });
-  if (record.setBonus) rows.push({ label: "Set bonus (4/4)", value: record.setBonus });
+  const setBonusLines = normalizeSetBonusLines(record.setBonus);
+  if (setBonusLines.length > 0) {
+    rows.push({
+      label: "Set bonus (4/4)",
+      value: "",
+      values: setBonusLines,
+    });
+  }
   const showElement = profile?.allowsElement ?? Boolean(record.element);
   const showPiercing =
     (profile?.piercingSlotMax ?? 0) > 0 && Boolean(record.piercing);
