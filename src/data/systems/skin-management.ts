@@ -1,5 +1,8 @@
 // @ts-nocheck
 import { equippedItem } from "../workshop/equipped";
+import { getItemById } from "../items/catalog";
+import { isSkinItem } from "../items/item";
+import { canApplySkinIdToEquipped } from "./skin-rules";
 
 /** @typedef {{
  *   id: string;
@@ -32,9 +35,27 @@ export function getSkinById(id) {
   return getItemSkinState().skinPool.find((s) => s.id === id);
 }
 
-/** @param {string} equipmentType */
+/** Pool do item ou skin da bag com qty 1 se compatível. */
+export function resolveSkinChoice(id) {
+  const fromPool = getSkinById(id);
+  if (fromPool) return fromPool;
+  const item = getItemById(id);
+  if (!item || !isSkinItem(item)) return undefined;
+  if (!canApplySkinIdToEquipped(id, equippedItem)) return undefined;
+  return {
+    id: item.id,
+    icon: item.icon,
+    name: item.name,
+    typeLabel: item.typeLabel,
+    qty: 1,
+  };
+}
+
+/** @deprecated use canApplySkinIdToEquipped */
 export function canApplySkinType(equipmentType) {
-  return equipmentType === equippedItem.typeLabel;
+  const selected = getItemSkinState().selectedSkinId;
+  if (selected) return canApplySkinIdToEquipped(selected, equippedItem);
+  return equipmentType === equippedItem.subtype;
 }
 
 /** @param {string | null} id */
@@ -93,9 +114,11 @@ export function applySkin() {
   const id = state.selectedSkinId;
   if (!id) return { ok: false, reason: "no_skin" };
 
-  const skin = getSkinById(id);
+  const skin = resolveSkinChoice(id);
   if (!skin || skin.qty <= 0) return { ok: false, reason: "no_skin" };
-  if (!canApplySkinType(skin.typeLabel)) return { ok: false, reason: "type_mismatch" };
+  if (!canApplySkinIdToEquipped(id, equippedItem)) {
+    return { ok: false, reason: "type_mismatch" };
+  }
 
   skin.qty -= 1;
   if (skin.qty <= 0) {

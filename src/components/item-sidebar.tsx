@@ -20,16 +20,15 @@ export function ItemSidebar({ item }: { item: CatalogItem }) {
     );
   }
 
-  const badge =
-    item.type === "skin"
-      ? "Skin"
-      : item.stackQty > 1
-        ? `×${item.stackQty}`
-        : "";
+  const badge = item.isSkin
+    ? "Skin"
+    : item.stackQty > 1
+      ? `×${item.stackQty}`
+      : "";
 
   return (
     <aside className="frame item-sidebar">
-      <h2 className="section-title">Selected Item</h2>
+      <h2 className="section-title">{item.isSkin ? "Skin Item" : "Selected Item"}</h2>
       <ItemCard
         icon={item.icon}
         name={item.name}
@@ -37,7 +36,9 @@ export function ItemSidebar({ item }: { item: CatalogItem }) {
         upgradeBadge={badge}
       />
       <p className="muted item-sidebar__hint">
-        This item is in your bag. Equip gear above to use workshop actions.
+        {item.isSkin
+          ? "Use the Skins tab — same equipment type as the primary (sword↔sword, axe↔axe). No Upgrade."
+          : "This item is in your bag. Equip gear above to use workshop actions."}
       </p>
     </aside>
   );

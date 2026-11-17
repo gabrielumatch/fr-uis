@@ -15,7 +15,7 @@ import type {
   WorkshopWeaponItem,
 } from "./item";
 import { createSkinState } from "./item";
-import type { ArmorSubtype, WeaponSubtype } from "./types";
+import type { ArmorSubtype, SkinSlot, WeaponSubtype } from "./types";
 import { upgradeProfile } from "../upgrade/recipes";
 
 type WikiIconKey = keyof typeof WIKI;
@@ -85,9 +85,28 @@ export function assertItemRecord(record: ItemRecord): void {
   }
 }
 
+function resolveSkinSlot(
+  record: ItemRecord,
+  recordsById: Map<string, ItemRecord>,
+): SkinSlot {
+  if (record.skinSlot) return record.skinSlot;
+  if (record.hostItemId) {
+    const host = recordsById.get(record.hostItemId);
+    if (
+      host &&
+      (host.type === "weapon" || host.type === "armor" || host.type === "fashion")
+    ) {
+      return host.subtype as SkinSlot;
+    }
+  }
+  throw new Error(`Item "${record.id}": skin exige skinSlot ou hostItemId compatível`);
+}
+
 function hydrateSimpleItem(
   record: ItemRecord,
+  recordsById: Map<string, ItemRecord>,
 ): ConsumableItem | SkinItem | import("./item").PetItem | import("./item").QuestItem {
+  const isSkin = record.type === "skin";
   const base = {
     id: record.id,
     name: record.name,
@@ -97,6 +116,7 @@ function hydrateSimpleItem(
     typeLabel: record.typeLabel,
     icon: resolveIcon(record),
     stackQty: record.stackQty ?? 1,
+    isSkin,
   } as const;
 
   if (record.type === "consumable") {
@@ -119,6 +139,7 @@ function hydrateSimpleItem(
     type: "skin",
     subtype: record.subtype as SkinItem["subtype"],
     category: "skin",
+    skinSlot: resolveSkinSlot(record, recordsById),
     hostItemId: record.hostItemId,
   };
 }
@@ -183,6 +204,7 @@ function skinPoolFromIds(
   qtyById: Map<string, number>,
   catalog: Map<string, CatalogItem>,
   ownerId: string,
+  hostSubtype: string,
 ): SkinPoolEntry[] {
   if (!ids?.length) return [];
   const pool: SkinPoolEntry[] = [];
@@ -190,6 +212,11 @@ function skinPoolFromIds(
     const skin = catalog.get(skinId);
     if (!skin || skin.type !== "skin") {
       throw new Error(`Item "${ownerId}": skinPoolIds referencia "${skinId}" inválido`);
+    }
+    if (skin.skinSlot !== hostSubtype) {
+      throw new Error(
+        `Item "${ownerId}" (${hostSubtype}): skin "${skinId}" é slot "${skin.skinSlot}"`,
+      );
     }
     pool.push({
       id: skin.id,
@@ -223,7 +250,13 @@ function hydrateWorkshopItem(
   const icon = resolveIcon(record);
   const scrolls = record.skinScrolls ?? { purge: 2, recover: 1 };
   const qtyById = new Map((record.skinPoolIds ?? []).map((id) => [id, 1]));
-  const skinPool = skinPoolFromIds(record.skinPoolIds, qtyById, catalog, record.id);
+  const skinPool = skinPoolFromIds(
+    record.skinPoolIds,
+    qtyById,
+    catalog,
+    record.id,
+    record.subtype,
+  );
 
   const base = {
     id: record.id,
@@ -234,6 +267,7 @@ function hydrateWorkshopItem(
     typeLabel: record.typeLabel,
     icon,
     stackQty: record.stackQty ?? 1,
+    isSkin: false,
     baseIcon: icon,
     upgradeBadge: upgradeBadge(record),
     upgradeLevel: record.upgradeLevel ?? 0,
@@ -317,6 +351,7 @@ export function hydrateItemsCatalog(catalog: ItemsCatalog): CatalogItem[] {
     assertItemRecord(record);
   }
 
+  const recordsById = new Map(catalog.items.map((r) => [r.id, r]));
   const byId = new Map<string, CatalogItem>();
 
   for (const record of catalog.items) {
@@ -326,7 +361,7 @@ export function hydrateItemsCatalog(catalog: ItemsCatalog): CatalogItem[] {
       record.type === "pet" ||
       record.type === "quest"
     ) {
-      byId.set(record.id, hydrateSimpleItem(record));
+      byId.set(record.id, hydrateSimpleItem(record, recordsById));
     }
   }
 

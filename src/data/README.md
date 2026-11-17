@@ -24,3 +24,7 @@ Não inferir por nome ou ícone. No hydrate, `category` vira `item.upgrade` via 
 Ex.: `hotter-sword` = `type: weapon`, `subtype: two-handed-sword`, `category: normal` → Sunstone + SProtect. Ultimate (Lusaka, etc.) = `category: ultimate` → Oricalkum + XProtect.
 
 Ao cadastrar item novo: acerte `category` no JSON; o boot valida bag + coerência `category` ↔ `upgrade`.
+
+### Skins (`isSkin: true`, `type: skin`)
+
+Não abrem **Upgrade**. Clique na bag → aba **Skins**. Compatibilidade: `skinSlot` (= `subtype` do primary: `two-handed-axe`, `bow`, `helmet`, …). `skinPoolIds` no gear só aceita skins com o mesmo slot.

@@ -5,8 +5,10 @@ import {
   type ConsumableItem,
   type WorkshopItem,
   isConsumableItem,
+  isSkinItem,
   isWorkshopItem,
 } from "./item";
+import { skinFitsHost } from "../systems/skin-rules";
 import { hydrateItemsCatalog, parseItemsCatalog } from "./hydrate-items";
 import {
   UPGRADE_RECIPE_PAIRS,
@@ -59,6 +61,24 @@ for (const slot of INVENTORY_BAG_SLOTS) {
     throw new Error(
       `Inventory bag references "${slot.itemId}" but it is missing from items.json`,
     );
+  }
+}
+
+for (const item of itemCatalog) {
+  if (!isSkinItem(item)) continue;
+  if (!item.skinSlot) {
+    throw new Error(`Skin "${item.id}": skinSlot obrigatório após hydrate`);
+  }
+  if (item.hostItemId) {
+    const host = getEquipmentById(item.hostItemId);
+    if (!host) {
+      throw new Error(`Skin "${item.id}": hostItemId "${item.hostItemId}" não é gear workshop`);
+    }
+    if (!skinFitsHost(item, host)) {
+      throw new Error(
+        `Skin "${item.id}" (slot ${item.skinSlot}) incompatível com host "${host.id}" (${host.subtype})`,
+      );
+    }
   }
 }
 

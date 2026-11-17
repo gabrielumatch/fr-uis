@@ -43,6 +43,8 @@ import {
   getWorkshopItemById,
 } from "./data/workshop/equipped";
 import { getItemById } from "./data/items/catalog";
+import { isSkinItem, opensWorkshopUpgrade } from "./data/items/item";
+import { canApplySkinIdToEquipped } from "./data/systems/skin-rules";
 
 const DEFAULT_TAB = "upgrade";
 
@@ -97,22 +99,36 @@ export function App() {
   const tabDefs = tabRegistry.map(({ id, label, icon }) => ({ id, label, icon }));
 
   const handleSelectCatalogItem = (itemId: string) => {
-    if (!getItemById(itemId)) return;
+    const item = getItemById(itemId);
+    if (!item) return;
 
     const ok = workshop.selectItem(itemId);
     if (!ok) return;
 
-    const panelItem = getWorkshopItemById(activeWorkshopItemId);
-    if (panelItem) {
-      clearAttemptPlan("upgrade-level");
-      syncSkinToEquippedItem();
+    if (isSkinItem(item)) {
+      const host = getWorkshopItemById(activeWorkshopItemId);
+      if (!host || !canApplySkinIdToEquipped(itemId, host)) return;
 
-      const upgradeSub = panelItem.type === "jewel" ? "jewels" : "level";
+      syncSkinToEquippedItem();
+      setSelectedSkinId(itemId);
       setRoute({
         ...DEFAULT_ROUTE,
-        tabId: "upgrade",
-        upgradeSub,
+        tabId: "skins",
+        skinsSub: "apply",
       });
+    } else if (opensWorkshopUpgrade(item)) {
+      const panelItem = getWorkshopItemById(activeWorkshopItemId);
+      if (panelItem) {
+        clearAttemptPlan("upgrade-level");
+        syncSkinToEquippedItem();
+
+        const upgradeSub = panelItem.type === "jewel" ? "jewels" : "level";
+        setRoute({
+          ...DEFAULT_ROUTE,
+          tabId: "upgrade",
+          upgradeSub,
+        });
+      }
     }
 
     requestAnimationFrame(() => {

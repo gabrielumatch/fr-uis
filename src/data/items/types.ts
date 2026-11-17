@@ -60,6 +60,9 @@ export type WeaponSubtype =
 
 export type FashionSubtype = "hat" | "suit" | "gloves" | "boots" | "back";
 
+/** Primary compatível com a skin (mesmo `subtype` do equip). */
+export type SkinSlot = WeaponSubtype | ArmorSubtype | FashionSubtype;
+
 export type ConsumableRecipeSlot = "material" | "protect" | "smelting";
 
 export type WeaponJewelSocketRule = "ultimate" | "baruna" | "none";
@@ -124,6 +127,8 @@ export type ItemRecord = {
   recipeSlot?: ConsumableRecipeSlot;
   /** Skin: gear do workshop que aceita este look. */
   hostItemId?: string;
+  /** Skin: mesmo `subtype` do primary (machado→machado, espada→espada). */
+  skinSlot?: SkinSlot;
 };
 
 export type ItemsCatalog = {

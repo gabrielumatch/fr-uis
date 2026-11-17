@@ -29,6 +29,8 @@ export type ItemBase = {
   typeLabel: string;
   icon: string;
   stackQty: number;
+  /** `true` quando `type === "skin"` — não usa aba Upgrade. */
+  isSkin: boolean;
 };
 
 export type ConsumableItem = ItemBase & {
@@ -42,6 +44,7 @@ export type SkinItem = ItemBase & {
   type: "skin";
   subtype: import("./types").SkinSubtype;
   category: "skin";
+  skinSlot: import("./types").SkinSlot;
   hostItemId?: string;
 };
 
@@ -144,7 +147,12 @@ export function isConsumableItem(item: CatalogItem): item is ConsumableItem {
 }
 
 export function isSkinItem(item: CatalogItem): item is SkinItem {
-  return item.type === "skin";
+  return item.isSkin || item.type === "skin";
+}
+
+/** Só gear de workshop usa Safe Upgrade, piercing com stats, etc. */
+export function opensWorkshopUpgrade(item: CatalogItem): boolean {
+  return isWorkshopItem(item);
 }
 
 export function isPetItem(item: CatalogItem): item is PetItem {
