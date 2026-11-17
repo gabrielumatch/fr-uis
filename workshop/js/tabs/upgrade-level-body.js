@@ -33,8 +33,4 @@ export function renderUpgradeLevelBody() {
   `;
 }
 
-export const upgradeLevelMaterials = [
-  { icon: "🔶", name: "Orikalkum", quantity: 25 },
-  { icon: "📜", name: "SProtect", quantity: 10 },
-  { icon: "✨", name: "Smelting Scroll", quantity: 5 },
-];
+export { getUpgradeLevelMaterials as upgradeLevelMaterials } from "../data/upgrade-materials.js";

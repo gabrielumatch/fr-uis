@@ -28,12 +28,24 @@ const plans = {
   "piercing-pierce": createEmptyRows(),
 };
 
+import { getUpgradeLevelAttemptDefaults } from "./upgrade-materials.js";
+
 /** @type {Record<AttemptPlanKey, { material: string; protect: string; smelting: string }>} */
 const planTemplates = {
   "upgrade-level": { material: "🔶", protect: "📜", smelting: "✨" },
   "element-upgrade": { material: "⚡", protect: "📜", smelting: "✨" },
   "piercing-pierce": { material: "🌙", protect: "📜", smelting: "✨" },
 };
+
+/**
+ * @param {AttemptPlanKey} key
+ */
+function resolvePlanTemplate(key) {
+  if (key === "upgrade-level") {
+    return getUpgradeLevelAttemptDefaults();
+  }
+  return planTemplates[key];
+}
 
 /**
  * @param {AttemptPlanKey} key
@@ -48,7 +60,7 @@ export function getAttemptRows(key) {
  * @param {Partial<{ material: string; protect: string; smelting: string }>} [overrides]
  */
 export function autoRefillAttemptPlan(key, overrides = {}) {
-  const base = { ...planTemplates[key], ...overrides };
+  const base = { ...resolvePlanTemplate(key), ...overrides };
   plans[key] = plans[key].map((row) => ({
     ...row,
     material: base.material,

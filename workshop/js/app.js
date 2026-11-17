@@ -292,6 +292,7 @@ function bindEvents(mount) {
     if (workshopItemBtn instanceof HTMLButtonElement) {
       const itemId = workshopItemBtn.dataset.workshopItemId;
       if (itemId && selectWorkshopItem(itemId)) {
+        clearAttemptPlan("upgrade-level");
         syncSkinToEquippedItem();
         render(mount, readRouteFromUrl());
       }

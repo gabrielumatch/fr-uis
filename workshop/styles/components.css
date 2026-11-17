@@ -655,6 +655,13 @@
   font-size: 20px;
 }
 
+.material-card__icon-img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
 .material-card__qty {
   font-weight: bold;
   color: var(--success);

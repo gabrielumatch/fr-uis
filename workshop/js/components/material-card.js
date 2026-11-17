@@ -1,3 +1,5 @@
+import { renderItemIcon } from "../utils/item-icon.js";
+
 /**
  * @typedef {{ icon: string; name: string; quantity: number; showBuy?: boolean }} MaterialCardProps
  */
@@ -13,7 +15,11 @@ export function renderMaterialCard({ icon, name, quantity, showBuy = false }) {
   return `
     <div class="material-card" data-material="${name}">
       <div class="material-card__name">
-        <span class="material-card__icon" aria-hidden="true">${icon}</span>
+        ${renderItemIcon(icon, {
+          wrapperClass: "material-card__icon",
+          imgClass: "material-card__icon-img",
+          alt: name,
+        })}
         ${name}
       </div>
       ${right}

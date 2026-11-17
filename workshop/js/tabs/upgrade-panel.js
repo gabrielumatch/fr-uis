@@ -1,4 +1,5 @@
-import { renderUpgradeLevelBody, upgradeLevelMaterials } from "./upgrade-level-body.js";
+import { getUpgradeLevelMaterials } from "../data/upgrade-materials.js";
+import { renderUpgradeLevelBody } from "./upgrade-level-body.js";
 import {
   renderUpgradeJewelsBody,
   upgradeJewelsMaterials,
@@ -39,7 +40,7 @@ export function getUpgradePanelView(sub) {
     panelSubtitle: "Plan protected upgrade attempts to your target level.",
     materialsVariant: "grid",
     materialsTitle: "Materials Required / Available",
-    materials: upgradeLevelMaterials,
+    materials: getUpgradeLevelMaterials(),
     renderBody: renderUpgradeLevelBody,
   };
 }
@@ -52,7 +53,9 @@ export const upgradeTab = {
   panelTitle: "Safe Upgrade",
   panelSubtitle: "",
   materialsVariant: "grid",
-  materials: upgradeLevelMaterials,
+  get materials() {
+    return getUpgradeLevelMaterials();
+  },
   materialsTitle: "Materials Required / Available",
   renderBody() {
     return renderUpgradeLevelBody();

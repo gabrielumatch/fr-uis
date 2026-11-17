@@ -4,6 +4,7 @@ import { WIKI } from "./flyff-wiki-icons.js";
 /** @typedef {{ label: string; value: string }} StatRow */
 
 /** @typedef {'weapon' | 'armor' | 'fashion'} WorkshopCategory */
+/** @typedef {'normal' | 'ultimate'} WorkshopUpgradeTier */
 
 /**
  * @typedef {{
@@ -18,6 +19,7 @@ import { WIKI } from "./flyff-wiki-icons.js";
  *   stats: StatRow[];
  *   awake: AwakeStat[];
  *   gearScore: number;
+ *   upgradeTier?: WorkshopUpgradeTier;
  *   elementHost: 'weapon' | 'suit';
  *   activeSkinName?: string | null;
  *   workshopSkin: {
@@ -49,6 +51,7 @@ const inventory = [
   {
     id: "lusaka-axe",
     category: "weapon",
+    upgradeTier: "ultimate",
     icon: WIKI.lusakaHeavyAxe,
     baseIcon: WIKI.lusakaHeavyAxe,
     name: "Ultimate Lusaka's Heavy Axe",
@@ -110,6 +113,7 @@ const inventory = [
   {
     id: "ryvius-sword",
     category: "weapon",
+    upgradeTier: "ultimate",
     icon: WIKI.lusakaHeavySword,
     baseIcon: WIKI.lusakaHeavySword,
     name: "Ultimate Lusaka's Heavy Sword",
@@ -163,6 +167,7 @@ const inventory = [
   {
     id: "carnian-bow",
     category: "weapon",
+    upgradeTier: "ultimate",
     icon: WIKI.lusakaBow,
     baseIcon: WIKI.lusakaBow,
     name: "Ultimate Lusaka's Bow",
@@ -213,6 +218,7 @@ const inventory = [
   {
     id: "mystique-suit",
     category: "armor",
+    upgradeTier: "normal",
     icon: WIKI.bilariSuitF,
     baseIcon: WIKI.bilariSuitF,
     name: "Bilari Suit",
@@ -258,6 +264,7 @@ const inventory = [
   {
     id: "vigor-helm",
     category: "armor",
+    upgradeTier: "normal",
     icon: WIKI.bilariHelmetF,
     baseIcon: WIKI.bilariHelmetF,
     name: "Bilari Helmet",

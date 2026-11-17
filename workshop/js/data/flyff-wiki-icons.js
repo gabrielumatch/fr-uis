@@ -67,5 +67,10 @@ export const WIKI = {
   petUnicorn: wikiImg("images/thumb/1/10/Pet_Unicorn.PNG/70px-Pet_Unicorn.png"),
   petFeed: wikiImg("images/8/89/Pet_PetFeed.png"),
   scrollSProtect: wikiImg("images/b/b7/ScrollofSprotect.png"),
+  scrollAProtect: wikiImg("images/a/a9/ScrollofAprotect.png"),
+  scrollXProtect: wikiImg("images/f/fa/ScrollofXprotect.png"),
+  moonstone: wikiImg("images/2/2a/Moonstone.gif"),
+  sunstone: wikiImg("images/4/4e/Sunstone.gif"),
+  shiningOricalkum: wikiImg("images/2/27/ShiningOrichalcum.gif"),
   petHelper: wikiImg("images/thumb/5/51/Pet_Helper.PNG/250px-Pet_Helper.png"),
 };
