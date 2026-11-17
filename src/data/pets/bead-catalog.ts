@@ -1,66 +1,69 @@
+import type { ConsumableItem } from "../items/item";
+import type { BuffBeadGrade } from "../items/types";
 import type { BuffBeadDefinition } from "./pickup-types";
 
-export const BUFF_BEAD_CATALOG: readonly BuffBeadDefinition[] = [
-  {
-    id: "bead-power-l1",
-    name: "Bead of Power",
-    tier: 1,
-    effectSummary: "ATK +20",
-    durationLabel: "1 hour",
-  },
-  {
-    id: "bead-power-l2",
-    name: "Precious Bead of Power",
-    tier: 2,
-    effectSummary: "ATK +60",
-    durationLabel: "1–3 days",
-    requiresBeadIds: ["bead-power-l1"],
-  },
-  {
-    id: "bead-gladiator-l3",
-    name: "Sacred Bead of the Gladiator",
-    tier: 3,
-    effectSummary: "ATK +3%, Attack Speed +9%",
-    durationLabel: "7 days",
-    requiresBeadIds: ["bead-power-l1", "bead-power-l2"],
-  },
-  {
-    id: "bead-protector-l1",
-    name: "Bead of the Protector",
-    tier: 1,
-    effectSummary: "DEF +20",
-    durationLabel: "1 hour",
-  },
-  {
-    id: "bead-protector-l2",
-    name: "Precious Bead of the Protector",
-    tier: 2,
-    effectSummary: "DEF +60",
-    durationLabel: "1–3 days",
-    requiresBeadIds: ["bead-protector-l1"],
-  },
-  {
-    id: "bead-guardian-l3",
-    name: "Sacred Bead of the Guardian",
-    tier: 3,
-    effectSummary: "DEF +5%, Max HP +8%",
-    durationLabel: "7 days",
-    requiresBeadIds: ["bead-protector-l1", "bead-protector-l2"],
-  },
-  {
-    id: "bead-grizzled-perm",
-    name: "Bead of the Grizzled Warrior (PERM)",
-    tier: 4,
-    effectSummary: "ATK +1%, Attack Speed +3%",
-    durationLabel: "Permanent",
-  },
-] as const;
+type ConsumableLookup = (id: string) => ConsumableItem | undefined;
+type ConsumableList = () => readonly ConsumableItem[];
 
-const beadById = new Map(BUFF_BEAD_CATALOG.map((b) => [b.id, b]));
+let getConsumableById: ConsumableLookup = () => undefined;
+let listConsumables: ConsumableList = () => [];
+
+/** Evita ciclo catalog ↔ hydrate ↔ pickup-pet-sync. */
+export function registerBuffBeadCatalogAccess(hooks: {
+  getById: ConsumableLookup;
+  list: ConsumableList;
+}): void {
+  getConsumableById = hooks.getById;
+  listConsumables = hooks.list;
+}
+
+export function buffBeadDefinitionFromItem(
+  item: ConsumableItem,
+): BuffBeadDefinition | undefined {
+  if (!item.buffBead) return undefined;
+  const b = item.buffBead;
+  return {
+    id: item.id,
+    name: item.name,
+    grade: b.grade,
+    family: b.family,
+    tier: b.tier,
+    effectSummary: b.effectSummary,
+    durationLabel: b.durationLabel,
+    requiresBeadIds: b.requiresBeadIds,
+    icon: item.icon,
+  };
+}
 
 export function getBuffBeadDefinition(id: string): BuffBeadDefinition | undefined {
-  return beadById.get(id);
+  const item = getConsumableById(id);
+  if (!item?.buffBead) return undefined;
+  return buffBeadDefinitionFromItem(item);
 }
+
+export function listBuffBeadDefinitions(): BuffBeadDefinition[] {
+  return listConsumables()
+    .filter((c) => c.subtype === "buff-bead" && c.buffBead)
+    .map((c) => buffBeadDefinitionFromItem(c)!)
+    .sort((a, b) => {
+      const gradeOrder: Record<BuffBeadGrade, number> = {
+        normal: 0,
+        precious: 1,
+        sacred: 2,
+        permanent: 3,
+      };
+      const g = gradeOrder[a.grade] - gradeOrder[b.grade];
+      if (g !== 0) return g;
+      return a.name.localeCompare(b.name);
+    });
+}
+
+export const BUFF_BEAD_GRADE_LABEL: Record<BuffBeadGrade, string> = {
+  normal: "Normal (blue)",
+  precious: "Precious (yellow)",
+  sacred: "Sacred (red)",
+  permanent: "Permanent",
+};
 
 export function defaultPickupFilter(): import("./pickup-types").PickupFilterState {
   return {

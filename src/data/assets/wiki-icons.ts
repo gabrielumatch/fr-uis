@@ -54,4 +54,19 @@ export const WIKI = {
   sunstone: wikiImg("images/4/4e/Sunstone.gif"),
   shiningOricalkum: wikiImg("images/2/27/ShiningOrichalcum.gif"),
   petHelper: wikiImg("images/thumb/5/51/Pet_Helper.PNG/250px-Pet_Helper.png"),
+  /** Buff pet beads by tier (wiki genéricos por duração/cor). */
+  beadGradeNormal: wikiImg("images/c/c2/1hourBuffBead.png"),
+  beadGradePrecious: wikiImg("images/7/79/3dayBuffBead.png"),
+  beadGradeSacred: wikiImg("images/f/fd/7dayBuffBead.png"),
+  beadGradePermanent: wikiImg("images/8/81/Bead_of_Soul_Leeching_Permanent.png"),
 } as const satisfies Record<string, string>;
+
+export const BUFF_BEAD_GRADE_ICON_KEY = {
+  normal: "beadGradeNormal",
+  precious: "beadGradePrecious",
+  sacred: "beadGradeSacred",
+  permanent: "beadGradePermanent",
+} as const satisfies Record<
+  import("../items/types").BuffBeadGrade,
+  keyof typeof WIKI
+>;

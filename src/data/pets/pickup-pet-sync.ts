@@ -25,9 +25,12 @@ function beadFromSlotId(beadId: string | null): BuffBeadEquipped | null {
   return {
     beadId: def.id,
     name: def.name,
+    grade: def.grade,
+    family: def.family,
     tier: def.tier,
     effectSummary: def.effectSummary,
     durationLabel: def.durationLabel,
+    icon: def.icon,
     requiresBeadIds: def.requiresBeadIds ? [...def.requiresBeadIds] : undefined,
   };
 }
@@ -95,10 +98,12 @@ export function defaultPickupWorkshopInventory(): import("./pickup-types").Picku
     beadSlotKeys: 2,
     blessingScroll: 3,
     beadsOnHand: {
-      "bead-power-l1": 2,
-      "bead-power-l2": 1,
-      "bead-protector-l1": 1,
-      "bead-grizzled-perm": 1,
+      "bead-power": 2,
+      "bead-power-precious": 1,
+      "bead-protector": 1,
+      "bead-winds": 1,
+      "bead-gladiator-sacred": 1,
+      "bead-grizzled-warrior-perm": 1,
     },
   };
 }

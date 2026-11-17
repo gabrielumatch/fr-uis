@@ -30,7 +30,14 @@ export type ItemCategory =
 /** Tier de gear (weapon/armor). */
 export type GearItemCategory = "normal" | "green" | "ultimate" | "baruna";
 
-export type ConsumableSubtype = "upgrade-stone" | "upgrade-scroll" | "smelting";
+export type ConsumableSubtype =
+  | "upgrade-stone"
+  | "upgrade-scroll"
+  | "smelting"
+  | "buff-bead";
+
+/** Cor/tier visual no jogo — normal (azul), precious (amarelo), sacred (vermelho). */
+export type BuffBeadGrade = "normal" | "precious" | "sacred" | "permanent";
 
 export type SkinSubtype = "equipment-look";
 
@@ -148,6 +155,19 @@ export type ItemRecord = {
   raisedPet?: RaisedPetRecord;
   /** Pet pick-up/buff: convert, beads, blessing, loot filter (subtype `pickup`). */
   pickupPet?: PickupPetRecord;
+  /** Consumable buff-bead equipável no Buff Pet (subtype `buff-bead`). */
+  buffBead?: BuffBeadRecord;
+};
+
+export type BuffBeadRecord = {
+  grade: BuffBeadGrade;
+  /** Linha de evolução (power, winds, tiger, …) para UI e requisitos. */
+  family: string;
+  tier: 1 | 2 | 3 | 4;
+  effectSummary: string;
+  durationLabel: string;
+  /** Ids de outros beads que precisam estar equipados (ex. sacred). */
+  requiresBeadIds?: string[];
 };
 
 export type ItemsCatalog = {

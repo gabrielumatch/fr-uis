@@ -45,6 +45,7 @@ export type ConsumableItem = ItemBase & {
   subtype: string;
   category: "upgrade" | "pet";
   recipeSlot?: ConsumableRecipeSlot;
+  buffBead?: import("./types").BuffBeadRecord;
 };
 
 export type SkinItem = ItemBase & {

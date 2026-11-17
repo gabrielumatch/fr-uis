@@ -111,6 +111,14 @@ export function assertItemRecord(record: ItemRecord): void {
       if (record.category !== "upgrade" && record.category !== "pet") {
         throw new Error(`Item "${record.id}": consumable category inválida`);
       }
+      if (record.subtype === "buff-bead") {
+        if (!record.buffBead) {
+          throw new Error(`Item "${record.id}": buff-bead exige buffBead{}`);
+        }
+        if (record.category !== "pet") {
+          throw new Error(`Item "${record.id}": buff-bead deve ser category pet`);
+        }
+      }
       break;
     case "skin":
       if (record.category !== "skin") {
@@ -221,6 +229,7 @@ function hydrateSimpleItem(
       subtype: record.subtype,
       category: record.category as ConsumableItem["category"],
       recipeSlot: record.recipeSlot,
+      buffBead: record.buffBead,
     };
   }
   if (record.type === "quest") {

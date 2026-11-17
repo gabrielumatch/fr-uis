@@ -8,6 +8,6 @@
 
 **Raised:** `items.json` → `raisedPet{}`; runtime `workshopPet.inventory`; `systems/raised-pet-workshop.ts`.
 
-**Pick-up / Buff:** `items.json` → `pickupPet{}`; runtime `workshopPickup.inventory`; beads em `bead-catalog.ts`; `systems/pickup-pet-workshop.ts`.
+**Pick-up / Buff:** `items.json` → `pickupPet{}`; runtime `workshopPickup.inventory`; **buff beads** como `consumable` `buff-bead` em `buff-bead-items.ts` (merge no catalog); UI lê `listBuffBeadDefinitions()`; `systems/pickup-pet-workshop.ts`.
 
 Aba **Awake** (pick-up/buff) — mesmo layout que gear awake (Start / Previous / highlight), scroll **Pet Blessing (Pick-up)**; sem Reversion. Raised continua com Awake na Peach + Reversion.

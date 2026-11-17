@@ -34,9 +34,12 @@ export type PickupPetRecord = {
 export type BuffBeadEquipped = {
   beadId: string;
   name: string;
+  grade: import("../items/types").BuffBeadGrade;
+  family: string;
   tier: BuffBeadTier;
   effectSummary: string;
   durationLabel: string;
+  icon: string;
   requiresBeadIds?: string[];
 };
 
@@ -54,9 +57,12 @@ export type PickupPetRuntime = {
 export type BuffBeadDefinition = {
   id: string;
   name: string;
+  grade: import("../items/types").BuffBeadGrade;
+  family: string;
   tier: BuffBeadTier;
   effectSummary: string;
   durationLabel: string;
+  icon: string;
   /** Tier 3+ exige estes ids também equipados no pet. */
   requiresBeadIds?: readonly string[];
 };

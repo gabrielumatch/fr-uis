@@ -1,4 +1,6 @@
 import itemsJson from "./items.json";
+import { BUFF_BEAD_ITEM_RECORDS } from "../pets/buff-bead-items";
+import { registerBuffBeadCatalogAccess } from "../pets/bead-catalog";
 import { INVENTORY_BAG_SLOTS } from "../inventory/inventory-bag";
 import {
   type CatalogItem,
@@ -25,7 +27,12 @@ import {
   unlockedJewelSlotCount,
 } from "../systems/jewel-slot-rules";
 
-const items: CatalogItem[] = hydrateItemsCatalog(parseItemsCatalog(itemsJson));
+const mergedCatalog = {
+  ...itemsJson,
+  items: [...itemsJson.items, ...BUFF_BEAD_ITEM_RECORDS],
+};
+
+const items: CatalogItem[] = hydrateItemsCatalog(parseItemsCatalog(mergedCatalog));
 
 const byId = new Map<string, CatalogItem>(items.map((item) => [item.id, item]));
 
@@ -175,3 +182,11 @@ for (const item of equipmentCatalog) {
     }
   }
 }
+
+registerBuffBeadCatalogAccess({
+  getById: (id) => {
+    const item = byId.get(id);
+    return item && isConsumableItem(item) ? item : undefined;
+  },
+  list: () => consumableCatalog,
+});

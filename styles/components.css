@@ -1567,10 +1567,49 @@
 }
 
 .pet-bead-slot--locked {
-  opacity: 0.55;
-  cursor: not-allowed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: default;
   background: linear-gradient(#ddd4c4, #cfc4b4);
   border-style: dashed;
+  padding: 6px 4px 5px;
+  aspect-ratio: auto;
+  min-height: 78px;
+}
+
+.pet-bead-slot--unlock-ready {
+  opacity: 1;
+  border-color: #9a7030;
+  border-style: solid;
+  background: linear-gradient(#f0e6d0, #dcc9a4);
+}
+
+.pet-bead-slot--locked-later {
+  opacity: 0.42;
+}
+
+.pet-bead-slot__idx {
+  position: absolute;
+  top: 3px;
+  left: 5px;
+  font: bold 8px Arial, sans-serif;
+  line-height: 1;
+}
+
+.pet-bead-slot__unlock {
+  width: calc(100% - 4px);
+  margin-top: 1px;
+  padding: 4px 2px;
+  font-size: 8px;
+  line-height: 1.2;
+}
+
+.pet-bead-slot__locked-hint {
+  font-size: 8px;
+  line-height: 1.1;
 }
 
 .pet-bead-slot--inactive {
@@ -1583,9 +1622,11 @@
   border-color: #9a7030;
 }
 
-.pet-bead-slot__orb {
-  font-size: 26px;
-  line-height: 1;
+.pet-bead-slot .item-icon,
+.pet-bead-inv .item-icon {
+  width: auto;
+  height: auto;
+  display: inline-flex;
 }
 
 .pet-bead-slot__timer {
@@ -1613,8 +1654,9 @@
 }
 
 .pet-bead-slot__lock {
-  font-size: 18px;
-  opacity: 0.75;
+  font-size: 22px;
+  line-height: 1;
+  opacity: 0.85;
 }
 
 .pet-bead-slot__placeholder {
@@ -1622,91 +1664,187 @@
   font-weight: bold;
 }
 
-.pet-bead-catalog__title {
-  margin: 4px 0 8px;
-  font: bold 13px Arial, sans-serif;
-  color: #5e3f20;
+.pet-bead-slot__icon {
+  width: 38px;
+  height: 38px;
 }
 
-.pet-bead-catalog {
-  list-style: none;
-  margin: 0 0 12px;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.pet-bead-catalog__row {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-rows: auto auto;
-  gap: 2px 10px;
-  align-items: center;
+.pet-bead-slot__icon-img {
   width: 100%;
-  text-align: left;
-  padding: 8px 10px;
-  border: 1px solid #cfba92;
-  border-radius: 8px;
-  background: linear-gradient(#f8f0dc, #ead8b4);
-  font: 12px Arial, sans-serif;
-  color: #5e3f20;
-  cursor: default;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
 }
 
-.pet-bead-catalog__row.is-missing {
-  opacity: 0.5;
+.pet-bead-slot--grade-normal {
+  box-shadow: inset 0 0 0 1px #6a8ec8aa;
 }
 
-.pet-bead-catalog__row.is-available {
-  cursor: pointer;
-  border-color: #6a9a5c;
-  background: linear-gradient(#eef8ea, #d8e8d0);
+.pet-bead-slot--grade-precious {
+  box-shadow: inset 0 0 0 1px #d4b020aa;
 }
 
-.pet-bead-catalog__row.is-available:hover {
-  filter: brightness(1.03);
+.pet-bead-slot--grade-sacred {
+  box-shadow: inset 0 0 0 1px #c83838aa;
 }
 
-.pet-bead-catalog__row:disabled {
-  pointer-events: none;
+.pet-bead-panel {
+  margin-bottom: 10px;
 }
 
-.pet-bead-catalog__orb {
-  grid-row: 1 / span 2;
-  font-size: 22px;
-}
-
-.pet-bead-catalog__name {
-  font-weight: bold;
-}
-
-.pet-bead-catalog__effect {
+.pet-bead-tabs__btn {
+  position: relative;
+  padding: 8px 6px;
   font-size: 10px;
 }
 
-.pet-bead-catalog__qty {
-  grid-row: 1 / span 2;
-  text-align: right;
-  font-weight: bold;
-  color: var(--success);
+.pet-bead-tabs__btn--normal:not(.is-active) {
+  border-color: #6a8ec8;
+  color: #2d4a7a;
 }
 
-.pet-bead-catalog__badge {
-  grid-column: 2;
+.pet-bead-tabs__btn--precious:not(.is-active) {
+  border-color: #c9a020;
+  color: #8a6a10;
+}
+
+.pet-bead-tabs__btn--sacred:not(.is-active) {
+  border-color: #c83838;
+  color: #8b2020;
+}
+
+.pet-bead-tabs__badge {
+  display: inline-block;
+  margin-left: 3px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #3d7a45;
+  color: #fff;
   font-size: 9px;
-  font-weight: bold;
-  color: #3d7a45;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  line-height: 1.35;
+  vertical-align: middle;
 }
 
-.pet-bead-catalog__row.is-available .pet-bead-catalog__badge {
-  display: block;
+.pet-bead-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin-bottom: 8px;
+  font: 10px Arial, sans-serif;
+  color: #5e3f20;
 }
 
-.pet-bead-catalog__row:not(.is-available) .pet-bead-catalog__badge {
-  display: none;
+.pet-bead-filters__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.pet-bead-filters__meta {
+  margin-left: auto;
+  font-size: 9px;
+}
+
+.pet-bead-inv {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+  gap: 5px;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #c5a779;
+  border-radius: 8px;
+  background: rgb(255 248 232 / 65%);
+}
+
+.pet-bead-inv__empty {
+  grid-column: 1 / -1;
+  padding: 12px 8px;
+  text-align: center;
+  font-size: 11px;
+}
+
+.pet-bead-inv__tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  width: 100%;
+  padding: 4px;
+  border: 1px solid #cfba92;
+  border-radius: 6px;
+  background: linear-gradient(#f5ecda, #e6d5b4);
+  cursor: default;
+}
+
+.pet-bead-panel--orb-picker .pet-bead-inv__tile.has-stock {
+  border-width: 2px;
+}
+
+.pet-bead-panel--grade-normal .pet-bead-inv__tile.has-stock {
+  border-color: #6a8ec8;
+}
+
+.pet-bead-panel--grade-precious .pet-bead-inv__tile.has-stock {
+  border-color: #c9a020;
+}
+
+.pet-bead-panel--grade-sacred .pet-bead-inv__tile.has-stock {
+  border-color: #c83838;
+}
+
+.pet-bead-panel--grade-permanent .pet-bead-inv__tile.has-stock {
+  border-color: #7a5ab0;
+}
+
+.pet-bead-inv__tile.is-missing {
+  opacity: 0.28;
+}
+
+.pet-bead-inv__tile.is-available {
+  cursor: pointer;
+  box-shadow: 0 0 0 2px #4a9a54;
+}
+
+.pet-bead-inv__tile.is-available:hover {
+  filter: brightness(1.06);
+}
+
+.pet-bead-inv__tile:disabled:not(.is-missing) {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.pet-bead-inv__icon {
+  width: 32px;
+  height: 32px;
+}
+
+.pet-bead-inv__icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.pet-bead-inv__qty {
+  position: absolute;
+  right: 2px;
+  bottom: 1px;
+  min-width: 14px;
+  padding: 0 3px;
+  border-radius: 4px;
+  background: rgb(20 20 20 / 78%);
+  color: #f0ead8;
+  font: bold 9px Arial, sans-serif;
+  line-height: 1.35;
+  text-align: center;
 }
 
 /* Awake item */
