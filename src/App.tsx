@@ -45,10 +45,21 @@ import {
 } from "./data/workshop/equipped";
 import { getItemById } from "./data/items/catalog";
 import {
+  isPickupPetItem,
   isRaisedPetItem,
   isWorkshopGearItem,
   opensWorkshopHost,
 } from "./data/items/item";
+import {
+  applyPickupBlessing,
+  convertPickupToBuff,
+  equipBeadInSlot,
+  getEquippedPickupPet,
+  setPickupFilter,
+  togglePickupSummon,
+  unlockBeadSlot,
+} from "./data/systems/pickup-pet-workshop";
+import { getPetBeadsPanelMaterials } from "./tabs/pet-beads-panel";
 import {
   advancePetStatLevel,
   craftPetFeed,
@@ -67,6 +78,7 @@ import {
   getWorkshopTabIds,
   itemOpensWorkshopUi,
   resolveWorkshopSidebarItem,
+  workshopTabLabel,
 } from "./data/workshop/ui-rules";
 import { useEffect, useMemo } from "react";
 
@@ -110,11 +122,22 @@ export function App() {
     ) {
       setRoute(next);
     }
-  }, [equipped.id, hasSkinApplied, route, setRoute, equipped]);
+    // Só realinha rota quando o host muda (evita loop com popstate / URL).
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- route lido no fechamento; deps = host
+  }, [equipped.id, hasSkinApplied]);
 
   const hostFallbackTab = defaultTabForHost(equipped);
   let tab = getTabById(effectiveRoute.tabId) ?? getTabById(hostFallbackTab);
-  if (!tab) return null;
+  if (!tab) {
+    return (
+      <div className="frame" style={{ margin: "1rem", padding: "1rem" }}>
+        <p>
+          Workshop tab <strong>{effectiveRoute.tabId}</strong> não encontrada. Troque o item na bag
+          ou limpe os query params da URL.
+        </p>
+      </div>
+    );
+  }
 
   let panelTitle = tab.panelTitle;
   let panelSubtitle = tab.panelSubtitle;
@@ -171,6 +194,33 @@ export function App() {
     materialsVariant = "grid";
     materialsTitle = "Materials";
   }
+  if (tab.id === "beads" && isPickupPetItem(equipped) && equipped.mode === "buff") {
+    materials = getPetBeadsPanelMaterials();
+    materialsVariant = "list";
+    materialsTitle = "On hand";
+  }
+  if (tab.id === "convert" && isPickupPetItem(equipped) && equipped.mode === "pickup") {
+    materials = [
+      {
+        icon: "📜",
+        name: "Pick-up Pet Upgrade",
+        quantity: equipped.workshopPickup.inventory.pickupUpgradeScroll,
+      },
+    ];
+    materialsVariant = "list";
+    materialsTitle = "Materials";
+  }
+  if (tab.id === "blessing" && isPickupPetItem(equipped)) {
+    materials = [
+      {
+        icon: "📜",
+        name: "Scroll of Pet Blessing (Pick-up)",
+        quantity: equipped.workshopPickup.inventory.blessingScroll,
+      },
+    ];
+    materialsVariant = "grid";
+    materialsTitle = "Materials";
+  }
 
   const visibleTabIds = getWorkshopTabIds(equipped);
   const tabDefs = tabRegistry
@@ -180,8 +230,8 @@ export function App() {
       label:
         id === "upgrade" && isWorkshopGearItem(equipped) && equipped.type === "jewel"
           ? "Accessory Upgrade"
-          : id === "awake" && isRaisedPetItem(equipped)
-            ? "Pet Awake"
+          : isPickupPetItem(equipped) || isRaisedPetItem(equipped)
+            ? workshopTabLabel(id, equipped)
             : label,
       icon,
     }));
@@ -369,6 +419,41 @@ export function App() {
       if (action === "Apply Skin" && !actionBtn.disabled) {
         if (applySkin().ok) workshop.bump();
         return;
+      }
+
+      const pickup = getEquippedPickupPet();
+      if (pickup) {
+        if (action === "Convert to Buff Pet") {
+          if (convertPickupToBuff(pickup).ok) workshop.bump();
+          return;
+        }
+        if (action === "Unlock Bead Slot") {
+          if (unlockBeadSlot(pickup).ok) workshop.bump();
+          return;
+        }
+        if (action === "Apply Pet Blessing") {
+          if (applyPickupBlessing(pickup).ok) workshop.bump();
+          return;
+        }
+        if (action === "Toggle Pickup Summon") {
+          togglePickupSummon(pickup);
+          workshop.bump();
+          return;
+        }
+        if (action === "Equip Demo Bead" && actionBtn.dataset.beadId) {
+          const slot = Number(actionBtn.dataset.beadSlot ?? "0");
+          if (equipBeadInSlot(pickup, slot, actionBtn.dataset.beadId).ok) {
+            workshop.bump();
+          }
+          return;
+        }
+        if (action === "Toggle Pickup Filter" && actionBtn.dataset.pickupFilterId) {
+          const filterId = actionBtn.dataset
+            .pickupFilterId as import("./data/pets/pickup-types").PickupFilterId;
+          setPickupFilter(pickup, filterId, !pickup.pickupFilter[filterId]);
+          workshop.bump();
+          return;
+        }
       }
 
       const raised = getEquippedRaisedPet();

@@ -1,4 +1,4 @@
-import { getTabById, TAB_HASH_ALIASES } from "../../tabs/registry";
+import { resolveTabIdAlias, isKnownWorkshopTabId } from "../../tabs/tab-ids";
 import { getWorkshopHostById, workshopHostCatalog } from "../items/catalog";
 import { resolveInventoryTab, type InventoryTabId } from "../inventory/display";
 import type { WorkshopRoute } from "./route-types";
@@ -123,8 +123,8 @@ function routeFromLegacyHash(raw: string): WorkshopRoute | null {
     return { ...DEFAULT_ROUTE, tabId: "skins", skinsSub: "apply" };
   }
 
-  const tabId = TAB_HASH_ALIASES[raw] ?? raw;
-  if (tabId && getTabById(tabId)) {
+  const tabId = resolveTabIdAlias(raw);
+  if (tabId) {
     return { ...DEFAULT_ROUTE, tabId };
   }
   return null;
@@ -137,7 +137,7 @@ export function parseWorkshopAppUrl(href = location.href): WorkshopAppUrlState {
   let route: WorkshopRoute = { ...DEFAULT_ROUTE };
 
   const workshopTab = params.get(Q.workshopTab);
-  if (workshopTab && getTabById(workshopTab)) {
+  if (workshopTab && isKnownWorkshopTabId(workshopTab)) {
     route = { ...DEFAULT_ROUTE, tabId: workshopTab };
     const subtab = params.get(Q.subtab);
     if (subtab) {

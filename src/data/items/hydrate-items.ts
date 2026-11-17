@@ -13,6 +13,7 @@ import type {
   WorkshopItem,
   WorkshopJewelItem,
   WorkshopRaisedPetItem,
+  WorkshopPickupPetItem,
   WorkshopWeaponItem,
 } from "./item";
 import { createSkinState } from "./item";
@@ -20,6 +21,11 @@ import type { RaisedPetRecord } from "../pets/types";
 import { PET_HP_BY_RANK } from "../pets/rank-tables";
 import { speciesDef } from "../pets/species";
 import { formatPetBonusTotal, statBonusForLevel } from "../pets/rank-tables";
+import {
+  defaultPickupWorkshopInventory,
+  mergePickupFilterFromRecord,
+  syncPickupPetStats,
+} from "../pets/pickup-pet-sync";
 import type { ArmorSubtype, SkinSlot, WeaponSubtype } from "./types";
 import { upgradeProfile } from "../upgrade/recipes";
 import {
@@ -134,7 +140,30 @@ export function assertItemRecord(record: ItemRecord): void {
         if (record.upgradeLevel != null) {
           throw new Error(`Item "${record.id}": raised pet não pode ter upgradeLevel`);
         }
-      } else if (record.subtype !== "pickup") {
+      } else if (record.subtype === "pickup") {
+        if (!record.pickupPet) {
+          throw new Error(`Item "${record.id}": pet pick-up exige pickupPet{}`);
+        }
+        const pp = record.pickupPet;
+        if (pp.mode !== "pickup" && pp.mode !== "buff") {
+          throw new Error(`Item "${record.id}": pickupPet.mode deve ser pickup|buff`);
+        }
+        if (pp.mode === "pickup" && (pp.unlockedBeadSlots ?? 0) > 0) {
+          throw new Error(`Item "${record.id}": pick-up puro não tem bead slots`);
+        }
+        if (pp.mode === "buff") {
+          const slots = pp.unlockedBeadSlots ?? 2;
+          if (slots < 2 || slots > 9) {
+            throw new Error(`Item "${record.id}": buff pet unlockedBeadSlots 2–9`);
+          }
+        }
+        if (record.raisedPet) {
+          throw new Error(`Item "${record.id}": pet não pode ter raisedPet e pickupPet`);
+        }
+        if (record.upgradeLevel != null) {
+          throw new Error(`Item "${record.id}": pick-up/buff pet não pode ter upgradeLevel`);
+        }
+      } else {
         throw new Error(`Item "${record.id}": pet.subtype deve ser raised|pickup`);
       }
       break;
@@ -193,9 +222,6 @@ function hydrateSimpleItem(
       category: record.category as ConsumableItem["category"],
       recipeSlot: record.recipeSlot,
     };
-  }
-  if (record.type === "pet" && record.subtype === "pickup") {
-    return { ...base, type: "pet", subtype: "pickup", category: "pet" };
   }
   if (record.type === "quest") {
     return { ...base, type: "quest", category: "quest" };
@@ -399,6 +425,39 @@ function buildRaisedPetStats(
   ];
 }
 
+function hydratePickupPetItem(record: ItemRecord): WorkshopPickupPetItem {
+  const pp = record.pickupPet!;
+  const icon = resolveIcon(record);
+  const slotIds = Array.from({ length: 9 }, (_, i) => pp.beadSlotBeadIds?.[i] ?? null);
+  const item: WorkshopPickupPetItem = {
+    id: record.id,
+    name: record.name,
+    type: "pet",
+    subtype: "pickup",
+    category: "pet",
+    typeLabel: record.typeLabel,
+    icon,
+    stackQty: record.stackQty ?? 1,
+    isSkin: false,
+    mode: pp.mode,
+    mailable: pp.mailable ?? true,
+    summoned: pp.summoned ?? false,
+    unlockedBeadSlots: pp.mode === "buff" ? (pp.unlockedBeadSlots ?? 2) : 0,
+    beadSlots: Array.from({ length: 9 }, () => null),
+    _beadSlotIds: slotIds,
+    stats: [],
+    blessing: (pp.blessing ?? []).map((a) => ({
+      label: a.label,
+      value: a.value,
+      tone: a.tone,
+    })),
+    pickupFilter: mergePickupFilterFromRecord(pp.pickupFilter),
+    workshopPickup: { inventory: defaultPickupWorkshopInventory() },
+  };
+  syncPickupPetStats(item);
+  return item;
+}
+
 function hydrateRaisedPetItem(record: ItemRecord): WorkshopRaisedPetItem {
   const rp = record.raisedPet!;
   const icon = resolveIcon(record);
@@ -545,10 +604,11 @@ export function hydrateItemsCatalog(catalog: ItemsCatalog): CatalogItem[] {
   for (const record of catalog.items) {
     if (record.type === "pet" && record.subtype === "raised") {
       byId.set(record.id, hydrateRaisedPetItem(record));
+    } else if (record.type === "pet" && record.subtype === "pickup") {
+      byId.set(record.id, hydratePickupPetItem(record));
     } else if (
       record.type === "consumable" ||
       record.type === "skin" ||
-      record.type === "pet" ||
       record.type === "quest" ||
       record.type === "wing"
     ) {

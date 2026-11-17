@@ -852,7 +852,53 @@
       "category": "pet",
       "iconKey": "petUnicorn",
       "typeLabel": "Pick-up Pet",
-      "stackQty": 1
+      "stackQty": 1,
+      "pickupPet": {
+        "mode": "pickup",
+        "mailable": true,
+        "summoned": false,
+        "blessing": [],
+        "pickupFilter": {
+          "penya": true,
+          "equipment": true,
+          "material": true,
+          "jewel": false
+        }
+      }
+    },
+    {
+      "id": "pet-mocomochi",
+      "name": "Mocomochi",
+      "type": "pet",
+      "subtype": "pickup",
+      "category": "pet",
+      "iconKey": "petUnicorn",
+      "typeLabel": "Buff Pet",
+      "stackQty": 1,
+      "pickupPet": {
+        "mode": "buff",
+        "mailable": false,
+        "summoned": true,
+        "unlockedBeadSlots": 3,
+        "beadSlotBeadIds": ["bead-power-l1", "bead-protector-l1", null, null, null, null, null, null, null],
+        "blessing": [
+          {
+            "label": "Blessing",
+            "value": "+2% pickup radius",
+            "tone": "blue"
+          }
+        ],
+        "pickupFilter": {
+          "penya": true,
+          "equipment": true,
+          "quest": false,
+          "food": true,
+          "material": true,
+          "card": true,
+          "jewel": true,
+          "etc": true
+        }
+      }
     },
     {
       "id": "pet-helper",

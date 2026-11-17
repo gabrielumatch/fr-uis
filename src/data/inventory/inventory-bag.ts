@@ -42,6 +42,7 @@ export const INVENTORY_BAG_SLOTS: InventoryBagSlot[] = [
   { tab: "pets", itemId: "pet-lion" },
   { tab: "pets", itemId: "pet-dragon" },
   { tab: "pets", itemId: "pet-unicorn" },
+  { tab: "pets", itemId: "pet-mocomochi" },
 
   { tab: "quest", itemId: "pet-helper" },
   { tab: "quest", itemId: "sprotect" },

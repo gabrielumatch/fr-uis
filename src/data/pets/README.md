@@ -1,14 +1,13 @@
-# Raised pets (status)
+# Pets no workshop
 
-Tipagem alinhada à [wiki BR Pets](https://flyff-wiki.gpotato.com.br/wiki/Pets).
+| `subtype` | `pickupPet.mode` | Workshop hosts | Abas |
+|-----------|------------------|----------------|------|
+| `raised` | — | Sim | Feed, Growth, Awake |
+| `pickup` | `pickup` | Sim | Convert, Blessing, Pickup |
+| `pickup` | `buff` | Sim | Beads, Blessing, Pickup |
 
-| `subtype` | Workshop | Abas |
-|-----------|----------|------|
-| `raised` | Sim (`WorkshopRaisedPetItem`) | Feed, Growth, Awake |
-| `pickup` | Não (só bag) | — |
+**Raised:** `items.json` → `raisedPet{}`; runtime `workshopPet.inventory`; `systems/raised-pet-workshop.ts`.
 
-**Feed:** craft no Pet Tamer (quest drops) + give (HP / rank EXP convocado).  
-**Growth:** advance stat level (99,99% EXP, rola tier D–S) + reroll (Blessing/Chance/Reversion).  
-**Awake:** scroll na Peach (compartilha UI Awake; sem upgrade/pierce/jewel).
+**Pick-up / Buff:** `items.json` → `pickupPet{}`; runtime `workshopPickup.inventory`; beads em `bead-catalog.ts`; `systems/pickup-pet-workshop.ts`.
 
-Dados: `items.json` → `raisedPet{}`; runtime `workshopPet.inventory`; lógica em `systems/raised-pet-workshop.ts`.
+Blessing de pick-up usa **Scroll of Pet Blessing (Pick-up Pets)** — não confundir com Scroll of Pet Awakening (raised / Peach).

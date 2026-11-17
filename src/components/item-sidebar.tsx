@@ -3,6 +3,8 @@ import { StatList } from "./stat-list";
 import { AwakeAttributes } from "./awake-attributes";
 import { GearScore } from "./gear-score";
 import {
+  isBuffPetItem,
+  isPickupPetItem,
   isRaisedPetItem,
   isWingItem,
   isWorkshopHostItem,
@@ -11,7 +13,13 @@ import {
 
 export function ItemSidebar({ item }: { item: CatalogItem }) {
   if (isWorkshopHostItem(item)) {
-    const title = isRaisedPetItem(item) ? "Raised Pet" : "Workshop Item";
+    const title = isRaisedPetItem(item)
+      ? "Raised Pet"
+      : isPickupPetItem(item)
+        ? isBuffPetItem(item)
+          ? "Buff Pet"
+          : "Pick-up Pet"
+        : "Workshop Item";
     return (
       <aside className="frame item-sidebar">
         <h2 className="section-title">{title}</h2>
@@ -19,12 +27,22 @@ export function ItemSidebar({ item }: { item: CatalogItem }) {
           icon={item.icon}
           name={item.name}
           typeLabel={item.typeLabel}
-          upgradeBadge={isRaisedPetItem(item) ? undefined : item.upgradeBadge}
-          activeSkinName={isRaisedPetItem(item) ? undefined : item.activeSkinName}
+          upgradeBadge={
+            isRaisedPetItem(item) || isPickupPetItem(item) ? undefined : item.upgradeBadge
+          }
+          activeSkinName={
+            isRaisedPetItem(item) || isPickupPetItem(item) ? undefined : item.activeSkinName
+          }
         />
         <StatList rows={item.stats} />
-        <AwakeAttributes stats={item.awake} />
-        <GearScore score={item.gearScore} />
+        {isPickupPetItem(item) ? (
+          <AwakeAttributes stats={item.blessing} />
+        ) : isRaisedPetItem(item) ? (
+          <AwakeAttributes stats={item.awake} />
+        ) : (
+          <AwakeAttributes stats={item.awake} />
+        )}
+        {!isPickupPetItem(item) ? <GearScore score={item.gearScore} /> : null}
       </aside>
     );
   }

@@ -10,6 +10,12 @@ import type {
   WeaponSubtype,
 } from "./types";
 import type { RaisedPetRuntime, RaisedPetSpecies, PetRank, PetStatTier } from "../pets/types";
+import type {
+  BuffBeadEquipped,
+  PickupFilterState,
+  PickupPetMode,
+  PickupPetRuntime,
+} from "../pets/pickup-types";
 import type { ItemUpgradeAttributes } from "../upgrade/recipes";
 
 export type StatRow = { label: string; value: string; values?: string[] };
@@ -49,11 +55,30 @@ export type SkinItem = ItemBase & {
   hostItemId?: string;
 };
 
-export type PickupPetItem = ItemBase & {
+/**
+ * Pick-up / Buff (cash shop) — workshop com Convert ou Beads, Blessing, Pickup filter.
+ * Sem safe+, rank D–S nem feed de raised.
+ */
+export type WorkshopPickupPetItem = ItemBase & {
   type: "pet";
   subtype: "pickup";
   category: "pet";
+  mode: PickupPetMode;
+  mailable: boolean;
+  summoned: boolean;
+  unlockedBeadSlots: number;
+  /** Slots hidratados (somente leitura na UI). */
+  beadSlots: (BuffBeadEquipped | null)[];
+  /** Ids por slot — fonte de verdade para equipar beads. */
+  _beadSlotIds: (string | null)[];
+  stats: StatRow[];
+  blessing: AwakeStat[];
+  pickupFilter: PickupFilterState;
+  workshopPickup: PickupPetRuntime;
 };
+
+/** @deprecated alias — sempre hidratado como WorkshopPickupPetItem */
+export type PickupPetItem = WorkshopPickupPetItem;
 
 /**
  * Raised pet — sem `upgradeLevel` / badge de slot (+N, LvN).
@@ -78,7 +103,7 @@ export type WorkshopRaisedPetItem = ItemBase & {
   workshopPet: RaisedPetRuntime;
 };
 
-export type PetItem = PickupPetItem | WorkshopRaisedPetItem;
+export type PetItem = WorkshopPickupPetItem | WorkshopRaisedPetItem;
 
 export type QuestItem = ItemBase & {
   type: "quest";
@@ -161,14 +186,13 @@ export type WorkshopItem =
   | WorkshopJewelItem
   | WorkshopFashionItem;
 
-/** Gear + raised pet — painel Workshop Item. */
-export type WorkshopHostItem = WorkshopItem | WorkshopRaisedPetItem;
+/** Gear + pets com workshop (raised ou pick-up/buff). */
+export type WorkshopHostItem = WorkshopItem | WorkshopRaisedPetItem | WorkshopPickupPetItem;
 
 export type CatalogItem =
   | WorkshopHostItem
   | ConsumableItem
   | SkinItem
-  | PickupPetItem
   | QuestItem
   | WingItem;
 
@@ -189,12 +213,24 @@ export function isRaisedPetItem(item: CatalogItem): item is WorkshopRaisedPetIte
   return item.type === "pet" && item.subtype === "raised";
 }
 
-export function isPickupPetItem(item: CatalogItem): item is PickupPetItem {
+export function isPickupPetItem(item: CatalogItem): item is WorkshopPickupPetItem {
   return item.type === "pet" && item.subtype === "pickup";
 }
 
+export function isBuffPetItem(
+  item: CatalogItem,
+): item is WorkshopPickupPetItem & { mode: "buff" } {
+  return isPickupPetItem(item) && item.mode === "buff";
+}
+
+export function isPickupOnlyPetItem(
+  item: CatalogItem,
+): item is WorkshopPickupPetItem & { mode: "pickup" } {
+  return isPickupPetItem(item) && item.mode === "pickup";
+}
+
 export function isWorkshopHostItem(item: CatalogItem): item is WorkshopHostItem {
-  return isWorkshopGearItem(item) || isRaisedPetItem(item);
+  return isWorkshopGearItem(item) || isRaisedPetItem(item) || isPickupPetItem(item);
 }
 
 export function isConsumableItem(item: CatalogItem): item is ConsumableItem {
@@ -216,9 +252,9 @@ export function opensWorkshopUpgrade(item: CatalogItem): boolean {
   );
 }
 
-/** Abre o bloco workshop (gear safe+ ou pet raised). */
+/** Abre o bloco workshop (gear safe+, raised ou pick-up/buff). */
 export function opensWorkshopHost(item: CatalogItem): boolean {
-  return opensWorkshopUpgrade(item) || isRaisedPetItem(item);
+  return opensWorkshopUpgrade(item) || isRaisedPetItem(item) || isPickupPetItem(item);
 }
 
 /** @deprecated import from `../workshop/ui-rules` */

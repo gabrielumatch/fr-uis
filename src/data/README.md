@@ -39,7 +39,7 @@ Ex.: `hotter-sword` = `type: weapon`, `subtype: two-handed-sword`, `category: no
 
 **Jewelry** (`type: jewel`, ring/necklace/earring): só aba **Accessory Upgrade** — Moonstone + AProtect. Sem Element, Piercing, Awake, Skins nem sub-aba Jewels (sockets de arma).
 
-**Raised pet** (`type: pet`, `subtype: raised`, `raisedPet` no JSON): workshop com abas **Feed / Growth / Awake** — sem Safe +, element, piercing nem jewels. Pick-up pets (`subtype: pickup`) ficam só na bag. Ver `src/data/pets/README.md`.
+**Raised pet** (`subtype: raised`, `raisedPet{}`): **Feed / Growth / Awake**. **Pick-up / Buff** (`subtype: pickup`, `pickupPet.mode`): **Convert ou Beads**, **Blessing**, **Pickup** filter. Ver `src/data/pets/README.md`.
 
 Ao cadastrar item novo: acerte `category` no JSON; o boot valida bag + coerência `category` ↔ `upgrade`.
 

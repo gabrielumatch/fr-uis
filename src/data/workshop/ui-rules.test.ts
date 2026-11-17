@@ -50,9 +50,10 @@ describe("workshop UI routing", () => {
     expect(itemOpensWorkshopUi(requireWorkshopItem("intelli-ring"))).toBe(true);
   });
 
-  it("raised pet opens workshop; pickup pet does not", () => {
+  it("raised and pick-up/buff pets open workshop from bag", () => {
     expect(itemOpensWorkshopUi(requireWorkshopHost("pet-lion"))).toBe(true);
-    expect(itemOpensWorkshopUi(getItemById("pet-unicorn")!)).toBe(false);
+    expect(itemOpensWorkshopUi(requireWorkshopHost("pet-unicorn"))).toBe(true);
+    expect(itemOpensWorkshopUi(requireWorkshopHost("pet-mocomochi"))).toBe(true);
   });
 
   it("skin, wing never open workshop UI from bag", () => {
@@ -98,6 +99,18 @@ describe("raised pet workshop tabs", () => {
   it("exposes feed, growth, awake only", () => {
     const lion = requireWorkshopHost("pet-lion");
     expect(getWorkshopTabIds(lion)).toEqual(["feed", "growth", "awake"]);
+  });
+});
+
+describe("pick-up / buff pet workshop tabs", () => {
+  it("pick-up only: convert, blessing, pickup filter", () => {
+    const luia = requireWorkshopHost("pet-unicorn");
+    expect(getWorkshopTabIds(luia)).toEqual(["convert", "blessing", "pickup"]);
+  });
+
+  it("buff pet: beads, blessing, pickup filter", () => {
+    const moco = requireWorkshopHost("pet-mocomochi");
+    expect(getWorkshopTabIds(moco)).toEqual(["beads", "blessing", "pickup"]);
   });
 });
 

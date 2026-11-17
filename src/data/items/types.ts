@@ -1,6 +1,7 @@
 /** Campos comuns a **todo** item do jogo (equip, consumível, skin, …). */
 
 import type { RaisedPetRecord } from "../pets/types";
+import type { PickupPetRecord } from "../pets/pickup-types";
 
 export type ItemType =
   | "weapon"
@@ -145,6 +146,8 @@ export type ItemRecord = {
   skinSlot?: SkinSlot;
   /** Pet raised: progressão D–S, feed, stat levels (subtype `raised`). */
   raisedPet?: RaisedPetRecord;
+  /** Pet pick-up/buff: convert, beads, blessing, loot filter (subtype `pickup`). */
+  pickupPet?: PickupPetRecord;
 };
 
 export type ItemsCatalog = {

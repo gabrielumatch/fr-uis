@@ -1,5 +1,7 @@
 import type { CatalogItem, SkinItem, WorkshopHostItem, WorkshopItem } from "../items/item";
 import {
+  isBuffPetItem,
+  isPickupOnlyPetItem,
   isPickupPetItem,
   isRaisedPetItem,
   isSkinItem,
@@ -25,6 +27,10 @@ export const WORKSHOP_MAIN_TAB_IDS = [
   "skins",
   "feed",
   "growth",
+  "convert",
+  "beads",
+  "blessing",
+  "pickup",
 ] as const;
 
 export type WorkshopMainTabId = (typeof WORKSHOP_MAIN_TAB_IDS)[number];
@@ -69,11 +75,42 @@ export function defaultTabForHost(item: WorkshopHostItem): WorkshopHostTabId {
   return profile.mainTabs[0] ?? "upgrade";
 }
 
+export function workshopTabLabel(tabId: string, item: WorkshopHostItem): string {
+  if (tabId === "blessing" && isPickupPetItem(item)) return "Blessing";
+  if (tabId === "awake" && isRaisedPetItem(item)) return "Pet Awake";
+  if (tabId === "pickup") return "Pickup";
+  if (tabId === "convert") return "Convert";
+  if (tabId === "beads") return "Beads";
+  return tabId.charAt(0).toUpperCase() + tabId.slice(1);
+}
+
 export function defaultRouteForHost(item: WorkshopHostItem): WorkshopRoute {
   const tabId = defaultTabForHost(item);
   if (isRaisedPetItem(item)) {
     return {
       tabId,
+      feedSub: "give",
+      growthSub: "advance",
+      upgradeSub: "level",
+      piercingSub: "pierce",
+      elementSub: "upgrade",
+      skinsSub: "apply",
+    };
+  }
+  if (isPickupOnlyPetItem(item)) {
+    return {
+      tabId: "convert",
+      feedSub: "give",
+      growthSub: "advance",
+      upgradeSub: "level",
+      piercingSub: "pierce",
+      elementSub: "upgrade",
+      skinsSub: "apply",
+    };
+  }
+  if (isBuffPetItem(item)) {
+    return {
+      tabId: "beads",
       feedSub: "give",
       growthSub: "advance",
       upgradeSub: "level",
@@ -145,12 +182,7 @@ export function resolveWorkshopSidebarItem(equipped: WorkshopHostItem): Workshop
 }
 
 export function isInventoryOnlyCatalogItem(item: CatalogItem): boolean {
-  return (
-    isSkinItem(item) ||
-    isWingItem(item) ||
-    isPickupPetItem(item) ||
-    item.type === "quest"
-  );
+  return isSkinItem(item) || isWingItem(item) || item.type === "quest";
 }
 
 export function filterSkinsForWorkshopHost(
