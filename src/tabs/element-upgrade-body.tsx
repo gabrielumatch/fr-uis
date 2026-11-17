@@ -1,4 +1,4 @@
-import { elementUpgradeState, getElementById } from "../data/element-upgrade";
+import { elementUpgradeState, getElementById } from "../data/systems/element-upgrade";
 import { PanelSubTabBar } from "../components/upgrade/sub-tab-bar";
 import { ELEMENT_SUB_TABS } from "./element-sub-tabs";
 import { ElementStatus } from "../components/element/element-status";
@@ -6,7 +6,7 @@ import { ElementTarget } from "../components/element/element-target";
 import { AttemptTable } from "../components/upgrade/attempt-table";
 import { ProbabilityBar } from "../components/upgrade/probability-bar";
 import { ActionButtons } from "../components/upgrade/action-buttons";
-import { getAttemptRows } from "../data/attempt-plans";
+import { getAttemptRows } from "../data/systems/attempt-plans";
 
 export function getElementUpgradeMaterials() {
   const applied = getElementById(elementUpgradeState.appliedElementId);

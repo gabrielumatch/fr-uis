@@ -2,18 +2,18 @@
 import {
   elementUpgradeState,
   getElementById,
-} from "../../data/element-upgrade";
+} from "../../data/systems/element-upgrade";
 import {
   ELEMENT_CYCLE_ORDER,
   elementStrongAgainst,
   elementWeakAgainst,
-} from "../../data/element-cycle";
+} from "../../data/systems/element-cycle";
 import {
   elementMatchupPercent,
   formatMatchupPercent,
   ELEMENT_LEVEL_MAX,
   ELEMENT_MATCHUP_CAP_PERCENT,
-} from "../../data/element-advantage-scale";
+} from "../../data/systems/element-advantage-scale";
 
 /**
  * @param {{

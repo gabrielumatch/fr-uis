@@ -1,4 +1,4 @@
-import type { AttemptPlanRow } from "../../data/attempt-plans";
+import type { AttemptPlanRow } from "../../data/systems/attempt-plans";
 
 function MaterialCell({ value, slotLabel }: { value: string; slotLabel: string }) {
   const filled = Boolean(value);

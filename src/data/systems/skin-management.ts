@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { equippedItem } from "./equipped-item";
+import { equippedItem } from "../workshop/equipped";
 
 /** @typedef {{
  *   id: string;
@@ -34,7 +34,7 @@ export function getSkinById(id) {
 
 /** @param {string} equipmentType */
 export function canApplySkinType(equipmentType) {
-  return equipmentType === equippedItem.type;
+  return equipmentType === equippedItem.typeLabel;
 }
 
 /** @param {string | null} id */
@@ -60,7 +60,7 @@ function returnAppliedSkinToInventory() {
       id: look.id,
       icon: look.icon,
       name: look.name,
-      type: look.type,
+      typeLabel: look.typeLabel,
       qty: 1,
     });
   }
@@ -95,7 +95,7 @@ export function applySkin() {
 
   const skin = getSkinById(id);
   if (!skin || skin.qty <= 0) return { ok: false, reason: "no_skin" };
-  if (!canApplySkinType(skin.type)) return { ok: false, reason: "type_mismatch" };
+  if (!canApplySkinType(skin.typeLabel)) return { ok: false, reason: "type_mismatch" };
 
   skin.qty -= 1;
   if (skin.qty <= 0) {
@@ -107,7 +107,7 @@ export function applySkin() {
     id: skin.id,
     icon: skin.icon,
     name: skin.name,
-    type: skin.type,
+    typeLabel: skin.typeLabel,
   };
   state.selectedSkinId = null;
 

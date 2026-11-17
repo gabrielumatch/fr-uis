@@ -3,7 +3,7 @@ import { ItemIcon } from "../utils/item-icon";
 export function ItemCard(item: {
   icon: string;
   name: string;
-  type: string;
+  typeLabel: string;
   upgradeBadge: string;
   activeSkinName?: string | null;
 }) {
@@ -19,7 +19,7 @@ export function ItemCard(item: {
         <span className="item-card__badge">{item.upgradeBadge}</span>
       </div>
       <div className="item-card__name">{item.name}</div>
-      <div className="item-card__type">{item.type}</div>
+      <div className="item-card__type">{item.typeLabel}</div>
       {item.activeSkinName ? (
         <div className="item-card__look muted">Skin: {item.activeSkinName}</div>
       ) : null}

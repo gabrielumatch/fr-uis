@@ -1,10 +1,12 @@
 import type {
-  ArmorSlot,
-  FashionSlot,
+  ArmorSubtype,
+  FashionSubtype,
+  GearItemCategory,
+  ItemCombatStats,
   JewelSubtype,
-  WeaponClass,
-} from "./item-taxonomy";
-import type { ItemUpgradeAttributes } from "./upgrade-recipes";
+  WeaponSubtype,
+} from "./types";
+import type { ItemUpgradeAttributes } from "../upgrade/recipes";
 
 export type StatRow = { label: string; value: string };
 
@@ -18,7 +20,7 @@ export type SkinPoolEntry = {
   id: string;
   icon: string;
   name: string;
-  type: string;
+  typeLabel: string;
   qty: number;
 };
 
@@ -35,11 +37,9 @@ type WorkshopItemCore = {
   icon: string;
   baseIcon: string;
   name: string;
-  /** Rótulo legível na UI (ex.: "Two-Handed Axe", "Ring"). */
-  type: string;
+  typeLabel: string;
   upgradeBadge: string;
   upgradeLevel: number;
-  /** Safe Upgrade: material, protect, max +, sockets — definido por item. */
   upgrade: ItemUpgradeAttributes;
   stats: StatRow[];
   awake: AwakeStat[];
@@ -47,35 +47,40 @@ type WorkshopItemCore = {
   elementHost: "weapon" | "suit";
   activeSkinName?: string | null;
   workshopSkin: WorkshopSkinState;
+  combat?: ItemCombatStats;
 };
 
-export type WorkshopWeaponItem = WorkshopItemCore & {
-  kind: "weapon";
-  weaponClass: WeaponClass;
-  upgrade: Extract<
-    ItemUpgradeAttributes,
-    { id: "normal" | "ultimate" | "baruna" }
-  >;
+type CategoryRecipeId = {
+  normal: "normal";
+  green: "normal";
+  ultimate: "ultimate";
+  baruna: "baruna";
 };
 
-export type WorkshopArmorItem = WorkshopItemCore & {
-  kind: "armor";
-  armorSlot: ArmorSlot;
-  upgrade: Extract<
-    ItemUpgradeAttributes,
-    { id: "normal" | "baruna" }
-  >;
+type GearItemCore<C extends GearItemCategory = GearItemCategory> = WorkshopItemCore & {
+  category: C;
+  upgrade: Extract<ItemUpgradeAttributes, { id: CategoryRecipeId[C] }>;
+};
+
+export type WorkshopWeaponItem = GearItemCore & {
+  type: "weapon";
+  subtype: WeaponSubtype;
+};
+
+export type WorkshopArmorItem = GearItemCore & {
+  type: "armor";
+  subtype: ArmorSubtype;
 };
 
 export type WorkshopJewelItem = WorkshopItemCore & {
-  kind: "jewel";
-  jewelSubtype: JewelSubtype;
+  type: "jewel";
+  subtype: JewelSubtype;
   upgrade: Extract<ItemUpgradeAttributes, { id: "jewel" }>;
 };
 
 export type WorkshopFashionItem = WorkshopItemCore & {
-  kind: "fashion";
-  fashionSlot: FashionSlot;
+  type: "fashion";
+  subtype: FashionSubtype;
   upgrade: Extract<ItemUpgradeAttributes, { id: "fashion" }>;
 };
 
@@ -85,14 +90,19 @@ export type WorkshopItem =
   | WorkshopJewelItem
   | WorkshopFashionItem;
 
-export function createSkinState(skinPool: SkinPoolEntry[]): WorkshopSkinState {
+export type { ItemType, ItemCombatStats, GearItemCategory, ItemCategory } from "./types";
+
+export function createSkinState(
+  skinPool: SkinPoolEntry[],
+  scrolls: { purge: number; recover: number } = { purge: 2, recover: 1 },
+): WorkshopSkinState {
   return {
     hasSkinApplied: false,
     appliedLook: null,
     selectedSkinId: null,
     inventory: {
-      purgeSkinScrolls: 2,
-      recoverSkinScrolls: 1,
+      purgeSkinScrolls: scrolls.purge,
+      recoverSkinScrolls: scrolls.recover,
     },
     skinPool,
   };

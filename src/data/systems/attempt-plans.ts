@@ -1,4 +1,4 @@
-import { getUpgradeLevelAttemptDefaults } from "./upgrade-materials";
+import { getUpgradeLevelAttemptDefaults } from "../upgrade/materials";
 
 export type AttemptPlanKey = "upgrade-level" | "element-upgrade" | "piercing-pierce";
 

@@ -1,7 +1,7 @@
 import {
   attemptPlanCanStart,
   type AttemptPlanKey,
-} from "../../data/attempt-plans";
+} from "../../data/systems/attempt-plans";
 
 export function ActionButtons({
   primary = "Start",

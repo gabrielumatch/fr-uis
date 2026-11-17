@@ -1,10 +1,10 @@
-import { getPiercingCounts, piercingWeaponConfig } from "../data/piercing-slots";
+import { getPiercingCounts, piercingWeaponConfig } from "../data/systems/piercing-slots";
 import { PanelSubTabBar } from "../components/upgrade/sub-tab-bar";
 import { PIERCING_SUB_TABS } from "./piercing-sub-tabs";
 import { AttemptTable } from "../components/upgrade/attempt-table";
 import { ProbabilityBar } from "../components/upgrade/probability-bar";
 import { ActionButtons } from "../components/upgrade/action-buttons";
-import { getAttemptRows } from "../data/attempt-plans";
+import { getAttemptRows } from "../data/systems/attempt-plans";
 
 export const pierceMaterials = [
   { icon: "🌙", name: "Moonstone", quantity: 40 },

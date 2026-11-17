@@ -1,4 +1,4 @@
-import { getUpgradeLevelMaterials } from "../data/upgrade-materials";
+import { getUpgradeLevelMaterials } from "../data/upgrade/materials";
 import { UpgradeLevelBody } from "./upgrade-level-body";
 import { UpgradeJewelsBody, upgradeJewelsMaterials } from "./upgrade-jewels-body";
 import { UPGRADE_SUB_TABS } from "./upgrade-sub-tabs";

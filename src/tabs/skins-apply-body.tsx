@@ -2,7 +2,7 @@ import { PanelSubTabBar } from "../components/upgrade/sub-tab-bar";
 import { SKINS_SUB_TABS } from "./skins-sub-tabs";
 import { SkinSlotPair } from "../components/skins/skin-slot-pair";
 import { SkinPicker } from "../components/skins/skin-picker";
-import { getItemSkinState, getSkinById } from "../data/skin-management";
+import { getItemSkinState, getSkinById } from "../data/systems/skin-management";
 import { ActionButtons } from "../components/upgrade/action-buttons";
 
 export function getSkinsApplyMaterials() {

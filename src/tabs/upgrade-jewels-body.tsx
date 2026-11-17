@@ -1,4 +1,4 @@
-import { buildJewelManagementState } from "../data/jewel-management";
+import { buildJewelManagementState } from "../data/systems/jewel-management";
 import { JewelSlotList } from "../components/jewels/jewel-slot-list";
 import { JewelInventory } from "../components/jewels/jewel-inventory";
 import { PanelSubTabBar } from "../components/upgrade/sub-tab-bar";

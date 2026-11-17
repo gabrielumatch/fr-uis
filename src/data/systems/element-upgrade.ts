@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { equippedItem } from "./equipped-item";
+import { equippedItem } from "../workshop/equipped";
 
 /**
  * Element upgrade (arma/suit) — track separado do + de upgrade.

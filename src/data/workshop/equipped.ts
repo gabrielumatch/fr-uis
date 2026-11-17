@@ -4,5 +4,5 @@ export {
   activeWorkshopItemId,
   selectWorkshopItem,
   getWorkshopItemById,
-} from "./workshop-inventory";
-export type { WorkshopItem } from "./workshop-item";
+} from "./inventory";
+export type { WorkshopItem } from "../items/workshop-item";

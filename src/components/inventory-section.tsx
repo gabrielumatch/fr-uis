@@ -1,19 +1,16 @@
-import {
-  formatPenya,
-  inventoryTabId,
-  playerPenya,
-  type InventoryTabId,
-} from "../data/inventory-display";
+import { formatPenya, playerPenya, type InventoryTabId } from "../data/inventory/display";
 import { SectionHeader } from "./workshop-header";
 import { CharacterEquipPane } from "./inventory/character-equip-pane";
 import { InventoryGridPane } from "./inventory/inventory-grid-pane";
 
 export function InventorySection({
   activeId,
-  tabId = inventoryTabId as InventoryTabId,
+  tabId,
+  onInventoryTabChange,
 }: {
   activeId: string;
-  tabId?: InventoryTabId;
+  tabId: InventoryTabId;
+  onInventoryTabChange: (tab: InventoryTabId) => void;
 }) {
   return (
     <section
@@ -27,7 +24,11 @@ export function InventorySection({
           <CharacterEquipPane />
         </div>
         <div className="inventory-layout__bag">
-          <InventoryGridPane tabId={tabId} activeWorkshopItemId={activeId} />
+          <InventoryGridPane
+            tabId={tabId}
+            activeWorkshopItemId={activeId}
+            onTabChange={onInventoryTabChange}
+          />
         </div>
       </div>
       <footer className="inventory-panel__penya" aria-label="Penya">

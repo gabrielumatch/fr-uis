@@ -1,7 +1,7 @@
 import {
   piercingWeaponConfig,
   summarizeEquippedWeaponCards,
-} from "../data/piercing-slots";
+} from "../data/systems/piercing-slots";
 import { PanelSubTabBar } from "../components/upgrade/sub-tab-bar";
 import { PIERCING_SUB_TABS } from "./piercing-sub-tabs";
 import { PiercingSlotList } from "../components/piercing/slot-list";

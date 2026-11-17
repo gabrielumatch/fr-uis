@@ -1,4 +1,4 @@
-import type { buildJewelManagementState } from "../../data/jewel-management";
+import type { buildJewelManagementState } from "../../data/systems/jewel-management";
 
 export function JewelSlotRow({
   slot,

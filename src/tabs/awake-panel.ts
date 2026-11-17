@@ -1,4 +1,4 @@
-import { awakeManagementState } from "../data/awake-management";
+import { awakeManagementState } from "../data/systems/awake-management";
 import { AwakeBody } from "./awake-body";
 import type { TabDefinition } from "./registry";
 

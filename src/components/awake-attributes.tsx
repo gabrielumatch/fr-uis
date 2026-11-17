@@ -1,5 +1,5 @@
 import { StatList } from "./stat-list";
-import type { AwakeStat } from "../data/workshop-item";
+import type { AwakeStat } from "../data/items/workshop-item";
 
 export function AwakeAttributes({ stats }: { stats: AwakeStat[] }) {
   return (

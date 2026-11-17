@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { equippedItem } from "./equipped-item";
-import { getUpgradeLevelRecipe } from "./upgrade-recipes";
+import { equippedItem } from "../workshop/equipped";
+import { getUpgradeLevelRecipe } from "../upgrade/recipes";
 import {
   MAX_JEWEL_SLOTS,
   unlockedJewelSlotCount,

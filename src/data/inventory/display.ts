@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { WIKI } from "./flyff-wiki-icons";
+import { WIKI } from "../assets/wiki-icons";
 
 export type InventoryTabId = "weapons" | "armor" | "pets" | "quest" | "consumables";
 export type InventoryGridItem = {
@@ -32,7 +32,7 @@ export const INVENTORY_TABS = [
   { id: "pets", label: "Pets" },
   { id: "quest", label: "Quest Items" },
   { id: "consumables", label: "Consumables" },
-];
+] as const satisfies readonly { id: InventoryTabId; label: string }[];
 
 /** Slots pequenos; o CSS preenche a largura com `auto-fill`. */
 export const INVENTORY_SLOT_SIZE_PX = 52;

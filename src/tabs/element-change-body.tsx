@@ -1,5 +1,5 @@
-import { equippedItem } from "../data/equipped-item";
-import { elementUpgradeState, getElementById } from "../data/element-upgrade";
+import { equippedItem } from "../data/workshop/equipped";
+import { elementUpgradeState, getElementById } from "../data/systems/element-upgrade";
 import { PanelSubTabBar } from "../components/upgrade/sub-tab-bar";
 import { ELEMENT_SUB_TABS } from "./element-sub-tabs";
 import { ElementStatus } from "../components/element/element-status";

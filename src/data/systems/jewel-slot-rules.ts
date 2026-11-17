@@ -1,4 +1,4 @@
-import type { WeaponJewelSocketRule } from "./item-taxonomy";
+import type { WeaponJewelSocketRule } from "../items/types";
 
 export const MAX_JEWEL_SLOTS = 5;
 

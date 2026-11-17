@@ -118,9 +118,9 @@ Fonte **TypeScript** em `src/data/` — app **Vite + React 19** na raiz do repo 
 |-------|---------|
 | `kind` | `weapon` \| `armor` \| `jewel` \| `fashion` |
 | `upgradeCategory` | `normal` \| `ultimate` \| `baruna` |
-| Subtipos | `jewelSubtype`: ring, necklace, earring · `armorSlot`: helmet, suit, gauntlet, boots, shield · `weaponClass`: sword, knuckle, bow, … · `fashionSlot`: hat, back, … |
+| Taxonomia (TS) | `type`: weapon \| armor \| jewel \| fashion · `subtype` por tipo · `category`: normal \| green \| ultimate \| baruna (só gear) · `typeLabel` = texto na UI · `combat.attack` / `combat.defense` opcionais |
 
-Regras de cap e material: `item-taxonomy.ts` + receitas tipadas em `src/data/upgrade-recipes.ts` (`UPGRADE_RECIPE_PAIRS`: jewel → Moonstone+AProtect, normal → Sunstone+SProtect, ultimate → Oricalkum+XProtect).
+Catálogo: `src/data/workshop-items.json` → `workshop-item-record.ts` (tipos) → `hydrate-workshop-items.ts`. Upgrade: `type` + `category` em `item-upgrade-rules.ts` + `upgrade-recipes.ts` (`UPGRADE_RECIPE_PAIRS`: jewel → Moonstone+AProtect, normal → Sunstone+SProtect, ultimate → Oricalkum+XProtect).
 
 ## Implicações para este repo (raiz)
 

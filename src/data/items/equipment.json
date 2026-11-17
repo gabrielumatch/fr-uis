@@ -1,0 +1,204 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "lusaka-axe",
+      "name": "Ultimate Lusaka's Heavy Axe",
+      "type": "weapon",
+      "subtype": "two-handed-axe",
+      "category": "ultimate",
+      "iconKey": "lusakaHeavyAxe",
+      "typeLabel": "Two-Handed Axe",
+      "elementHost": "weapon",
+      "upgradeLevel": 9,
+      "level": 75,
+      "attack": { "min": 471, "max": 664 },
+      "bonus": "HP+12%, DEF+15%, Melee Block+11%, Wind vs Monster+3%",
+      "element": { "name": "Lightning", "level": 19, "max": 20 },
+      "piercing": { "current": 5, "max": 10 },
+      "cards": { "current": 4, "max": 10 },
+      "jewels": { "unlocked": 4, "capacity": 4 },
+      "gearScore": 120,
+      "awake": [
+        { "label": "STR", "value": "+25", "tone": "red" },
+        { "label": "Critical Chance", "value": "+17%", "tone": "blue" },
+        { "label": "Attack Speed", "value": "+10%", "tone": "blue" }
+      ],
+      "skinPool": [
+        { "id": "spectre-axe", "iconKey": "spectreAxe", "name": "Ultimate Spectre's Axe", "typeLabel": "Two-Handed Axe", "qty": 1 },
+        { "id": "nautilus-axe", "iconKey": "nautilusAxe", "name": "Ultimate Nautilus", "typeLabel": "Two-Handed Axe", "qty": 1 },
+        { "id": "bishop-axe", "iconKey": "bishopAxe", "name": "Ultimate Bishop", "typeLabel": "Two-Handed Axe", "qty": 1 },
+        { "id": "lasternition", "iconKey": "lasternition", "name": "Lasternition", "typeLabel": "Two-Handed Axe", "qty": 1 }
+      ]
+    },
+    {
+      "id": "ryvius-sword",
+      "name": "Ultimate Lusaka's Heavy Sword",
+      "type": "weapon",
+      "subtype": "two-handed-sword",
+      "category": "ultimate",
+      "iconKey": "lusakaHeavySword",
+      "typeLabel": "Two-Handed Sword",
+      "elementHost": "weapon",
+      "upgradeLevel": 6,
+      "level": 75,
+      "attack": { "min": 539, "max": 600 },
+      "bonus": "ATK Speed+25%, Crit+25%, ICD+83%, Wind vs Monster+3%",
+      "element": { "name": "Fire", "level": 8, "max": 20 },
+      "piercing": { "current": 3, "max": 10 },
+      "cards": { "current": 2, "max": 10 },
+      "jewels": { "unlocked": 2, "capacity": 3 },
+      "gearScore": 78,
+      "awake": [
+        { "label": "STR", "value": "+12", "tone": "red" },
+        { "label": "DEX", "value": "+8", "tone": "blue" }
+      ],
+      "skinPool": [
+        { "id": "lusaka-crystal-sword", "iconKey": "lusakaCrystalSword", "name": "Ultimate Lusaka's Heavy Crystal Sword", "typeLabel": "Two-Handed Sword", "qty": 1 },
+        { "id": "smiter-sword", "iconKey": "smiterSword", "name": "Smiter Sword", "typeLabel": "Two-Handed Sword", "qty": 1 },
+        { "id": "gladiator-gold-2h-sword", "iconKey": "gladiatorGold2hSword", "name": "Gladiator's Gold 2H Sword", "typeLabel": "Two-Handed Sword", "qty": 1 }
+      ]
+    },
+    {
+      "id": "carnian-bow",
+      "name": "Ultimate Lusaka's Bow",
+      "type": "weapon",
+      "subtype": "bow",
+      "category": "ultimate",
+      "iconKey": "lusakaBow",
+      "typeLabel": "Bow",
+      "elementHost": "weapon",
+      "upgradeLevel": 5,
+      "level": 75,
+      "attack": { "min": 429, "max": 474 },
+      "bonus": "Crit+23%, ATK+16%, ICD+63%, Wind vs Monster+3%",
+      "element": { "name": "Wind", "level": 6, "max": 20 },
+      "piercing": { "current": 2, "max": 10 },
+      "cards": { "current": 1, "max": 10 },
+      "jewels": { "unlocked": 1, "capacity": 2 },
+      "gearScore": 62,
+      "awake": [{ "label": "DEX", "value": "+14", "tone": "blue" }],
+      "skinPool": [
+        { "id": "bow-of-echoes", "iconKey": "bowOfEchoes", "name": "Ultimate Bow of Echoes", "typeLabel": "Bow", "qty": 1 },
+        { "id": "nemos-fury", "iconKey": "nemosFury", "name": "Ultimate Nemo's Fury", "typeLabel": "Bow", "qty": 1 },
+        { "id": "baroness-bow", "iconKey": "baronessBow", "name": "Ultimate Baroness", "typeLabel": "Bow", "qty": 1 }
+      ]
+    },
+    {
+      "id": "mystique-suit",
+      "name": "Bilari Suit",
+      "type": "armor",
+      "subtype": "suit",
+      "category": "normal",
+      "iconKey": "bilariSuitF",
+      "typeLabel": "Suit",
+      "elementHost": "suit",
+      "upgradeLevel": 7,
+      "level": 125,
+      "defense": { "min": 1743, "max": 1749 },
+      "setBonus": "DEF+20%, HP+20%, Melee Block+20%, Ranged Block+20%",
+      "element": { "name": "Wind", "level": 12, "max": 20 },
+      "piercing": { "current": 2, "max": 10 },
+      "cards": { "current": 2, "max": 10 },
+      "gearScore": 85,
+      "awake": [
+        { "label": "DEX", "value": "+15", "tone": "red" },
+        { "label": "HP", "value": "+8%", "tone": "blue" }
+      ],
+      "skinPool": [
+        { "id": "bileire-suit", "iconKey": "bileireSuitM", "name": "Bileire Suit", "typeLabel": "Suit", "qty": 1 },
+        { "id": "cruentus-look", "iconKey": "cruentusSuitM", "name": "(M) Cruentus Set", "typeLabel": "Suit", "qty": 1 }
+      ]
+    },
+    {
+      "id": "vigor-helm",
+      "name": "Bilari Helmet",
+      "type": "armor",
+      "subtype": "helmet",
+      "category": "normal",
+      "iconKey": "bilariHelmetF",
+      "typeLabel": "Helmet",
+      "elementHost": "suit",
+      "upgradeLevel": 4,
+      "level": 125,
+      "defense": { "min": 1141, "max": 1146 },
+      "gearScore": 28,
+      "awake": [{ "label": "STA", "value": "+6", "tone": "blue" }],
+      "skinPool": [
+        { "id": "cruentus-helm", "iconKey": "cruentusHelmetM", "name": "(M) Cruentus Helmet", "typeLabel": "Helmet", "qty": 1 }
+      ]
+    },
+    {
+      "id": "neo-hat",
+      "name": "(M) Cruentus Helmet",
+      "type": "fashion",
+      "subtype": "hat",
+      "iconKey": "cruentusHelmetM",
+      "typeLabel": "Fashion (Hat)",
+      "elementHost": "suit",
+      "upgradeLevel": 0,
+      "gearScore": 12,
+      "awake": [],
+      "info": [
+        { "label": "Category", "value": "Rare / CS" },
+        { "label": "Set", "value": "(M) Cruentus" },
+        { "label": "Source", "value": "Knight Armor (Wiki)" },
+        { "label": "Appearance", "value": "Original" }
+      ],
+      "skinPool": [
+        { "id": "cruentus-helm-f", "iconKey": "cruentusHelmetF", "name": "(F) Cruentus Helmet", "typeLabel": "Fashion (Hat)", "qty": 1 }
+      ]
+    },
+    {
+      "id": "intelli-ring",
+      "name": "Intelli Ring",
+      "type": "jewel",
+      "subtype": "ring",
+      "iconKey": "jewelryRing",
+      "typeLabel": "Ring",
+      "elementHost": "suit",
+      "upgradeLevel": 2,
+      "level": 90,
+      "bonus": "INT+1",
+      "gearScore": 8,
+      "awake": [],
+      "skinPool": []
+    },
+    {
+      "id": "gore-necklace",
+      "name": "Gore Necklace",
+      "type": "jewel",
+      "subtype": "necklace",
+      "iconKey": "jewelryNecklace",
+      "typeLabel": "Necklace",
+      "elementHost": "suit",
+      "upgradeLevel": 12,
+      "level": 90,
+      "bonus": "STR+2",
+      "gearScore": 22,
+      "awake": [{ "label": "STR", "value": "+2", "tone": "red" }],
+      "skinPool": []
+    },
+    {
+      "id": "ankou-cloak",
+      "name": "Fashion Wings",
+      "type": "fashion",
+      "subtype": "back",
+      "iconKey": "fashionWings",
+      "typeLabel": "Fashion (Back / Wings)",
+      "elementHost": "suit",
+      "upgradeLevel": 0,
+      "gearScore": 18,
+      "awake": [],
+      "info": [
+        { "label": "Category", "value": "Fashion / CS" },
+        { "label": "Slot", "value": "Back (wings)" },
+        { "label": "Source", "value": "gPotato Wiki (icon TBD)" },
+        { "label": "Appearance", "value": "Original" }
+      ],
+      "skinPool": [
+        { "id": "bilari-helm", "iconKey": "bilariHelmetF", "name": "Bilari Helmet", "typeLabel": "Fashion (Hat)", "qty": 1 }
+      ]
+    }
+  ]
+}

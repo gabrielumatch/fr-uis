@@ -1,5 +1,5 @@
-import { equippedItem } from "../../data/equipped-item";
-import { getItemSkinState, getSkinById } from "../../data/skin-management";
+import { equippedItem } from "../../data/workshop/equipped";
+import { getItemSkinState, getSkinById } from "../../data/systems/skin-management";
 import { ItemIcon } from "../../utils/item-icon";
 
 export function SkinSlotPair({ skinSelected }: { skinSelected: boolean }) {
@@ -19,7 +19,7 @@ export function SkinSlotPair({ skinSelected }: { skinSelected: boolean }) {
           alt={equippedItem.name}
         />
         <div className="transmute-slot__name">{equippedItem.name}</div>
-        <div className="transmute-slot__type muted">{equippedItem.type}</div>
+        <div className="transmute-slot__type muted">{equippedItem.typeLabel}</div>
         <p className="transmute-slot__hint muted">
           Keeps +{equippedItem.upgradeLevel}, stats, element & awake
         </p>
@@ -40,7 +40,7 @@ export function SkinSlotPair({ skinSelected }: { skinSelected: boolean }) {
               alt={selected.name}
             />
             <div className="transmute-slot__name">{selected.name}</div>
-            <div className="transmute-slot__type muted">{selected.type}</div>
+            <div className="transmute-slot__type muted">{selected.typeLabel}</div>
           </>
         ) : (
           <span className="transmute-slot__empty muted">Pick a skin item below</span>

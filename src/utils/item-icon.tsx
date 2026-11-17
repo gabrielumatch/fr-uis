@@ -1,4 +1,4 @@
-import { FLYFF_WIKI_ORIGIN } from "../data/flyff-wiki-icons";
+import { FLYFF_WIKI_ORIGIN } from "../data/assets/wiki-icons";
 
 export function resolveIconSrc(icon: string): string {
   if (!icon) return "";

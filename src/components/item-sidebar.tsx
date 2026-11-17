@@ -2,7 +2,7 @@ import { ItemCard } from "./item-card";
 import { StatList } from "./stat-list";
 import { AwakeAttributes } from "./awake-attributes";
 import { GearScore } from "./gear-score";
-import type { WorkshopItem } from "../data/workshop-item";
+import type { WorkshopItem } from "../data/items/workshop-item";
 
 export function ItemSidebar({ item }: { item: WorkshopItem }) {
   return (

@@ -3,24 +3,24 @@ import {
   autoRefillAttemptPlan,
   clearAttemptPlan,
   type AttemptPlanKey,
-} from "./data/attempt-plans";
+} from "./data/systems/attempt-plans";
 import {
   applyElementChange,
   elementUpgradeState,
   getElementById,
-} from "./data/element-upgrade";
+} from "./data/systems/element-upgrade";
 import {
   insertJewelIntoSlot,
   removeJewelFromSlot,
   setSelectedJewelId,
-} from "./data/jewel-management";
+} from "./data/systems/jewel-management";
 import {
   applySkin,
   removeSkin,
   setSelectedSkinId,
   syncSkinToEquippedItem,
   getItemSkinState,
-} from "./data/skin-management";
+} from "./data/systems/skin-management";
 import { WorkshopHeader } from "./components/workshop-header";
 import { TabBar } from "./components/tab-bar";
 import { ItemSidebar } from "./components/item-sidebar";
@@ -141,15 +141,6 @@ export function App() {
         const skinState = getItemSkinState();
         setSelectedSkinId(id === skinState.selectedSkinId ? null : id);
         workshop.bump();
-      }
-      return;
-    }
-
-    const invTabBtn = target.closest("[data-inventory-tab]");
-    if (invTabBtn instanceof HTMLButtonElement) {
-      const tabId = invTabBtn.dataset.inventoryTab;
-      if (tabId) {
-        workshop.setInventoryTab(tabId as import("./data/inventory-display").InventoryTabId);
       }
       return;
     }
@@ -329,6 +320,7 @@ export function App() {
       <InventorySection
         activeId={workshop.activeWorkshopItemId}
         tabId={workshop.inventoryTabId}
+        onInventoryTabChange={workshop.setInventoryTab}
       />
     </div>
   );

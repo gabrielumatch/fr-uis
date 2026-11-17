@@ -1,5 +1,5 @@
-import { equippedItem } from "../../data/equipped-item";
-import { getItemSkinState } from "../../data/skin-management";
+import { equippedItem } from "../../data/workshop/equipped";
+import { getItemSkinState } from "../../data/systems/skin-management";
 import { ItemIcon } from "../../utils/item-icon";
 
 export function SkinPicker() {
@@ -11,7 +11,7 @@ export function SkinPicker() {
     return (
       <p className="upgrade-sub-hint muted">
         No compatible skin items in inventory. Same equipment type only (
-        <strong>{equippedItem.type}</strong>).
+        <strong>{equippedItem.typeLabel}</strong>).
       </p>
     );
   }

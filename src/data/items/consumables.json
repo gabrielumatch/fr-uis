@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "sunstone",
+      "name": "Sunstone",
+      "type": "consumable",
+      "subtype": "upgrade-stone",
+      "category": "upgrade",
+      "iconKey": "sunstone",
+      "typeLabel": "Upgrade Stone",
+      "recipeSlot": "material"
+    },
+    {
+      "id": "moonstone",
+      "name": "Moonstone",
+      "type": "consumable",
+      "subtype": "upgrade-stone",
+      "category": "upgrade",
+      "iconKey": "moonstone",
+      "typeLabel": "Upgrade Stone",
+      "recipeSlot": "material"
+    },
+    {
+      "id": "oricalkum",
+      "name": "Shining Oricalkum",
+      "type": "consumable",
+      "subtype": "upgrade-stone",
+      "category": "upgrade",
+      "iconKey": "shiningOricalkum",
+      "typeLabel": "Ultimate Upgrade Stone",
+      "recipeSlot": "material"
+    },
+    {
+      "id": "lightning-stone",
+      "name": "Lightning Stone",
+      "type": "consumable",
+      "subtype": "upgrade-stone",
+      "category": "upgrade",
+      "iconEmoji": "⚡",
+      "typeLabel": "Fashion Upgrade Stone",
+      "recipeSlot": "material"
+    },
+    {
+      "id": "baruna-balance",
+      "name": "Stone of Balance",
+      "type": "consumable",
+      "subtype": "upgrade-stone",
+      "category": "upgrade",
+      "iconEmoji": "⚖️",
+      "typeLabel": "Baruna Upgrade Stone",
+      "recipeSlot": "material"
+    },
+    {
+      "id": "sprotect",
+      "name": "Scroll of SProtect",
+      "type": "consumable",
+      "subtype": "upgrade-scroll",
+      "category": "upgrade",
+      "iconKey": "scrollSProtect",
+      "typeLabel": "Upgrade Protect Scroll",
+      "recipeSlot": "protect"
+    },
+    {
+      "id": "aprotect",
+      "name": "Scroll of AProtect",
+      "type": "consumable",
+      "subtype": "upgrade-scroll",
+      "category": "upgrade",
+      "iconKey": "scrollAProtect",
+      "typeLabel": "Accessory Protect Scroll",
+      "recipeSlot": "protect"
+    },
+    {
+      "id": "xprotect",
+      "name": "Scroll of XProtect",
+      "type": "consumable",
+      "subtype": "upgrade-scroll",
+      "category": "upgrade",
+      "iconKey": "scrollXProtect",
+      "typeLabel": "Ultimate Protect Scroll",
+      "recipeSlot": "protect"
+    },
+    {
+      "id": "baruna-blessing",
+      "name": "Blessing of Baruna",
+      "type": "consumable",
+      "subtype": "upgrade-scroll",
+      "category": "upgrade",
+      "iconEmoji": "📜",
+      "typeLabel": "Baruna Protect Scroll",
+      "recipeSlot": "protect"
+    },
+    {
+      "id": "smelting-scroll",
+      "name": "Scroll of Smelting",
+      "type": "consumable",
+      "subtype": "smelting",
+      "category": "upgrade",
+      "iconEmoji": "✨",
+      "typeLabel": "Smelting (+10% chance)",
+      "recipeSlot": "smelting"
+    }
+  ]
+}

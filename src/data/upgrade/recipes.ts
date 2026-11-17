@@ -2,7 +2,7 @@ import type {
   UpgradeMaterialKey,
   UpgradeProtectKey,
   WeaponJewelSocketRule,
-} from "./item-taxonomy";
+} from "../items/types";
 
 /**
  * Receita de Safe Upgrade (`+`) — gPotato v21.

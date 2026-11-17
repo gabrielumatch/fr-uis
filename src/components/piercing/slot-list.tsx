@@ -1,4 +1,4 @@
-import { getPiercingCounts, piercingWeaponConfig } from "../../data/piercing-slots";
+import { getPiercingCounts, piercingWeaponConfig } from "../../data/systems/piercing-slots";
 import { PiercingSlotRow } from "./slot-row";
 
 export function PiercingSlotList({

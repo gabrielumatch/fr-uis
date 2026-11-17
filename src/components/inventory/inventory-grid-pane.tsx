@@ -1,10 +1,10 @@
-import { getWorkshopItemById } from "../../data/equipped-item";
+import { getWorkshopItemById } from "../../data/workshop/equipped";
 import {
   INVENTORY_TABS,
   getInventoryGridCells,
   resolveInventoryCellWorkshopId,
   type InventoryTabId,
-} from "../../data/inventory-display";
+} from "../../data/inventory/display";
 import { InventorySlot } from "./inventory-slot";
 
 function BagCell({
@@ -50,9 +50,11 @@ function BagCell({
 export function InventoryGridPane({
   tabId,
   activeWorkshopItemId,
+  onTabChange,
 }: {
   tabId: InventoryTabId;
   activeWorkshopItemId: string;
+  onTabChange: (tab: InventoryTabId) => void;
 }) {
   const cells = getInventoryGridCells(tabId);
 
@@ -64,8 +66,8 @@ export function InventoryGridPane({
             key={tab.id}
             type="button"
             className={`inv-tabs__btn${tab.id === tabId ? " is-active" : ""}`}
-            data-inventory-tab={tab.id}
             aria-selected={tab.id === tabId}
+            onClick={() => onTabChange(tab.id)}
           >
             {tab.label}
           </button>

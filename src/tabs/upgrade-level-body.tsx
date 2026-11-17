@@ -1,6 +1,6 @@
-import { equippedItem } from "../data/equipped-item";
-import { getMaxUpgradeLevel } from "../data/item-taxonomy";
-import { getAttemptRows } from "../data/attempt-plans";
+import { equippedItem } from "../data/workshop/equipped";
+import { getMaxUpgradeLevel } from "../data/upgrade/rules";
+import { getAttemptRows } from "../data/systems/attempt-plans";
 import { UPGRADE_SUB_TABS } from "./upgrade-sub-tabs";
 import { UpgradeTarget } from "../components/upgrade/upgrade-target";
 import { AttemptTable } from "../components/upgrade/attempt-table";

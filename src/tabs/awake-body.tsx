@@ -1,5 +1,5 @@
-import { awakeManagementState } from "../data/awake-management";
-import { equippedItem } from "../data/equipped-item";
+import { awakeManagementState } from "../data/systems/awake-management";
+import { equippedItem } from "../data/workshop/equipped";
 import { AwakeTargetItem } from "../components/awake/awake-target-item";
 import { AwakeNotice } from "../components/awake/awake-notice";
 import { AwakeResults } from "../components/awake/awake-results";

@@ -1,4 +1,4 @@
-import { jewelTypes } from "../../data/jewel-management";
+import { jewelTypes } from "../../data/systems/jewel-management";
 
 export function JewelInventory({
   inventory,

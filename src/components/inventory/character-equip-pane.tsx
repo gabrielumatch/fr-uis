@@ -2,11 +2,11 @@ import {
   characterEquippedSlots,
   characterGearScore,
   type EquipSlot,
-} from "../../data/inventory-display";
+} from "../../data/inventory/display";
 import {
   activeWorkshopItemId,
   getWorkshopItemById,
-} from "../../data/equipped-item";
+} from "../../data/workshop/equipped";
 import { InventorySlot } from "./inventory-slot";
 
 function EquipSlotCell({ slot }: { slot: EquipSlot | Record<string, never> }) {

@@ -1,4 +1,4 @@
-import type { PiercingSlot } from "../../data/piercing-slots";
+import type { PiercingSlot } from "../../data/systems/piercing-slots";
 
 export function PiercingSlotRow({ slot }: { slot: PiercingSlot }) {
   const label = `Slot ${String(slot.index).padStart(2, "0")}`;
