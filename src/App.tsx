@@ -45,6 +45,7 @@ import { getItemById } from "./data/items/catalog";
 import { opensWorkshopUpgrade } from "./data/items/item";
 import {
   coerceWorkshopRoute,
+  getSkinsSubTabIds,
   getWorkshopTabIds,
   itemOpensWorkshopUi,
   resolveWorkshopSidebarItem,
@@ -70,21 +71,25 @@ export function App() {
   const { route, setRoute } = useWorkshopRoute();
   const workshop = useWorkshop();
   const equipped = workshop.equippedItem;
+  const hasSkinApplied = equipped.workshopSkin.hasSkinApplied;
 
   const effectiveRoute = useMemo(
     () => coerceWorkshopRoute(route, equipped),
-    [route, equipped],
+    [route, equipped, hasSkinApplied],
   );
 
   useEffect(() => {
     const next = coerceWorkshopRoute(route, equipped);
     if (
       next.tabId !== route.tabId ||
-      next.upgradeSub !== route.upgradeSub
+      next.upgradeSub !== route.upgradeSub ||
+      next.piercingSub !== route.piercingSub ||
+      next.elementSub !== route.elementSub ||
+      next.skinsSub !== route.skinsSub
     ) {
       setRoute(next);
     }
-  }, [equipped.id, route.tabId, route.upgradeSub, setRoute, equipped]);
+  }, [equipped.id, hasSkinApplied, route, setRoute, equipped]);
 
   let tab = getTabById(effectiveRoute.tabId) ?? getTabById(DEFAULT_TAB);
   if (!tab) return null;
@@ -112,7 +117,7 @@ export function App() {
     Body = view.Body;
   }
   if (tab.id === "skins") {
-    const view = getSkinsPanelView(effectiveRoute.skinsSub);
+    const view = getSkinsPanelView(effectiveRoute.skinsSub, equipped);
     ({ panelTitle, panelSubtitle, materials, materialsVariant, materialsTitle } = view);
     Body = view.Body;
   }
@@ -198,10 +203,15 @@ export function App() {
 
     const skinsSubBtn = target.closest("[data-skins-sub]");
     if (skinsSubBtn instanceof HTMLButtonElement) {
+      const skinsSub =
+        skinsSubBtn.dataset.skinsSub === "remove" ? ("remove" as const) : ("apply" as const);
+      if (!getSkinsSubTabIds(equipped).includes(skinsSub)) {
+        return;
+      }
       setRoute({
         ...DEFAULT_ROUTE,
         tabId: "skins",
-        skinsSub: skinsSubBtn.dataset.skinsSub === "remove" ? "remove" : "apply",
+        skinsSub,
       });
       return;
     }

@@ -1,4 +1,5 @@
 import { getTabById, TAB_HASH_ALIASES } from "../../tabs/registry";
+import { equipmentCatalog, getEquipmentById } from "../items/catalog";
 import { resolveInventoryTab, type InventoryTabId } from "../inventory/display";
 import type { WorkshopRoute } from "./route-types";
 import { DEFAULT_ROUTE } from "./route-types";
@@ -7,12 +8,24 @@ const Q = {
   workshopTab: "workshop_tab",
   subtab: "subtab",
   inventory: "inventory",
+  workshopItem: "workshop_item",
 } as const;
 
 export type WorkshopAppUrlState = {
   route: WorkshopRoute;
   inventoryTab: InventoryTabId;
+  workshopItemId: string;
 };
+
+export function defaultWorkshopItemId(): string {
+  return equipmentCatalog[0]?.id ?? "";
+}
+
+function resolveWorkshopItemId(raw: string | null): string {
+  const fallback = defaultWorkshopItemId();
+  if (!raw?.trim()) return fallback;
+  return getEquipmentById(raw.trim()) ? raw.trim() : fallback;
+}
 
 function normalizeUpgradeSub(raw: string): WorkshopRoute["upgradeSub"] {
   if (raw === "jewels" || raw === "jewel" || raw === "jwel") return "jewels";
@@ -126,7 +139,9 @@ export function parseWorkshopAppUrl(href = location.href): WorkshopAppUrlState {
     ? resolveInventoryTab(inventoryRaw === "weapon" ? "weapons" : inventoryRaw)
     : "weapons";
 
-  return { route, inventoryTab };
+  const workshopItemId = resolveWorkshopItemId(params.get(Q.workshopItem));
+
+  return { route, inventoryTab, workshopItemId };
 }
 
 export function serializeWorkshopAppUrl(
@@ -137,6 +152,11 @@ export function serializeWorkshopAppUrl(
   url.searchParams.set(Q.workshopTab, state.route.tabId);
   url.searchParams.set(Q.subtab, subtabFromRoute(state.route));
   url.searchParams.set(Q.inventory, state.inventoryTab);
+  if (state.workshopItemId) {
+    url.searchParams.set(Q.workshopItem, state.workshopItemId);
+  } else {
+    url.searchParams.delete(Q.workshopItem);
+  }
   url.hash = "";
   return `${url.pathname}${url.search}`;
 }

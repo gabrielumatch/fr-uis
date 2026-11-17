@@ -1277,6 +1277,13 @@
   color: #fff2d5;
 }
 
+.sub-tab-bar__btn:disabled,
+.sub-tab-bar__btn.is-disabled:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: grayscale(0.25);
+}
+
 .upgrade-sub-hint {
   margin: 0 0 12px;
   font-size: 11px;

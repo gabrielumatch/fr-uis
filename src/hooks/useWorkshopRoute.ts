@@ -2,6 +2,7 @@ import { useCallback, useSyncExternalStore } from "react";
 import type { InventoryTabId } from "../data/inventory/types";
 import { DEFAULT_ROUTE, type WorkshopRoute } from "../data/workshop/route-types";
 import {
+  defaultWorkshopItemId,
   parseWorkshopAppUrl,
   urlSnapshotKey,
   writeWorkshopAppUrl,
@@ -19,9 +20,11 @@ export type {
 export { DEFAULT_ROUTE } from "../data/workshop/route-types";
 
 let cachedKey = "";
+
 let cachedState: WorkshopAppUrlState = {
   route: DEFAULT_ROUTE,
   inventoryTab: "weapons",
+  workshopItemId: defaultWorkshopItemId(),
 };
 
 function readAppStateFromUrl(): WorkshopAppUrlState {
@@ -50,7 +53,18 @@ function subscribeUrl(onChange: () => void) {
 }
 
 function getServerSnapshot(): WorkshopAppUrlState {
-  return { route: DEFAULT_ROUTE, inventoryTab: "weapons" };
+  return {
+    route: DEFAULT_ROUTE,
+    inventoryTab: "weapons",
+    workshopItemId: defaultWorkshopItemId(),
+  };
+}
+
+function mergeAndWriteUrl(partial: Partial<WorkshopAppUrlState>): void {
+  const current = readAppStateFromUrl();
+  writeWorkshopAppUrl({ ...current, ...partial });
+  invalidateUrlCache();
+  window.dispatchEvent(new PopStateEvent("popstate"));
 }
 
 export function readRouteFromUrl(): WorkshopRoute {
@@ -59,9 +73,7 @@ export function readRouteFromUrl(): WorkshopRoute {
 
 /** @deprecated hashes — use query params via writeWorkshopAppUrl */
 export function writeRouteToUrl(route: WorkshopRoute): void {
-  const current = readAppStateFromUrl();
-  writeWorkshopAppUrl({ route, inventoryTab: current.inventoryTab });
-  invalidateUrlCache();
+  mergeAndWriteUrl({ route });
 }
 
 export function useWorkshopRoute() {
@@ -72,24 +84,24 @@ export function useWorkshopRoute() {
   );
 
   const setRoute = useCallback((next: WorkshopRoute) => {
-    const inventoryTab = readAppStateFromUrl().inventoryTab;
-    writeWorkshopAppUrl({ route: next, inventoryTab });
-    invalidateUrlCache();
-    window.dispatchEvent(new PopStateEvent("popstate"));
+    mergeAndWriteUrl({ route: next });
   }, []);
 
   const setInventoryTab = useCallback((inventoryTab: InventoryTabId) => {
-    const route = readAppStateFromUrl().route;
-    writeWorkshopAppUrl({ route, inventoryTab });
-    invalidateUrlCache();
-    window.dispatchEvent(new PopStateEvent("popstate"));
+    mergeAndWriteUrl({ inventoryTab });
+  }, []);
+
+  const setWorkshopItemId = useCallback((workshopItemId: string) => {
+    mergeAndWriteUrl({ workshopItemId });
   }, []);
 
   return {
     route: appState.route,
     inventoryTab: appState.inventoryTab,
+    workshopItemId: appState.workshopItemId,
     setRoute,
     setInventoryTab,
+    setWorkshopItemId,
     DEFAULT_ROUTE,
   };
 }

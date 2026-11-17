@@ -5,7 +5,9 @@ import {
   opensWorkshopUpgrade,
 } from "../items/item";
 import { skinFitsHost } from "../systems/skin-rules";
+import type { SkinsSub } from "./route-types";
 import type { WorkshopRoute } from "./route-types";
+import { workshopGearProfile } from "./workshop-capabilities";
 
 export const WORKSHOP_MAIN_TAB_IDS = [
   "upgrade",
@@ -23,20 +25,24 @@ export function isAccessoryJewelryItem(item: WorkshopItem): boolean {
 
 /** Abas principais do workshop para o item equipado. */
 export function getWorkshopTabIds(item: WorkshopItem): WorkshopMainTabId[] {
-  if (isAccessoryJewelryItem(item)) {
-    return ["upgrade"];
-  }
-  return [...WORKSHOP_MAIN_TAB_IDS];
+  return [...workshopGearProfile(item).mainTabs];
 }
 
 /** Sub-abas em Upgrade — jewelry só Safe +, sem jewel sockets. */
 export function getUpgradeSubTabIds(
   item: WorkshopItem,
 ): readonly ("level" | "jewels")[] {
-  if (isAccessoryJewelryItem(item)) {
-    return ["level"];
-  }
-  return ["level", "jewels"];
+  return workshopGearProfile(item).upgradeSubs;
+}
+
+/** Sub-abas de Skins abríveis na URL — apply OU remove, conforme o estado do look. */
+export function getSkinsSubTabIds(item: WorkshopItem): readonly SkinsSub[] {
+  if (item.workshopSkin.hasSkinApplied) return ["remove"];
+  return ["apply"];
+}
+
+export function defaultSkinsSub(item: WorkshopItem): SkinsSub {
+  return item.workshopSkin.hasSkinApplied ? "remove" : "apply";
 }
 
 export function coerceWorkshopRoute(
@@ -49,14 +55,20 @@ export function coerceWorkshopRoute(
     : "upgrade";
 
   let upgradeSub = route.upgradeSub;
-  if (tabId === "upgrade" && isAccessoryJewelryItem(item)) {
+  if (tabId === "upgrade" && !workshopGearProfile(item).upgradeSubs.includes("jewels")) {
     upgradeSub = "level";
+  }
+
+  let skinsSub = route.skinsSub;
+  if (tabId === "skins" && !getSkinsSubTabIds(item).includes(skinsSub)) {
+    skinsSub = defaultSkinsSub(item);
   }
 
   return {
     ...route,
     tabId,
     upgradeSub,
+    skinsSub,
   };
 }
 

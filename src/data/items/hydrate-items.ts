@@ -21,6 +21,11 @@ import {
   maxJewelSlotsForRule,
   unlockedJewelSlotCount,
 } from "../systems/jewel-slot-rules";
+import {
+  isArmorSetPieceSubtype,
+  workshopGearProfileFromParts,
+  type WorkshopGearProfile,
+} from "../workshop/workshop-capabilities";
 
 type WikiIconKey = keyof typeof WIKI;
 
@@ -65,6 +70,24 @@ export function assertItemRecord(record: ItemRecord): void {
         throw new Error(
           `Item "${record.id}": armor.category deve ser normal|green|ultimate|baruna (receita +), recebeu "${record.category}"`,
         );
+      }
+      if (isArmorSetPieceSubtype(record.subtype)) {
+        if (record.element || record.piercing || record.cards) {
+          throw new Error(
+            `Item "${record.id}": ${record.subtype} de set não pode ter element/piercing/cards no JSON`,
+          );
+        }
+      }
+      if (record.subtype === "suit") {
+        if (record.piercing && record.piercing.max > 4) {
+          throw new Error(`Item "${record.id}": suit piercing.max máximo 4`);
+        }
+        if (record.cards && record.cards.max > 4) {
+          throw new Error(`Item "${record.id}": suit cards.max máximo 4`);
+        }
+        if (record.element && record.element.max > 20) {
+          throw new Error(`Item "${record.id}": suit element.max máximo 20`);
+        }
       }
       break;
     case "jewel":
@@ -185,6 +208,7 @@ function formatSlot(p: { current: number; max: number }): string {
 function buildGearStats(
   record: ItemRecord,
   upgrade: ReturnType<typeof upgradeProfile>,
+  profile?: WorkshopGearProfile,
 ): StatRow[] {
   const rows: StatRow[] = [{ label: "Level", value: String(record.level ?? 0) }];
   if (record.attack) {
@@ -195,7 +219,12 @@ function buildGearStats(
   }
   if (record.bonus) rows.push({ label: "Bonus", value: record.bonus });
   if (record.setBonus) rows.push({ label: "Set bonus (4/4)", value: record.setBonus });
-  if (record.element) {
+  const showElement = profile?.allowsElement ?? Boolean(record.element);
+  const showPiercing =
+    (profile?.piercingSlotMax ?? 0) > 0 && Boolean(record.piercing);
+  const showCards = (profile?.cardSlotMax ?? 0) > 0 && Boolean(record.cards);
+
+  if (showElement && record.element) {
     rows.push({
       label: "Element",
       value: `${record.element.name} ${record.element.level}/${record.element.max}`,
@@ -205,8 +234,12 @@ function buildGearStats(
     label: "Upgrade",
     value: formatUpgradeProgress(record.upgradeLevel ?? 0, { upgrade }),
   });
-  if (record.piercing) rows.push({ label: "Piercing", value: formatSlot(record.piercing) });
-  if (record.cards) rows.push({ label: "Cards", value: formatSlot(record.cards) });
+  if (showPiercing && record.piercing) {
+    rows.push({ label: "Piercing", value: formatSlot(record.piercing) });
+  }
+  if (showCards && record.cards) {
+    rows.push({ label: "Cards", value: formatSlot(record.cards) });
+  }
   if (record.type === "weapon") {
     const rule = upgrade.weaponJewelSocketRule;
     const capacity = maxJewelSlotsForRule(rule);
@@ -321,26 +354,28 @@ function hydrateWorkshopItem(
   switch (record.type) {
     case "weapon": {
       const upgrade = upgradeProfile(gearCategoryToRecipeId(record.category as import("./types").GearItemCategory));
+      const profile = workshopGearProfileFromParts("weapon", record.subtype);
       const item: WorkshopWeaponItem = {
         ...base,
         type: "weapon",
         subtype: record.subtype as WeaponSubtype,
         category: record.category as import("./types").GearItemCategory,
         upgrade,
-        stats: buildGearStats(record, upgrade),
+        stats: buildGearStats(record, upgrade, profile),
         combat: combatFromRecord(record),
       };
       return item;
     }
     case "armor": {
       const upgrade = upgradeProfile(gearCategoryToRecipeId(record.category as import("./types").GearItemCategory));
+      const profile = workshopGearProfileFromParts("armor", record.subtype);
       const item: WorkshopArmorItem = {
         ...base,
         type: "armor",
         subtype: record.subtype as ArmorSubtype,
         category: record.category as import("./types").GearItemCategory,
         upgrade,
-        stats: buildGearStats(record, upgrade),
+        stats: buildGearStats(record, upgrade, profile),
         combat: combatFromRecord(record),
       };
       return item;

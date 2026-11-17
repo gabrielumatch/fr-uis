@@ -2,6 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -16,6 +17,8 @@ import {
   resolveInventoryTab,
   type InventoryTabId,
 } from "../data/inventory/display";
+import { getItemById } from "../data/items/catalog";
+import { isWorkshopItem } from "../data/items/item";
 import { useWorkshopRoute } from "../hooks/useWorkshopRoute";
 
 type WorkshopContextValue = {
@@ -31,10 +34,23 @@ type WorkshopContextValue = {
 const WorkshopContext = createContext<WorkshopContextValue | null>(null);
 
 export function WorkshopProvider({ children }: { children: ReactNode }) {
-  const { inventoryTab: urlInventoryTab, setInventoryTab: setInventoryTabUrl } =
-    useWorkshopRoute();
+  const {
+    inventoryTab: urlInventoryTab,
+    workshopItemId: urlWorkshopItemId,
+    setInventoryTab: setInventoryTabUrl,
+    setWorkshopItemId,
+  } = useWorkshopRoute();
   const [selectionTick, setSelectionTick] = useState(0);
   const bump = useCallback(() => setSelectionTick((n) => n + 1), []);
+
+  useEffect(() => {
+    if (!urlWorkshopItemId || urlWorkshopItemId === activeWorkshopItemId) return;
+    const item = getItemById(urlWorkshopItemId);
+    if (item && isWorkshopItem(item)) {
+      selectCatalogItem(urlWorkshopItemId);
+      setSelectionTick((n) => n + 1);
+    }
+  }, [urlWorkshopItemId]);
 
   const value = useMemo<WorkshopContextValue>(
     () => ({
@@ -53,14 +69,20 @@ export function WorkshopProvider({ children }: { children: ReactNode }) {
       bump,
       selectItem: (id) => {
         const ok = selectCatalogItem(id);
-        if (ok) setSelectionTick((n) => n + 1);
+        if (ok) {
+          setSelectionTick((n) => n + 1);
+          const item = getItemById(id);
+          if (item && isWorkshopItem(item) && id !== urlWorkshopItemId) {
+            setWorkshopItemId(id);
+          }
+        }
         return ok;
       },
       setInventoryTab: (tab: InventoryTabId) => {
         setInventoryTabUrl(resolveInventoryTab(tab));
       },
     }),
-    [selectionTick, urlInventoryTab, bump, setInventoryTabUrl],
+    [selectionTick, urlInventoryTab, urlWorkshopItemId, bump, setInventoryTabUrl, setWorkshopItemId],
   );
 
   return <WorkshopContext.Provider value={value}>{children}</WorkshopContext.Provider>;

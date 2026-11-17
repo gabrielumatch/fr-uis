@@ -1,6 +1,6 @@
 import { ItemIcon } from "../utils/item-icon";
 import { PanelSubTabBar } from "../components/upgrade/sub-tab-bar";
-import { SKINS_SUB_TABS } from "./skins-sub-tabs";
+import { skinsSubTabsForItem } from "./skins-sub-tabs";
 import { equippedItem } from "../data/workshop/equipped";
 import { getItemSkinState } from "../data/systems/skin-management";
 
@@ -23,7 +23,7 @@ export function SkinsRemoveBody() {
   return (
     <>
       <PanelSubTabBar
-        tabs={[...SKINS_SUB_TABS]}
+        tabs={skinsSubTabsForItem(equippedItem)}
         activeId="remove"
         dataAttr="skins-sub"
         ariaLabel="Skins"

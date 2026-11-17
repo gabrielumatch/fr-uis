@@ -1,5 +1,6 @@
 import { PanelSubTabBar } from "../components/upgrade/sub-tab-bar";
-import { SKINS_SUB_TABS } from "./skins-sub-tabs";
+import { skinsSubTabsForItem } from "./skins-sub-tabs";
+import { equippedItem } from "../data/workshop/equipped";
 import { SkinSlotPair } from "../components/skins/skin-slot-pair";
 import { SkinPicker } from "../components/skins/skin-picker";
 import { getItemSkinState, getSkinById } from "../data/systems/skin-management";
@@ -31,7 +32,7 @@ export function SkinsApplyBody() {
   return (
     <>
       <PanelSubTabBar
-        tabs={[...SKINS_SUB_TABS]}
+        tabs={skinsSubTabsForItem(equippedItem)}
         activeId="apply"
         dataAttr="skins-sub"
         ariaLabel="Skins"

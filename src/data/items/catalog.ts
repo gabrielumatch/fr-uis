@@ -9,6 +9,7 @@ import {
   isWorkshopItem,
 } from "./item";
 import { skinFitsHost } from "../systems/skin-rules";
+import { workshopGearProfile } from "../workshop/workshop-capabilities";
 import { hydrateItemsCatalog, parseItemsCatalog } from "./hydrate-items";
 import {
   UPGRADE_RECIPE_PAIRS,
@@ -100,6 +101,28 @@ for (const item of equipmentCatalog) {
     throw new Error(
       `Item "${item.id}": materiais de upgrade inválidos (category "${item.category}" → ${canonical.material}+${canonical.protect ?? "—"})`,
     );
+  }
+
+  const profile = workshopGearProfile(item);
+
+  if (item.type === "armor" && profile.piercingSlotMax === 0) {
+    if (item.stats.some((s) => s.label === "Element")) {
+      throw new Error(`Item "${item.id}": peça de set não deve exibir Element`);
+    }
+    if (item.stats.some((s) => s.label === "Piercing" || s.label === "Cards")) {
+      throw new Error(`Item "${item.id}": peça de set não deve exibir Piercing/Cards`);
+    }
+  }
+
+  if (item.type === "armor" && item.subtype === "suit") {
+    const pierce = item.stats.find((s) => s.label === "Piercing");
+    const cards = item.stats.find((s) => s.label === "Cards");
+    if (pierce && !pierce.value.includes("/ 4")) {
+      throw new Error(`Item "${item.id}": suit piercing deve ter max 4`);
+    }
+    if (cards && !cards.value.includes("/ 4")) {
+      throw new Error(`Item "${item.id}": suit cards deve ter max 4`);
+    }
   }
 
   if (item.type === "weapon") {

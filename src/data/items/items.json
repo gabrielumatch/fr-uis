@@ -597,11 +597,11 @@
       },
       "piercing": {
         "current": 2,
-        "max": 10
+        "max": 4
       },
       "cards": {
         "current": 2,
-        "max": 10
+        "max": 4
       },
       "gearScore": 85,
       "awake": [

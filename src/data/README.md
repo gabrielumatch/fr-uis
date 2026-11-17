@@ -3,7 +3,7 @@
 | Pasta | Conteúdo |
 |-------|----------|
 | **`items/`** | **`items.json`** — catálogo único (weapon, armor, jewel, fashion, **wing**, **consumable**, **skin**); `types.ts`, `item.ts`, `hydrate-items.ts`, `catalog.ts` |
-| **`workshop/`** | Item equipado na UI |
+| **`workshop/`** | Item equipado na UI; URL (`route-url.ts`): `workshop_tab`, `subtab`, `inventory`, **`workshop_item`** (id do gear no painel) |
 | **`upgrade/`** | Receitas `+` e painel de materiais |
 | **`inventory/`** | Grid do bag |
 | **`assets/`** | Ícones wiki |
@@ -34,6 +34,8 @@ Testes: `src/data/systems/jewel-slot-rules.test.ts`.
 **Fashion** (`type: fashion`, `category: fashion`) → Lightning Stone (só peças CS que aceitam + de fashion). **Wings** (`type: wing`, `category: wing`) — slot costas; **sem** aba Upgrade (`opensWorkshopUpgrade` = false). **Helmet/armor** de set = `type: armor`, `category: normal` → Sunstone + SProtect.
 
 Ex.: `hotter-sword` = `type: weapon`, `subtype: two-handed-sword`, `category: normal` → Sunstone + SProtect. Ultimate (Lusaka, etc.) = `category: ultimate` → Oricalkum + XProtect.
+
+**Armor workshop** (`workshop-capabilities.ts`): elmo/luva/bota/escudo → só Upgrade (+ nível), Awake, Skins. **Suit** → também Element (max 20) e Piercing/Cartas (max 4 cada), sem sub-aba Jewels. Armas = abas completas + jewels.
 
 **Jewelry** (`type: jewel`, ring/necklace/earring): só aba **Accessory Upgrade** — Moonstone + AProtect. Sem Element, Piercing, Awake, Skins nem sub-aba Jewels (sockets de arma).
 

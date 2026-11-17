@@ -6,6 +6,7 @@ import { getBagSkinsForWorkshopHost } from "../inventory/bag-skins";
 import {
   coerceWorkshopRoute,
   filterSkinsForWorkshopHost,
+  getSkinsSubTabIds,
   getUpgradeSubTabIds,
   getWorkshopTabIds,
   isInventoryOnlyCatalogItem,
@@ -73,6 +74,33 @@ describe("accessory jewelry (ring/necklace/earring)", () => {
     );
     expect(coerced.tabId).toBe("upgrade");
     expect(coerced.upgradeSub).toBe("level");
+  });
+});
+
+describe("skins sub-tabs", () => {
+  it("remove sub-tab not navigable until a skin is applied", () => {
+    const suit = requireWorkshopItem("mystique-suit");
+    expect(suit.workshopSkin.hasSkinApplied).toBe(false);
+    expect(getSkinsSubTabIds(suit)).toEqual(["apply"]);
+
+    const coerced = coerceWorkshopRoute(
+      { ...DEFAULT_ROUTE, tabId: "skins", skinsSub: "remove" },
+      suit,
+    );
+    expect(coerced.skinsSub).toBe("apply");
+  });
+
+  it("apply not navigable while a skin is applied", () => {
+    const suit = requireWorkshopItem("mystique-suit");
+    suit.workshopSkin.hasSkinApplied = true;
+    expect(getSkinsSubTabIds(suit)).toEqual(["remove"]);
+
+    const coerced = coerceWorkshopRoute(
+      { ...DEFAULT_ROUTE, tabId: "skins", skinsSub: "apply" },
+      suit,
+    );
+    expect(coerced.skinsSub).toBe("remove");
+    suit.workshopSkin.hasSkinApplied = false;
   });
 });
 

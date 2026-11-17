@@ -5,6 +5,9 @@ import "../styles/base.css";
 import "../styles/components.css";
 import { App } from "./App";
 import { WorkshopProvider } from "./context/WorkshopContext";
+import { bootstrapWorkshopFromUrl } from "./data/workshop/bootstrap-url";
+
+bootstrapWorkshopFromUrl();
 
 const root = document.getElementById("root");
 if (root) {

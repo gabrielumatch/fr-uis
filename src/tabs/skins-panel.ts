@@ -5,6 +5,9 @@ import {
 import { getSkinsRemoveMaterials, SkinsRemoveBody } from "./skins-remove-body";
 import { SKINS_SUB_TABS } from "./skins-sub-tabs";
 import type { TabDefinition } from "./registry";
+import type { WorkshopItem } from "../data/items/item";
+import { equippedItem } from "../data/workshop/equipped";
+import { getSkinsSubTabIds } from "../data/workshop/ui-rules";
 
 export type SkinsSubId = (typeof SKINS_SUB_TABS)[number]["id"];
 
@@ -12,7 +15,13 @@ export function resolveSkinsSub(sub?: string): SkinsSubId {
   return sub === "remove" ? "remove" : "apply";
 }
 
-export function getSkinsPanelView(sub: SkinsSubId) {
+export function getSkinsPanelView(
+  sub: SkinsSubId,
+  item: WorkshopItem = equippedItem,
+) {
+  if (!getSkinsSubTabIds(item).includes(sub)) {
+    sub = item.workshopSkin.hasSkinApplied ? "remove" : "apply";
+  }
   if (sub === "remove") {
     return {
       panelTitle: "Remove Skin",

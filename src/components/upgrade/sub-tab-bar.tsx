@@ -1,4 +1,4 @@
-export type SubTabDef = { id: string; label: string };
+export type SubTabDef = { id: string; label: string; disabled?: boolean; title?: string };
 
 export function PanelSubTabBar({
   tabs,
@@ -13,17 +13,23 @@ export function PanelSubTabBar({
 }) {
   return (
     <nav className="sub-tab-bar" role="tablist" aria-label={ariaLabel}>
-      {tabs.map((tab) => (
-        <button
-          key={tab.id}
-          type="button"
-          className={`sub-tab-bar__btn${tab.id === activeId ? " is-active" : ""}`}
-          {...{ [`data-${dataAttr}`]: tab.id }}
-          aria-selected={tab.id === activeId}
-        >
-          {tab.label}
-        </button>
-      ))}
+      {tabs.map((tab) => {
+        const isActive = !tab.disabled && tab.id === activeId;
+        return (
+          <button
+            key={tab.id}
+            type="button"
+            className={`sub-tab-bar__btn${isActive ? " is-active" : ""}${tab.disabled ? " is-disabled" : ""}`}
+            {...(tab.disabled ? {} : { [`data-${dataAttr}`]: tab.id })}
+            aria-selected={isActive}
+            disabled={tab.disabled}
+            aria-disabled={tab.disabled}
+            title={tab.title}
+          >
+            {tab.label}
+          </button>
+        );
+      })}
     </nav>
   );
 }
