@@ -1,6 +1,9 @@
 import type { InventoryTabId } from "./types";
 
-/** Bag mock: só `itemId` do `items.json` (+ badge opcional). */
+/**
+ * Bag mock: só `itemId` do `items.json`.
+ * `upgradeBadge` opcional só para skins/consumíveis — **não** para raised pets (rank vem do catálogo).
+ */
 export type InventoryBagSlot = {
   tab: InventoryTabId;
   itemId: string;
@@ -37,7 +40,7 @@ export const INVENTORY_BAG_SLOTS: InventoryBagSlot[] = [
   { tab: "armor", itemId: "bileire-helm-m", upgradeBadge: "Skin" },
 
   { tab: "pets", itemId: "pet-lion" },
-  { tab: "pets", itemId: "pet-dragon", upgradeBadge: "Lv12" },
+  { tab: "pets", itemId: "pet-dragon" },
   { tab: "pets", itemId: "pet-unicorn" },
 
   { tab: "quest", itemId: "pet-helper" },

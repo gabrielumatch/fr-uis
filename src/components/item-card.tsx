@@ -4,7 +4,7 @@ export function ItemCard(item: {
   icon: string;
   name: string;
   typeLabel: string;
-  upgradeBadge: string;
+  upgradeBadge?: string;
   activeSkinName?: string | null;
 }) {
   return (
@@ -16,7 +16,9 @@ export function ItemCard(item: {
           imgClass="item-card__icon-img"
           alt={item.name}
         />
-        <span className="item-card__badge">{item.upgradeBadge}</span>
+        {item.upgradeBadge ? (
+          <span className="item-card__badge">{item.upgradeBadge}</span>
+        ) : null}
       </div>
       <div className="item-card__name">{item.name}</div>
       <div className="item-card__type">{item.typeLabel}</div>

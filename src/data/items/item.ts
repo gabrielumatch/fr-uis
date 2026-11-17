@@ -55,6 +55,10 @@ export type PickupPetItem = ItemBase & {
   category: "pet";
 };
 
+/**
+ * Raised pet — sem `upgradeLevel` / badge de slot (+N, LvN).
+ * Rank e stat level ficam só nas linhas de stat do workshop, nunca no ícone da bag.
+ */
 export type WorkshopRaisedPetItem = ItemBase & {
   type: "pet";
   subtype: "raised";
@@ -71,7 +75,6 @@ export type WorkshopRaisedPetItem = ItemBase & {
   stats: StatRow[];
   awake: AwakeStat[];
   gearScore: number;
-  upgradeBadge: string;
   workshopPet: RaisedPetRuntime;
 };
 

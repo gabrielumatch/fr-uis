@@ -1,6 +1,9 @@
 import { getItemById } from "../items/catalog";
 import {
+  isPickupPetItem,
+  isRaisedPetItem,
   isSkinItem,
+  isWingItem,
   isWorkshopItem,
   type CatalogItem,
 } from "../items/item";
@@ -38,9 +41,13 @@ export const INVENTORY_SLOT_SIZE_PX = 52;
 export const INVENTORY_GRID_CELL_COUNT = 168;
 
 function badgeForItem(item: CatalogItem, override?: string): string {
+  if (isRaisedPetItem(item)) return "";
+  if (isPickupPetItem(item)) return override ?? "Pick-up";
+  if (isWingItem(item)) return "W";
   if (override) return override;
   if (isSkinItem(item)) return "Skin";
   if (isWorkshopItem(item)) return item.upgradeBadge;
+  if (item.type === "consumable" && item.stackQty > 1) return `×${item.stackQty}`;
   return "";
 }
 

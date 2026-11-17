@@ -131,6 +131,9 @@ export function assertItemRecord(record: ItemRecord): void {
         if (rp.statTiers.length !== rp.statLevel) {
           throw new Error(`Item "${record.id}": statTiers.length deve ser statLevel`);
         }
+        if (record.upgradeLevel != null) {
+          throw new Error(`Item "${record.id}": raised pet não pode ter upgradeLevel`);
+        }
       } else if (record.subtype !== "pickup") {
         throw new Error(`Item "${record.id}": pet.subtype deve ser raised|pickup`);
       }
@@ -421,7 +424,6 @@ function hydrateRaisedPetItem(record: ItemRecord): WorkshopRaisedPetItem {
     stats: buildRaisedPetStats(rp.species, rp),
     awake: record.awake ?? [],
     gearScore: record.gearScore ?? 0,
-    upgradeBadge: `${rp.rank} · Lv${rp.statLevel}`,
     workshopPet: { inventory: defaultRaisedPetInventory() },
   };
   return item;

@@ -15,7 +15,13 @@ export function ItemSidebar({ item }: { item: CatalogItem }) {
     return (
       <aside className="frame item-sidebar">
         <h2 className="section-title">{title}</h2>
-        <ItemCard {...item} />
+        <ItemCard
+          icon={item.icon}
+          name={item.name}
+          typeLabel={item.typeLabel}
+          upgradeBadge={isRaisedPetItem(item) ? undefined : item.upgradeBadge}
+          activeSkinName={isRaisedPetItem(item) ? undefined : item.activeSkinName}
+        />
         <StatList rows={item.stats} />
         <AwakeAttributes stats={item.awake} />
         <GearScore score={item.gearScore} />

@@ -37,7 +37,6 @@ export function syncRaisedPetStats(pet: WorkshopRaisedPetItem): void {
     return `Lv${i + 1} (${tier}): +${val} ${def.bonusStat}`;
   });
   pet.hpMax = PET_HP_BY_RANK[pet.rank];
-  pet.upgradeBadge = `${pet.rank} · Lv${pet.statLevel}`;
   pet.stats = [
     { label: "Species", value: def.displayName },
     { label: "Rank", value: pet.rank },

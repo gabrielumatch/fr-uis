@@ -7,6 +7,7 @@ import {
   type WorkshopItem,
   isConsumableItem,
   isSkinItem,
+  isRaisedPetItem,
   isWorkshopHostItem,
   isWorkshopItem,
 } from "./item";
@@ -75,6 +76,12 @@ for (const slot of INVENTORY_BAG_SLOTS) {
   if (!byId.has(slot.itemId)) {
     throw new Error(
       `Inventory bag references "${slot.itemId}" but it is missing from items.json`,
+    );
+  }
+  const bagItem = byId.get(slot.itemId)!;
+  if (isRaisedPetItem(bagItem) && slot.upgradeBadge) {
+    throw new Error(
+      `Bag "${slot.itemId}": raised pet não usa upgradeBadge — só ícone na bag`,
     );
   }
 }
