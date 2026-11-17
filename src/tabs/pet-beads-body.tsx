@@ -101,7 +101,10 @@ export function PetBeadsBody() {
             .join(" ")}
           disabled={!available}
           title={`${def.name}\n${def.effectSummary}\n${def.durationLabel}`}
-          onClick={() => handleEquip(def.id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleEquip(def.id);
+          }}
         >
           <ItemIcon
             icon={def.icon}
@@ -158,10 +161,11 @@ export function PetBeadsBody() {
                     <button
                       type="button"
                       className="pet-bead-slot__unlock btn btn--secondary"
-                      data-action="Unlock Bead Slot"
                       disabled={inv.beadSlotKeys < 1}
                       title="Uses 1 Bead Slot Key"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
                         if (unlockBeadSlot(pet).ok) workshop.bump();
                       }}
                     >

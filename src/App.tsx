@@ -54,7 +54,6 @@ import {
   convertPickupToBuff,
   getEquippedPickupPet,
   setPickupFilter,
-  unlockBeadSlot,
 } from "./data/systems/pickup-pet-workshop";
 import { getPetBeadsPanelMaterials } from "./tabs/pet-beads-panel";
 import { PetPickupAwakeBody } from "./tabs/pet-pickup-awake-body";
@@ -430,10 +429,6 @@ export function App() {
       if (pickup) {
         if (action === "Convert to Buff Pet") {
           if (convertPickupToBuff(pickup).ok) workshop.bump();
-          return;
-        }
-        if (action === "Unlock Bead Slot") {
-          if (unlockBeadSlot(pickup).ok) workshop.bump();
           return;
         }
         if (action === "Toggle Pickup Filter" && actionBtn.dataset.pickupFilterId) {

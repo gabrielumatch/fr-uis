@@ -13,6 +13,9 @@ import { getBuffBeadDefinition } from "../pets/bead-catalog";
 
 const MAX_BEAD_SLOTS = 9;
 
+/** Evita dois unlocks no mesmo clique (handler local + delegação do App). */
+const unlockBeadSlotInFlight = new WeakMap<WorkshopPickupPetItem, boolean>();
+
 export function getEquippedPickupPet(): WorkshopPickupPetItem | undefined {
   return isPickupPetItem(equippedItem) ? equippedItem : undefined;
 }
@@ -37,6 +40,9 @@ export function convertPickupToBuff(pet: WorkshopPickupPetItem): { ok: boolean; 
 }
 
 export function unlockBeadSlot(pet: WorkshopPickupPetItem): { ok: boolean; message: string } {
+  if (unlockBeadSlotInFlight.get(pet)) {
+    return { ok: false, message: "Unlock already in progress." };
+  }
   if (pet.mode !== "buff") {
     return { ok: false, message: "Only Buff Pets use Bead Slot Keys." };
   }
@@ -47,10 +53,15 @@ export function unlockBeadSlot(pet: WorkshopPickupPetItem): { ok: boolean; messa
   if (inv.beadSlotKeys < 1) {
     return { ok: false, message: "Need a Bead Slot Key." };
   }
-  inv.beadSlotKeys -= 1;
-  pet.unlockedBeadSlots += 1;
-  syncPickupPetStats(pet);
-  return { ok: true, message: "Unlocked one bead slot." };
+  unlockBeadSlotInFlight.set(pet, true);
+  try {
+    inv.beadSlotKeys -= 1;
+    pet.unlockedBeadSlots += 1;
+    syncPickupPetStats(pet);
+    return { ok: true, message: "Unlocked one bead slot." };
+  } finally {
+    unlockBeadSlotInFlight.set(pet, false);
+  }
 }
 
 export function togglePickupSummon(pet: WorkshopPickupPetItem): void {

@@ -880,7 +880,7 @@
         "mailable": false,
         "summoned": true,
         "unlockedBeadSlots": 3,
-        "beadSlotBeadIds": ["bead-power", "bead-protector", null, null, null, null, null, null, null],
+        "beadSlotBeadIds": [null, null, null, null, null, null, null, null, null],
         "blessing": [
           {
             "label": "Blessing",
